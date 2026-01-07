@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../state/Store'
-import { useState, FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 
 function Header() {
-  const { state, dispatch } = useStore()
+  const { state } = useStore()
   const [query, setQuery] = useState('')
   const navigate = useNavigate()
 

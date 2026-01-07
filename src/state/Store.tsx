@@ -99,7 +99,7 @@ type StoreContext = {
   }
   actions: {
     requestOtp: (email: string) => string
-    verifyOtp: (email: string, input: string, name?: string) => boolean
+    verifyOtp: (email: string, input: string, name?: string, phoneNumber?: string) => boolean
     placeOrder: (address: Address) => Order
   }
 }

@@ -6,10 +6,17 @@ export default function ProductCard({ product }: { product: Product }) {
   const { state, dispatch } = useStore()
   const wished = state.wishlist.includes(product.id)
 
+  // Mock data to match the design since they are missing in the Product type
+  const mrp = Math.floor(product.price * 1.4) // 40% markup for demo
+  const discount = Math.round(((mrp - product.price) / mrp) * 100)
+  const rating = 5.0
+  const reviewCount = 18
+  const deliveryDate = "Sat, 10 Jan"
+
   return (
     <div className="product-card">
       <div className="image-wrap">
-        <Link to={`/product/${product.id}`} style={{ display: 'block', height: '100%' }}>
+        <Link to={`/product/${product.id}`} className="img-link">
           <img
             src={product.imageUrl || '/assets/images/full_logo.png'}
             alt={product.name}
@@ -25,33 +32,53 @@ export default function ProductCard({ product }: { product: Product }) {
             })
           }
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 21s-6.716-4.335-9.243-6.862C1.178 12.559 1 10.402 2.343 8.879c1.343-1.522 3.5-1.7 4.964-.236L12 10.336l4.693-1.693c1.465-1.464 3.622-1.286 4.964.236 1.343 1.523 1.165 3.68-.414 5.259C18.716 16.665 12 21 12 21z"
-              fill="currentColor"
-            />
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
           </svg>
         </button>
       </div>
+
       <div className="info">
         <h3>
-          <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link to={`/product/${product.id}`}>
             {product.name}
           </Link>
         </h3>
-        <p className="desc">{product.description}</p>
-        <p className="price">₹{product.price}</p>
-      </div>
-      <div className="actions">
-        <button
-          className="btn-cart"
-          onClick={() => dispatch({ type: 'CART_ADD', productId: product.id })}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M7 4h-2l-1 2v2h2l3 9h8l3-9H7z" stroke="#111" fill="#111" />
-          </svg>
-          <span>Add to Cart</span>
-        </button>
+
+        <div className="rating">
+          <span className="stars">★★★★★</span>
+          <span className="count">{reviewCount}</span>
+        </div>
+
+        <div className="price-block">
+          <div className="price-row">
+            <span className="currency">₹</span>
+            <span className="price-main">{product.price.toLocaleString()}</span>
+            <span className="mrp">M.R.P: <span>₹{mrp.toLocaleString()}</span></span>
+            <span className="discount">({discount}% off)</span>
+          </div>
+          <div className="coupon">
+            <span className="badge">Save 2%</span> with coupon
+          </div>
+        </div>
+
+        <div className="delivery">
+          <span className="free">FREE delivery</span>
+          <span className="date">{deliveryDate}</span>
+        </div>
+
+        <div className="prime-delivery">
+          Or <span className="prime">Prime</span> members get FREE delivery
+        </div>
+
+        <div className="actions">
+          <button
+            className="btn-cart"
+            onClick={() => dispatch({ type: 'CART_ADD', productId: product.id })}
+          >
+            Add to cart
+          </button>
+        </div>
       </div>
     </div>
   )
