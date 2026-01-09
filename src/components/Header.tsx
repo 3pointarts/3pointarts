@@ -17,6 +17,7 @@ function Header() {
     <header className="header">
       <div className="header-inner">
         <Link to="/" className="brand">
+          <img src="/assets/images/logo.png" alt="3 Point Arts" />
           <img src="/assets/images/name_logo.png" alt="3 Point Arts" />
         </Link>
 
