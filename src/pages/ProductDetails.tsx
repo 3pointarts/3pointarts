@@ -1,9 +1,10 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../state/Store'
 import { useState } from 'react'
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const { state, dispatch } = useStore()
   const [qty, setQty] = useState(1)
 
@@ -115,6 +116,7 @@ export default function ProductDetails() {
                 for (let i = 0; i < qty; i++) {
                   dispatch({ type: 'CART_ADD', productId: product.id })
                 }
+                navigate('/cart')
               }}
             >
               Add to Cart

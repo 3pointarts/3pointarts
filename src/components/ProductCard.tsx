@@ -1,9 +1,10 @@
 import { useStore } from '../state/Store'
 import type { Product } from '../types'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function ProductCard({ product }: { product: Product }) {
   const { state, dispatch } = useStore()
+  const navigate = useNavigate()
   const wished = state.wishlist.includes(product.id)
 
   // Mock data to match the design since they are missing in the Product type
@@ -74,7 +75,10 @@ export default function ProductCard({ product }: { product: Product }) {
         <div className="actions">
           <button
             className="btn-cart"
-            onClick={() => dispatch({ type: 'CART_ADD', productId: product.id })}
+            onClick={() => {
+              dispatch({ type: 'CART_ADD', productId: product.id })
+              navigate('/cart')
+            }}
           >
             Add to cart
           </button>
