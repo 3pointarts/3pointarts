@@ -15,6 +15,7 @@ import About from './pages/About'
 import Help from './pages/Help'
 import Contact from './pages/Contact'
 import Login from './pages/Login'
+import AdminLogin from './pages/admin/AdminLogin'
 import ProductDetails from './pages/ProductDetails'
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/orders/:orderId" element={<OrderDetails />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
             </Routes>
           </main>
           <Footer />
