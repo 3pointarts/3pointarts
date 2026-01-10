@@ -178,6 +178,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           total,
           createdAt: new Date().toISOString(),
           shippingAddress: address,
+          status: 'ordered',
         }
         dispatch({ type: 'PLACE_ORDER', order })
         return order

@@ -31,6 +31,7 @@ export type Order = {
   total: number
   createdAt: string
   shippingAddress: Address
+  status: 'ordered' | 'packed' | 'shipped' | 'delivered'
 }
 
 export type UserProfile = {

@@ -1748,3 +1748,402 @@ a:hover {
 .carousel-next {
     right: 10px;
 }
+
+.orders {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.orders .page-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.orders .orders-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.orders .order-card {
+    border: 1px solid #D5D9D9;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.orders .order-header {
+    background: #F0F2F2;
+    padding: 14px 18px;
+    border-bottom: 1px solid #D5D9D9;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #565959;
+}
+
+@media (max-width: 768px) {
+    .orders .order-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .orders .header-col {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+
+    .orders .header-col.right {
+        margin-left: 0;
+        text-align: left;
+        align-items: flex-start;
+    }
+}
+
+.orders .header-col {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+
+.orders .header-col.right {
+    margin-right: 0;
+    margin-left: auto;
+    text-align: right;
+    align-items: flex-end;
+}
+
+.orders .order-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.orders .order-value {
+    color: #0F1111;
+    font-weight: 500;
+}
+
+.orders .order-link {
+    color: #007185;
+    cursor: pointer;
+}
+
+.orders .order-link:hover {
+    text-decoration: underline;
+    color: #C7511F;
+}
+
+.orders .order-body {
+    padding: 20px;
+}
+
+.orders .status-text {
+    font-size: 18px;
+    margin: 0 0 15px;
+    font-weight: 700;
+}
+
+.orders .status-text.delivered {
+    color: #007600;
+}
+
+.orders .status-text.shipped {
+    color: #e67a00;
+}
+
+.orders .status-text.packed {
+    color: #007185;
+}
+
+.orders .item-row {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.orders .item-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.orders .item-name {
+    font-weight: 500;
+    color: #007185;
+    margin-bottom: 4px;
+}
+
+.orders .item-qty {
+    font-size: 13px;
+    color: #565959;
+}
+
+/* Tracking Stepper */
+.orders .track-container {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.orders .track-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.orders .track-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+}
+
+.orders .step-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #ddd;
+    margin-bottom: 8px;
+}
+
+.orders .track-step.active .step-circle {
+    background: #007600;
+}
+
+.orders .step-label {
+    font-size: 12px;
+    color: #565959;
+    font-weight: 500;
+}
+
+.orders .track-step.active .step-label {
+    color: #007600;
+    font-weight: 700;
+}
+
+.orders .step-line {
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: #ddd;
+    z-index: -1;
+}
+
+.orders .step-line.active {
+    background: #007600;
+}
+
+.orders .track-step:last-child .step-line {
+    display: none;
+}
+
+.orders .link-blue {
+    color: #007185;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.orders .link-blue:hover {
+    text-decoration: underline;
+    color: #C7511F;
+}
+
+.bill {
+    background: #525659;
+    min-height: 100vh;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bill .bill-paper {
+    background: #fff;
+    width: 210mm;
+    /* A4 width */
+    min-height: 297mm;
+    padding: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.bill .bill-header-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 20px;
+}
+
+.bill .bill-brand {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.bill .bill-logo {
+    height: 60px;
+}
+
+.bill .company-details {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.bill .invoice-meta {
+    text-align: right;
+}
+
+.bill .invoice-meta h1 {
+    color: #2c3e50;
+    font-size: 36px;
+    margin: 0 0 10px;
+    letter-spacing: 2px;
+}
+
+.bill .invoice-meta table {
+    float: right;
+}
+
+.bill .invoice-meta td {
+    padding: 2px 10px;
+    text-align: right;
+    font-size: 14px;
+}
+
+.bill .bill-addresses {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.bill .bill-addr-box h3 {
+    font-size: 14px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.bill .bill-addr-box p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.bill .bill-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+}
+
+.bill .bill-table th {
+    background: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+    font-size: 14px;
+}
+
+.bill .bill-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #555;
+}
+
+.bill .bill-table .text-right {
+    text-align: right;
+}
+
+.bill .bill-table .text-center {
+    text-align: center;
+}
+
+.bill .bill-table tfoot td {
+    border-top: 2px solid #333;
+    font-size: 16px;
+    color: #333;
+}
+
+.bill .bill-table tr.grand-total td {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    background: #f8f9fa;
+}
+
+.bill .bill-footer {
+    text-align: center;
+    margin-top: 60px;
+    color: #777;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.bill .btn-print {
+    background: #FFD814;
+    border: 1px solid #FCD200;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.bill .btn-print:hover {
+    background: #F7CA00;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .bill,
+    .bill * {
+        visibility: visible;
+    }
+
+    .bill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: white;
+        display: block;
+    }
+
+    .bill .bill-paper {
+        box-shadow: none;
+        margin: 0;
+        width: 100%;
+    }
+
+    .bill .print-actions {
+        display: none !important;
+    }
+
+    /* Hide header/footer explicitly if above rules miss them */
+    .app-header,
+    .app-footer,
+    .app-content>*:not(.bill) {
+        display: none !important;
+    }
+}
