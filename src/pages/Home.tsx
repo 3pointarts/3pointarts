@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <section>
       <HomeCarousel />
-      <div className="hero">
+      <div className="hero mb-1">
 
         <h1>3D Printed Art, Models & Lamps</h1>
         <p>Explore handcrafted 3D prints from 3 Point Arts.</p>
