@@ -8,11 +8,15 @@ import AdminCustomers from './AdminCustomers';
 import useAdminAuthStore from '../../state/admin/AdminAuthStore';
 import useAdminProductStore from '../../state/admin/AdminProductStore';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 export default function AdminDashboard() {
+    const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState('dashboard');
     const admin = useAdminAuthStore((state) => state.admin);
     const init = useAdminProductStore((state) => state.init);
     const products = useAdminProductStore((state) => state.products);
+    const logout = useAdminAuthStore((state) => state.logout);
 
     const renderContent = () => {
         switch (activeTab) {
@@ -88,6 +92,9 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         init();
+        if (!admin) {
+            navigate('/admin/login');
+        }
     }, []);
 
     return (
@@ -123,8 +130,14 @@ export default function AdminDashboard() {
                     <h1>Good Morning, {admin?.name || 'Admin'}!</h1>
                     <div className="header-actions">
                         <input type="text" placeholder="Search..." className="search-bar" />
-                        <div className="user-profile">
+                        <div className="user-profile d-flex align-items-center">
                             <div className="avatar">AD</div>
+                            <i className="fa fa-sign-out ms-3 text-danger" style={{ cursor: 'pointer', fontSize: '24px' }} onClick={() => {
+                                if (confirm('Are you sure you want to log out?')) {
+                                    navigate('/admin/login');
+                                    logout();
+                                }
+                            }}></i>
                         </div>
                     </div>
                 </header>

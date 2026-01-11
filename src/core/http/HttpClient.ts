@@ -17,5 +17,9 @@ export async function http<T>(
     throw new Error(err);
   }
 
+  if (res.status === 204) {
+    return {} as T;
+  }
+
   return res.json();
 }

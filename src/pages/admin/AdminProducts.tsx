@@ -1,10 +1,72 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './admin.css';
 import useAdminProductStore from '../../state/admin/AdminProductStore';
+import { ProductModal } from '../../components/admin/ProductModal';
+import { CategoryModal } from '../../components/admin/CategoryModal';
+import { ConfirmModal } from '../../components/ConfirmModal';
+
 export default function AdminProducts() {
     const [productTab, setProductTab] = useState('product');
+    const [searchProduct, setSearchProduct] = useState('');
+    const [searchCategory, setSearchCategory] = useState('');
+
     const products = useAdminProductStore((state) => state.products);
     const categories = useAdminProductStore((state) => state.categories);
+    const deleteProduct = useAdminProductStore((state) => state.deleteProduct);
+    const deleteCategory = useAdminProductStore((state) => state.deleteCategory);
+    const init = useAdminProductStore((state) => state.init);
+    // Modal States
+    const [showProductModal, setShowProductModal] = useState(false);
+    const [showCategoryModal, setShowCategoryModal] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+    // Edit/Delete State
+    const [selectedId, setSelectedId] = useState<number | null>(null);
+    const [isEdit, setIsEdit] = useState(false);
+    const [confirmAction, setConfirmAction] = useState<() => void>(() => { });
+    const [confirmMessage, setConfirmMessage] = useState('');
+
+    // --- Product Handlers ---
+    const handleAddProduct = () => {
+        setIsEdit(false);
+        setSelectedId(null);
+        setShowProductModal(true);
+    };
+
+    const handleEditProduct = (id: number) => {
+        setIsEdit(true);
+        setSelectedId(id);
+        setShowProductModal(true);
+    };
+
+    const handleDeleteProduct = (id: number) => {
+        setConfirmMessage('Are you sure you want to delete this product? This action cannot be undone.');
+        setConfirmAction(() => () => deleteProduct(id));
+        setShowConfirmModal(true);
+    };
+
+    // --- Category Handlers ---
+    const handleAddCategory = () => {
+        setIsEdit(false);
+        setSelectedId(null);
+        setShowCategoryModal(true);
+    };
+
+    const handleEditCategory = (id: number) => {
+        setIsEdit(true);
+        setSelectedId(id);
+        setShowCategoryModal(true);
+    };
+
+    const handleDeleteCategory = (id: number) => {
+        setConfirmMessage('Are you sure you want to delete this category? Products in this category might be affected.');
+        setConfirmAction(() => () => deleteCategory(id));
+        setShowConfirmModal(true);
+    };
+
+    useEffect(() => {
+        init();
+    }, [init]);
 
     return (
         <div className="products-view">
@@ -23,8 +85,8 @@ export default function AdminProducts() {
                 {productTab === 'product' ? (
                     <>
                         <div className="actions-bar">
-                            <input type="text" placeholder="Search products..." className="search-input" />
-                            <button className="btn-primary" style={{ width: 'max-content' }}>Add Product</button>
+                            <input type="text" placeholder="Search products..." className="search-input" value={searchProduct} onChange={(e) => setSearchProduct(e.target.value)} />
+                            <button className="btn-primary" style={{ width: 'max-content' }} onClick={handleAddProduct}>Add Product</button>
                         </div>
                         <table className="data-table">
                             <thead>
@@ -39,7 +101,7 @@ export default function AdminProducts() {
                             </thead>
                             <tbody>
                                 {
-                                    products.map((product) => (
+                                    products.filter((product) => product.title.toLowerCase().includes(searchProduct.toLowerCase())).map((product) => (
                                         <tr key={product.id}>
                                             <td>{product.images.length > 0 ? <img src={product.images[0]} alt={product.title} className="product-img" style={{ width: '50px', height: '50px', objectFit: 'contain' }} /> : <div className="img-placeholder"></div>}</td>
                                             <td>{product.title}</td>
@@ -47,8 +109,8 @@ export default function AdminProducts() {
                                             <td>${product.price}</td>
                                             <td>{product.stock}</td>
                                             <td>
-                                                <button className="btn-small" style={{ color: 'blue', borderColor: 'blue' }}>Edit</button>
-                                                <button className="btn-small" style={{ marginLeft: '5px', color: 'red', borderColor: 'red' }}>Delete</button>
+                                                <button className="btn-small" style={{ color: 'blue', borderColor: 'blue' }} onClick={() => handleEditProduct(product.id)}>Edit</button>
+                                                <button className="btn-small" style={{ marginLeft: '5px', color: 'red', borderColor: 'red' }} onClick={() => handleDeleteProduct(product.id)}>Delete</button>
                                             </td>
                                         </tr>
                                     ))
@@ -59,17 +121,17 @@ export default function AdminProducts() {
                 ) : (
                     <>
                         <div className="actions-bar">
-                            <input type="text" placeholder="Search coupons..." className="search-input" />
-                            <button className="btn-primary" style={{ width: 'max-content' }}>Add Category</button>
+                            <input type="text" placeholder="Search categories..." className="search-input" value={searchCategory} onChange={(e) => setSearchCategory(e.target.value)} />
+                            <button className="btn-primary" style={{ width: 'max-content' }} onClick={handleAddCategory}>Add Category</button>
                         </div>
                         <div className="categories-grid">
-                            {categories.map((category) => (
+                            {categories.filter((category) => category.name.toLowerCase().includes(searchCategory.toLowerCase())).map((category) => (
                                 <div className="category-card" key={category.id}>
                                     {category.image != "" ? <img src={category.image} alt={category.name} className="category-img" style={{ width: '100px', height: '100px', objectFit: 'contain' }} /> : <div className="category-img-placeholder"></div>}
                                     <h3>{category.name}</h3>
                                     <div className="category-actions">
-                                        <button className="btn-small" style={{ color: 'blue', borderColor: 'blue' }}>Edit</button>
-                                        <button className="btn-small" style={{ marginLeft: '5px', color: 'red', borderColor: 'red' }}>Delete</button>
+                                        <button className="btn-small" style={{ color: 'blue', borderColor: 'blue' }} onClick={() => handleEditCategory(category.id)}>Edit</button>
+                                        <button className="btn-small" style={{ marginLeft: '5px', color: 'red', borderColor: 'red' }} onClick={() => handleDeleteCategory(category.id)}>Delete</button>
                                     </div>
                                 </div>
                             ))}
@@ -77,6 +139,29 @@ export default function AdminProducts() {
                     </>
                 )}
             </div>
+
+            {/* Modals */}
+            <ProductModal
+                isOpen={showProductModal}
+                onClose={() => setShowProductModal(false)}
+                isEdit={isEdit}
+                editId={selectedId || undefined}
+            />
+            <CategoryModal
+                isOpen={showCategoryModal}
+                onClose={() => setShowCategoryModal(false)}
+                isEdit={isEdit}
+                editId={selectedId || undefined}
+            />
+            <ConfirmModal
+                isOpen={showConfirmModal}
+                onClose={() => setShowConfirmModal(false)}
+                onConfirm={confirmAction}
+                title="Confirm Delete"
+                message={confirmMessage}
+                confirmText="Delete"
+                isDestructive={true}
+            />
         </div>
     );
 }

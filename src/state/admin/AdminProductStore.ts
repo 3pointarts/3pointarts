@@ -29,12 +29,12 @@ interface AdminProductState {
     // Actions
     init: () => Promise<void>;
     // Product Actions
-    addProduct: (payload: ProductPayload) => Promise<void>;
-    updateProduct: (id: number, payload: ProductPayload) => Promise<void>;
+    addProduct: () => Promise<void>;
+    updateProduct: (id: number) => Promise<void>;
     deleteProduct: (id: number) => Promise<void>;
     // Category Actions
-    addCategory: (payload: CategoryPayload) => Promise<void>;
-    updateCategory: (id: number, payload: CategoryPayload) => Promise<void>;
+    addCategory: () => Promise<void>;
+    updateCategory: (id: number) => Promise<void>;
     deleteCategory: (id: number) => Promise<void>;
 
     setCategoryName: (name: string) => Promise<void>,

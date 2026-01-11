@@ -891,10 +891,12 @@ a:hover {
     color: #111;
 }
 
-.btn-secondary-sm {
+.btn-secondary-sm,
+.btn-secondary {
     background: #fff;
     border-color: #d5d9d9;
     color: #111;
+    border-radius: 6px;
 }
 
 /* Cart Page Layout */
