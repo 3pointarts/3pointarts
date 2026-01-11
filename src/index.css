@@ -1202,7 +1202,7 @@ a:hover {
 /* Amazon 3-Column Grid for Product Details */
 .details-grid-amazon {
     display: grid;
-    grid-template-columns: 40% 1fr 244px;
+    grid-template-columns: 40% 1fr;
     gap: 2rem;
     margin-bottom: 2rem;
 }
@@ -1401,7 +1401,7 @@ a:hover {
     width: 100%;
     background: #FFD814;
     border: 1px solid #FCD200;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 6px 10px;
     margin-bottom: 8px;
     cursor: pointer;
@@ -1412,7 +1412,7 @@ a:hover {
     width: 100%;
     background: #FFA41C;
     border: 1px solid #FF8F00;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 6px 10px;
     margin-bottom: 8px;
     cursor: pointer;

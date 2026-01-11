@@ -88,28 +88,25 @@ export default function ProductDetails() {
               <li>Easy to clean and maintain.</li>
             </ul>
           </div>
-        </div>
-
-        {/* Right Column: Buy Box */}
-        <div className="col-buybox">
-          <div className="buybox-inner">
-            <div className="price-lg">₹{product.price.toLocaleString()}</div>
-            <div className="delivery-info">
-              <Link to="#">FREE delivery</Link>
-              <br />
+          <div className="qty-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <label>Quantity:</label>
+            <div className="qty-control" style={{ display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: '4px' }}>
+              <button
+                onClick={() => setQty(q => Math.max(1, q - 1))}
+                style={{ padding: '5px 10px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderRight: '1px solid #ddd' }}
+              >
+                -
+              </button>
+              <span style={{ padding: '5px 15px', minWidth: '30px', textAlign: 'center', fontWeight: 'bold' }}>{qty}</span>
+              <button
+                onClick={() => setQty(q => q + 1)}
+                style={{ padding: '5px 10px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderLeft: '1px solid #ddd' }}
+              >
+                +
+              </button>
             </div>
-            <div className="stock-status">In stock</div>
-            <div className="sold-by">
-              Sold by <Link to="#">3 Point Arts</Link>
-            </div>
-
-            <div className="qty-row">
-              <label>Quantity:</label>
-              <select value={qty} onChange={(e) => setQty(Number(e.target.value))}>
-                {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
-              </select>
-            </div>
-
+          </div>
+          <div className='d-flex gap-3'>
             <button
               className="btn-amazon-primary"
               onClick={() => {
@@ -122,26 +119,22 @@ export default function ProductDetails() {
               Add to Cart
             </button>
             <button className="btn-amazon-secondary">Buy Now</button>
-
-            <div className="secure-trans">
-              <span className="lock-icon">🔒</span> Secure transaction
-            </div>
-
-            <div className="wishlist-row">
-              <button
-                className="btn-link-sm"
-                onClick={() =>
-                  dispatch({
-                    type: wished ? 'WISHLIST_REMOVE' : 'WISHLIST_ADD',
-                    productId: product.id,
-                  })
-                }
-              >
-                {wished ? 'Remove from Wishlist' : 'Add to Wishlist'}
-              </button>
-            </div>
+          </div>
+          <div className="wishlist-row">
+            <button
+              className="btn-link-sm"
+              onClick={() =>
+                dispatch({
+                  type: wished ? 'WISHLIST_REMOVE' : 'WISHLIST_ADD',
+                  productId: product.id,
+                })
+              }
+            >
+              {wished ? 'Remove from Wishlist' : 'Add to Wishlist'}
+            </button>
           </div>
         </div>
+
       </div>
 
       <div className="divider-section"></div>

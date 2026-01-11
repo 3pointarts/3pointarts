@@ -1,15 +1,21 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './admin.css';
+
 export default function AdminLogin() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [message, setMessage] = useState('')
+    const navigate = useNavigate()
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
         // Mock login logic
         if (email === 'admin@gmail.com' && password === '123456') {
             setMessage('Login Successful! Welcome Admin.')
+            setTimeout(() => {
+                navigate('/admin/dashboard')
+            }, 1000)
         } else {
             setMessage('Invalid credentials. Please try again.')
         }
