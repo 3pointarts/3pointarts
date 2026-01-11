@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import './admin.css';
-
+import useAdminProductStore from '../../state/admin/AdminProductStore';
 export default function AdminProducts() {
     const [productTab, setProductTab] = useState('product');
+    const products = useAdminProductStore((state) => state.products);
+    const categories = useAdminProductStore((state) => state.categories);
 
     return (
         <div className="products-view">
@@ -32,35 +34,25 @@ export default function AdminProducts() {
                                     <th>Category</th>
                                     <th>Price</th>
                                     <th>Stock</th>
-                                    <th>Sold</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><div className="img-placeholder"></div></td>
-                                    <td>iPhone 13 Pro Max</td>
-                                    <td>Electronics</td>
-                                    <td>$1,099</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>
-                                        <button className="btn-small" style={{ color: 'blue', borderColor: 'blue' }}>Edit</button>
-                                        <button className="btn-small" style={{ marginLeft: '5px', color: 'red', borderColor: 'red' }}>Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><div className="img-placeholder"></div></td>
-                                    <td>Sony WH-1000XM4</td>
-                                    <td>Electronics</td>
-                                    <td>$349</td>
-                                    <td>45</td>
-                                    <td>100</td>
-                                    <td>
-                                        <button className="btn-small" style={{ color: 'blue', borderColor: 'blue' }}>Edit</button>
-                                        <button className="btn-small" style={{ marginLeft: '5px', color: 'red', borderColor: 'red' }}>Delete</button>
-                                    </td>
-                                </tr>
+                                {
+                                    products.map((product) => (
+                                        <tr key={product.id}>
+                                            <td>{product.images.length > 0 ? <img src={product.images[0]} alt={product.title} className="product-img" style={{ width: '50px', height: '50px', objectFit: 'contain' }} /> : <div className="img-placeholder"></div>}</td>
+                                            <td>{product.title}</td>
+                                            <td>{categories.find((category) => category.id === product.categoryId)?.name}</td>
+                                            <td>${product.price}</td>
+                                            <td>{product.stock}</td>
+                                            <td>
+                                                <button className="btn-small" style={{ color: 'blue', borderColor: 'blue' }}>Edit</button>
+                                                <button className="btn-small" style={{ marginLeft: '5px', color: 'red', borderColor: 'red' }}>Delete</button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </>
@@ -71,10 +63,10 @@ export default function AdminProducts() {
                             <button className="btn-primary" style={{ width: 'max-content' }}>Add Category</button>
                         </div>
                         <div className="categories-grid">
-                            {['Electronics', 'Fashion', 'Home & Garden', 'Toys'].map((category) => (
-                                <div className="category-card" key={category}>
-                                    <div className="category-img-placeholder"></div>
-                                    <h3>{category}</h3>
+                            {categories.map((category) => (
+                                <div className="category-card" key={category.id}>
+                                    {category.image != "" ? <img src={category.image} alt={category.name} className="category-img" style={{ width: '100px', height: '100px', objectFit: 'contain' }} /> : <div className="category-img-placeholder"></div>}
+                                    <h3>{category.name}</h3>
                                     <div className="category-actions">
                                         <button className="btn-small" style={{ color: 'blue', borderColor: 'blue' }}>Edit</button>
                                         <button className="btn-small" style={{ marginLeft: '5px', color: 'red', borderColor: 'red' }}>Delete</button>

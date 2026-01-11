@@ -9,6 +9,7 @@ export default function AdminLogin() {
 
     // Selectors must be at the top level
     const email = useAdminAuthStore((state) => state.email);
+    const admin = useAdminAuthStore((state) => state.admin);
     const password = useAdminAuthStore((state) => state.password);
     const loginStatus = useAdminAuthStore((state) => state.loginStatus);
     const setEmail = useAdminAuthStore((state) => state.setEmail);
@@ -16,7 +17,7 @@ export default function AdminLogin() {
     const login = useAdminAuthStore((state) => state.login);
 
     useEffect(() => {
-        if (loginStatus === Status.success) {
+        if (admin != null) {
             navigate('/admin/dashboard');
         }
     }, [loginStatus, navigate]);

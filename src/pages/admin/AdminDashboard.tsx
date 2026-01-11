@@ -5,9 +5,14 @@ import AdminProducts from './AdminProducts';
 import AdminCoupons from './AdminCoupons';
 import AdminSales from './AdminSales';
 import AdminCustomers from './AdminCustomers';
-
+import useAdminAuthStore from '../../state/admin/AdminAuthStore';
+import useAdminProductStore from '../../state/admin/AdminProductStore';
+import { useEffect } from 'react';
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('dashboard');
+    const admin = useAdminAuthStore((state) => state.admin);
+    const init = useAdminProductStore((state) => state.init);
+    const products = useAdminProductStore((state) => state.products);
 
     const renderContent = () => {
         switch (activeTab) {
@@ -59,7 +64,7 @@ export default function AdminDashboard() {
                                 <div className="stat-icon">🏷️</div>
                                 <div className="stat-info">
                                     <h3>Products</h3>
-                                    <div className="value">450</div>
+                                    <div className="value">{products.length}</div>
                                     <div className="trend normal">− 0%</div>
                                 </div>
                             </div>
@@ -80,6 +85,10 @@ export default function AdminDashboard() {
                 return null;
         }
     };
+
+    useEffect(() => {
+        init();
+    }, []);
 
     return (
         <div className="admin-dashboard-page">
@@ -111,7 +120,7 @@ export default function AdminDashboard() {
             </aside>
             <main className="main-content">
                 <header className="top-header">
-                    <h1>Good Morning, Admin!</h1>
+                    <h1>Good Morning, {admin?.name || 'Admin'}!</h1>
                     <div className="header-actions">
                         <input type="text" placeholder="Search..." className="search-bar" />
                         <div className="user-profile">

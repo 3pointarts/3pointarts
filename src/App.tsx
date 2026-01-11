@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import './App.css'
+import useAdminAuthStore from './state/admin/AdminAuthStore'
 import { StoreProvider } from './state/Store'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -19,6 +20,7 @@ import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import ProductDetails from './pages/ProductDetails'
 import { ToastContainer } from 'react-toastify'
+import { useEffect } from 'react'
 const PublicLayout = () => {
   return (
     <div className="app">
@@ -32,6 +34,10 @@ const PublicLayout = () => {
 }
 
 function App() {
+  const initAdmin = useAdminAuthStore((state) => state.init);
+  useEffect(() => {
+    initAdmin();
+  }, []);
   return (
     <StoreProvider>
       <BrowserRouter>

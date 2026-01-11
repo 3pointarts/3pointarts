@@ -1,7 +1,6 @@
 import { createContext, useContext, useMemo, useReducer, useEffect } from 'react'
 import type { Product, CartItem, Order, UserProfile, Address } from '../types'
 import { products as seedProducts } from '../data/products'
-
 type State = {
   products: Product[]
   wishlist: string[]
