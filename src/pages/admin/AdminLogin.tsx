@@ -1,24 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './admin.css';
-
+import useAdminAuthStore from '../../state/admin/AdminAuthStore';
+import { Status } from '../../core/enum/Status';
 export default function AdminLogin() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
     const [message, setMessage] = useState('')
     const navigate = useNavigate()
+
+    // Selectors must be at the top level
+    const email = useAdminAuthStore((state) => state.email);
+    const password = useAdminAuthStore((state) => state.password);
+    const loginStatus = useAdminAuthStore((state) => state.loginStatus);
+    const setEmail = useAdminAuthStore((state) => state.setEmail);
+    const setPassword = useAdminAuthStore((state) => state.setPassword);
+    const login = useAdminAuthStore((state) => state.login);
+
+    useEffect(() => {
+        if (loginStatus === Status.success) {
+            navigate('/admin/dashboard');
+        }
+    }, [loginStatus, navigate]);
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
         // Mock login logic
-        if (email === 'admin@gmail.com' && password === '123456') {
-            setMessage('Login Successful! Welcome Admin.')
-            setTimeout(() => {
-                navigate('/admin/dashboard')
-            }, 1000)
-        } else {
-            setMessage('Invalid credentials. Please try again.')
-        }
+        // if (email === 'admin@gmail.com' && password === '123456') {
+        //     setMessage('Login Successful! Welcome Admin.')
+        //     setTimeout(() => {
+        //         navigate('/admin/dashboard')
+        //     }, 1000)
+        // } else {
+        //     setMessage('Invalid credentials. Please try again.')
+        // }
+        login();
     }
 
     return (
@@ -48,7 +62,9 @@ export default function AdminLogin() {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn-primary ">Login</button>
+                    {loginStatus === Status.loading ?
+                        <div className="loading-spinner"></div> :
+                        <button type="submit" className="btn-primary ">Login</button>}
                 </form>
                 {message && <div className={`message ${message.includes('Successful') ? 'success' : 'error'}`}>{message}</div>}
             </div>

@@ -18,7 +18,7 @@ import Login from './pages/Login'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import ProductDetails from './pages/ProductDetails'
-
+import { ToastContainer } from 'react-toastify'
 const PublicLayout = () => {
   return (
     <div className="app">
@@ -57,6 +57,7 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer />
     </StoreProvider>
   )
 }
