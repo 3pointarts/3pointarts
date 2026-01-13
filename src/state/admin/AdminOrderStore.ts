@@ -13,6 +13,7 @@ interface AdminOrderState {
     initStatus: Status;
     getOrderStatus: Status;
     updateStatus: Status;
+    totalSale: number;
     selectedOrder: OrderModel | null;
     newOrders: OrderModel[];
     buildingOrders: OrderModel[];
@@ -29,6 +30,7 @@ const AdminOrderStore: StateCreator<AdminOrderState> = (set, get) => ({
     initStatus: Status.init,
     updateStatus: Status.init,
     getOrderStatus: Status.init,
+    totalSale: 0,
     newOrders: [],
     buildingOrders: [],
     shippedOrders: [],
@@ -49,7 +51,11 @@ const AdminOrderStore: StateCreator<AdminOrderState> = (set, get) => ({
                 buildingOrders,
                 shippedOrders,
                 completedOrders,
-                initStatus: Status.success
+                initStatus: Status.success,
+                totalSale: newOrders.reduce((acc, order) => acc + order.total, 0) +
+                    buildingOrders.reduce((acc, order) => acc + order.total, 0) +
+                    shippedOrders.reduce((acc, order) => acc + order.total, 0) +
+                    completedOrders.reduce((acc, order) => acc + order.total, 0),
             });
         } catch (error) {
             console.error(error);

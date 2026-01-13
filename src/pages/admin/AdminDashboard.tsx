@@ -17,6 +17,7 @@ export default function AdminDashboard() {
     const orderStore = useAdminOrderStore((state) => state);
     const init = useAdminProductStore((state) => state.init);
     const products = useAdminProductStore((state) => state.products);
+    const customers = useAdminAuthStore((state) => state.customers);
     const logout = useAdminAuthStore((state) => state.logout);
 
     const renderContent = () => {
@@ -29,7 +30,7 @@ export default function AdminDashboard() {
                                 <div className="stat-icon">🛍️</div>
                                 <div className="stat-info">
                                     <h3>Sales</h3>
-                                    <div className="value">$628,454.37</div>
+                                    <div className="value">{orderStore.totalSale.toFixed(2)}</div>
                                     <div className="trend up">↗ 43.7%</div>
                                 </div>
                             </div>
@@ -61,7 +62,7 @@ export default function AdminDashboard() {
                                 <div className="stat-icon">👥</div>
                                 <div className="stat-info">
                                     <h3>Customers</h3>
-                                    <div className="value">1,250</div>
+                                    <div className="value">{customers.length}</div>
                                     <div className="trend up">↗ 15%</div>
                                 </div>
                             </div>
