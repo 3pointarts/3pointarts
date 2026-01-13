@@ -3,12 +3,14 @@ import { useState } from 'react'
 import useCartStore from '../state/customer/CartStore'
 import useAdminProductStore from '../state/admin/AdminProductStore';
 import useCustomerAuthStore from '../state/customer/CustomerAuthStore';
+import CheckoutModal from '../components/CheckoutModal';
 
 export default function Cart() {
   const store = useCartStore();
   const astore = useCustomerAuthStore();
   const [couponCode, setCouponCode] = useState('')
   const [discountPercent, setDiscountPercent] = useState(0)
+  const [showCheckout, setShowCheckout] = useState(false)
 
   const totalItems = store.carts.reduce((sum, item) => sum + item.qty, 0)
 
@@ -18,7 +20,7 @@ export default function Cart() {
   }, 0)
 
   const totalSellingPrice = store.carts.reduce((sum, item) => {
-    return sum + (item.product?.price ?? 0 * item.qty)
+    return sum + ((item.product?.price ?? 0) * item.qty)
   }, 0)
 
   const productDiscount = totalMrp - totalSellingPrice
@@ -48,7 +50,7 @@ export default function Cart() {
         <div className="cart-items-container">
           <div className="cart-header">
             <h2>Shopping Cart</h2>
-            <button className="link-button">Deselect all items</button>
+            <button className="link-button" onClick={() => store.clearCart()}>Delete all items</button>
             <span className="price-label">Price</span>
           </div>
 
@@ -96,7 +98,7 @@ export default function Cart() {
                         </Link>
                         <div className="item-price-mobile">
                           <span className="price-symbol">₹</span>
-                          <span className="price-whole">{Math.floor(product.price).toLocaleString()}</span>
+                          <span className="price-whole">{Math.floor((product.price * item.qty)).toLocaleString()}</span>
                         </div>
                       </div>
 
@@ -110,28 +112,37 @@ export default function Cart() {
                       </div>
 
                       <div className="item-controls">
-                        <select
-                          value={item.qty}
-                          onChange={(e) => { }
-                          }
-                          className="qty-select"
-                        >
-                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
-                            <option key={num} value={num}>Qty: {num}</option>
-                          ))}
-                        </select>
+                        <div className="qty-control" style={{ display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: '4px', marginRight: '10px' }}>
+                          <button
+                            onClick={() => {
+                              if (item.qty > 1) {
+                                store.updateCartQty(item.id, product.id, item.qty - 1)
+                              }
+                            }}
+                            style={{ padding: '2px 8px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderRight: '1px solid #ddd' }}
+                          >
+                            -
+                          </button>
+                          <span style={{ padding: '0 10px', minWidth: '30px', textAlign: 'center', fontWeight: 'bold' }}>{item.qty}</span>
+                          <button
+                            onClick={() => store.updateCartQty(item.id, product.id, item.qty + 1)}
+                            style={{ padding: '2px 8px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderLeft: '1px solid #ddd' }}
+                          >
+                            +
+                          </button>
+                        </div>
 
                         <div className="control-links">
                           <button
                             className="link-button"
-                            onClick={() => { }}
+                            onClick={() => {
+                              store.removeFromCart(item.id)
+                            }}
                           >
                             Delete
                           </button>
                           <span className="separator">|</span>
-                          <button className="link-button">Save for later</button>
-                          <span className="separator">|</span>
-                          <button className="link-button">See more like this</button>
+                          <Link to={`/catalog?category=${encodeURIComponent(product.categoryId)}`} className="link-button">See more like this</Link>
                           <span className="separator">|</span>
                           <button className="link-button">Share</button>
                         </div>
@@ -141,9 +152,8 @@ export default function Cart() {
                     {/* Item Price (Desktop) */}
                     <div className="item-price">
                       <span className="price-symbol">₹</span>
-                      <span className="price-whole">{Math.floor(product.price).toLocaleString()}</span>
+                      <span className="price-whole">{Math.floor((product.price * item.qty)).toLocaleString()}</span>
                     </div>
-
                   </div>
                 )
               })}

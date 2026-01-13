@@ -7,6 +7,7 @@ import { showError, showSuccess } from "../../core/message";
 import { UserPayload } from "../../data/payload/UserPayload";
 import { UserRole } from "../../core/enum/UserRole";
 import useCartStore from "./CartStore";
+import useCustomerOrderStore from "./CustomerOrderStore";
 const authDatasource = new AuthDatasource();
 
 interface CustomerAuthState {
@@ -57,6 +58,7 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
         const customer = localStorage.getItem('customer');
         if (customer) {
             useCartStore.getState().loadCarts();
+            useCustomerOrderStore.getState().loadOrders();
             set((state) => ({ customer: UserModel.fromMap(JSON.parse(customer)), loginStatus: Status.success }));
         }
     },

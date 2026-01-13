@@ -22,6 +22,7 @@ import ProductDetails from './pages/ProductDetails'
 import { ToastContainer } from 'react-toastify'
 import { useEffect } from 'react'
 import useCustomerAuthStore from './state/customer/CustomerAuthStore'
+
 const PublicLayout = () => {
   return (
     <div className="app">
@@ -59,6 +60,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/:orderId" element={<OrderDetails />} />
+            <Route path="/order/:orderId" element={<OrderDetails />} />
           </Route>
 
           {/* Admin Routes */}

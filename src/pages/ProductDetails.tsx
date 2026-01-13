@@ -9,7 +9,7 @@ export default function ProductDetails() {
   const navigate = useNavigate()
   const { products, init, initStatus } = useAdminProductStore()
   const { addToCart } = useCartStore()
-
+  const cstore = useCartStore()
   const [qty, setQty] = useState(1)
   const product = products.find((p) => p.id == Number(id))
   const wished = false
@@ -50,6 +50,8 @@ export default function ProductDetails() {
   }
 
   // Mock Data
+
+  const inCart = cstore.carts.some(c => c.productId === product.id)
   const mrp = Math.floor(product.price * 1.4)
   const discount = Math.round(((mrp - product.price) / mrp) * 100)
   const rating = 4.5
@@ -139,15 +141,21 @@ export default function ProductDetails() {
             </div>
           </div>
           <div className='row'>
-            <button
-              className="btn-amazon-primary col-md-6"
-              onClick={async () => {
-                await addToCart(product.id, qty)
-              }}
-            >
-              Add to Cart
-            </button>
-            <button className="btn-amazon-secondary col-md-6">Buy Now</button>
+            {inCart ?
+              (<Link to="/cart" className='col-md-6'><h5> Added to cart</h5></Link>) : (<button
+                className="btn-amazon-primary col-md-6"
+                onClick={async () => {
+                  await addToCart(product.id, qty)
+                }}
+              >
+                Add to Cart
+              </button>)}
+            <button className="btn-amazon-secondary col-md-6" onClick={async () => {
+              if (!inCart) {
+                await addToCart(product.id, qty);
+              }
+              navigate('/cart')
+            }}>Buy Now</button>
           </div>
           <div className="wishlist-row">
             <button

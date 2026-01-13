@@ -1,9 +1,13 @@
 import { Link, Navigate } from 'react-router-dom'
 import useCustomerAuthStore from '../state/customer/CustomerAuthStore'
 import { Status } from '../core/enum/Status'
+import useCartStore from '../state/customer/CartStore';
+import useCustomerOrderStore from '../state/customer/CustomerOrderStore';
 
 export default function Dashboard() {
-  const store = useCustomerAuthStore()
+  const store = useCustomerAuthStore();
+  const orderStore = useCustomerOrderStore();
+  const cartStore = useCartStore();
   // const { state, dispatch } = useStore()
 
 
@@ -67,7 +71,7 @@ export default function Dashboard() {
               </div>
               <div className="card-content">
                 <h3>Your Cart</h3>
-                <p>{0} items in your cart</p>
+                <p>{cartStore.carts.length} items in your cart</p>
               </div>
               <div className="arrow-icon">→</div>
             </Link>
@@ -95,7 +99,7 @@ export default function Dashboard() {
               </div>
               <div className="card-content">
                 <h3>Your Orders</h3>
-                <p>{0} orders placed</p>
+                <p>{orderStore.orders.length} orders placed</p>
               </div>
               <div className="arrow-icon">→</div>
             </Link>

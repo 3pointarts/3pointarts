@@ -1,44 +1,31 @@
-import { useParams } from 'react-router-dom'
-import { useStore } from '../state/Store'
-import type { Order } from '../types'
-
-const sampleOrder: Order = {
-  id: 'SAMPLE-ORD-001',
-  items: [
-    { productId: 'lamp-aurora', qty: 1 },
-    { productId: 'statue-dragon', qty: 1 }
-  ],
-  total: 3498,
-  createdAt: new Date().toISOString(),
-  shippingAddress: {
-    fullName: 'Rahul Sharma',
-    line1: '123, Green Park',
-    city: 'New Delhi',
-    state: 'Delhi',
-    postalCode: '110016',
-    country: 'India',
-    contactNumber: '9876543210'
-  },
-  status: 'delivered'
-}
+import { useParams, Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import useCustomerOrderStore from '../state/customer/CustomerOrderStore'
+import { Status } from '../core/enum/Status'
 
 export default function BillView() {
   const { orderId } = useParams()
-  const { state, selectors } = useStore()
+  const { orders, status, loadOrders } = useCustomerOrderStore()
 
-  // Try to find in state, fallback to sample if ID matches
-  const order = state.orders.find((o) => o.id === orderId) || (orderId === sampleOrder.id ? sampleOrder : undefined)
+  useEffect(() => {
+    if (orders.length === 0 && status === Status.init) {
+      loadOrders()
+    }
+  }, [orders.length, status, loadOrders])
 
-  if (!order) return <div>Order not found.</div>
+  const order = orders.find((o) => o.id === Number(orderId))
 
-  function productName(id: string) {
-    const p = selectors.productById(id)
-    return p ? p.name : id
+  if (status === Status.loading) {
+    return <div className="loading-bill">Loading invoice...</div>
   }
 
-  function productPrice(id: string) {
-    const p = selectors.productById(id)
-    return p ? p.price : 0
+  if (!order) {
+    return (
+      <div className="bill-error">
+        <p>Order not found.</p>
+        <Link to="/orders" className="btn-secondary">Back to Orders</Link>
+      </div>
+    )
   }
 
   return (
@@ -47,16 +34,14 @@ export default function BillView() {
         <header className="bill-header-row">
           <div className="bill-brand">
             <div >
-
               <img height={50} src="/assets/images/logo.png" alt="3 Point Arts" />
-              <img height={50} src="/assets/images/name_logo.png" alt="3 Point Arts" />
-
+              {/* <img height={50} src="/assets/images/name_logo.png" alt="3 Point Arts" /> */}
             </div>
             <div className="company-details">
               <strong>3 Point Arts </strong><br />
-              123 Creative Avenue, Art District<br />
-              New Delhi, India - 110001<br />
-              support@3pointarts.com
+              86/1 Balkeshwar Colony, Kamla Nagar<br />
+              Agra, India - 282005<br />
+              3pointarts@gmail.com
             </div>
           </div>
           <div className="invoice-meta">
@@ -65,22 +50,20 @@ export default function BillView() {
               <tbody>
                 <tr><td>Invoice #:</td><td>{order.id}</td></tr>
                 <tr><td>Date:</td><td>{new Date(order.createdAt).toLocaleDateString()}</td></tr>
-                <tr><td>Status:</td><td>{order.status.toUpperCase()}</td></tr>
+                <tr><td>Status:</td><td>PAID</td></tr>
               </tbody>
             </table>
           </div>
         </header>
 
         <section className="bill-addresses">
-          <div className="bill-addr-box">
+          <div className="bill-addr-box" style={{ textAlign: 'left' }}>
             <h3>Bill To:</h3>
             <p>
-              <strong>{order.shippingAddress.fullName}</strong><br />
-              {order.shippingAddress.line1}<br />
-              {order.shippingAddress.line2 && <>{order.shippingAddress.line2}<br /></>}
-              {order.shippingAddress.city}, {order.shippingAddress.state} - {order.shippingAddress.postalCode}<br />
-              {order.shippingAddress.country}<br />
-              Phone: {order.shippingAddress.contactNumber}
+              <strong>{order.billTo}</strong><br />
+              {order.contactAddress}<br />
+              Phone: {order.contactPhone}<br />
+              Contact: {order.contactName}
             </p>
           </div>
         </section>
@@ -95,14 +78,15 @@ export default function BillView() {
             </tr>
           </thead>
           <tbody>
-            {order.items.map((item, idx) => {
-              const price = productPrice(item.productId)
+            {order.items?.map((item, idx) => {
+              const price = item.product?.price || 0
+              const total = price * item.qty
               return (
                 <tr key={idx}>
-                  <td>{productName(item.productId)}</td>
+                  <td>{item.product?.title || `Product #${item.productId}`}</td>
                   <td className="text-right">₹{price.toLocaleString()}</td>
                   <td className="text-center">{item.qty}</td>
-                  <td className="text-right">₹{(price * item.qty).toLocaleString()}</td>
+                  <td className="text-right">₹{total.toLocaleString()}</td>
                 </tr>
               )
             })}
@@ -123,6 +107,8 @@ export default function BillView() {
           </tfoot>
         </table>
 
+
+
         <footer className="bill-footer">
           <p>Thank you for your business!</p>
           <p className="small">This is a computer-generated invoice and does not require a signature.</p>
@@ -131,7 +117,73 @@ export default function BillView() {
 
       <div className="print-actions">
         <button onClick={() => window.print()} className="btn-print">Print / Save PDF</button>
+        <Link to="/orders" className="btn-back">Back to Orders</Link>
       </div>
+
+      <style>{`
+        .loading-bill {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 1.2rem;
+            color: #555;
+        }
+        .bill-error {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            gap: 1rem;
+        }
+        .bill-note {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-left: 4px solid #eee;
+        }
+        .print-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 20px;
+        }
+        .btn-print {
+            padding: 10px 20px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn-back {
+            padding: 10px 20px;
+            background: white;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1rem;
+        }
+        @media print {
+            .print-actions {
+                display: none;
+            }
+            .bill {
+                background: white;
+                padding: 0;
+            }
+            .bill-paper {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                min-height: auto;
+                padding: 20px;
+            }
+        }
+      `}</style>
     </div>
   )
 }
