@@ -3,11 +3,13 @@ import useCustomerAuthStore from '../state/customer/CustomerAuthStore'
 import { Status } from '../core/enum/Status'
 import useCartStore from '../state/customer/CartStore';
 import useCustomerOrderStore from '../state/customer/CustomerOrderStore';
+import useWishlistStore from '../state/customer/WishlistStore';
 
 export default function Dashboard() {
   const store = useCustomerAuthStore();
   const orderStore = useCustomerOrderStore();
   const cartStore = useCartStore();
+  const wishlistStore = useWishlistStore();
   // const { state, dispatch } = useStore()
 
 
@@ -84,7 +86,7 @@ export default function Dashboard() {
               </div>
               <div className="card-content">
                 <h3>Your Wishlist</h3>
-                <p>{0} items saved for later</p>
+                <p>{wishlistStore.wishlists.length} items saved for later</p>
               </div>
               <div className="arrow-icon">→</div>
             </Link>

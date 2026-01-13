@@ -1,26 +1,33 @@
-import { useStore } from '../state/Store'
 import { Link, useNavigate } from 'react-router-dom'
 import { ProductModel } from '../data/model/ProductModel'
 import useCartStore from '../state/customer/CartStore'
+import useWishlistStore from '../state/customer/WishlistStore'
 
 export default function ProductCard({ product }: { product: ProductModel }) {
-  const { state, dispatch } = useStore()
   const { addToCart } = useCartStore()
+  const { wishlists, addToWishlist, removeFromWishlistByProduct } = useWishlistStore()
   const cstore = useCartStore()
   const navigate = useNavigate()
-  const wished = state.wishlist.includes(product.id.toString())
+  const wished = wishlists.some(w => w.productId === product.id)
 
   // Mock data to match the design since they are missing in the Product type
   const mrp = Math.floor(product.price * 1.4) // 40% markup for demo
   const discount = Math.round(((mrp - product.price) / mrp) * 100)
   const inCart = cstore.carts.some(c => c.productId === product.id)
-  const rating = 5.0
   const reviewCount = 18
   const deliveryDate = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
     weekday: 'short',
     month: 'short',
     day: '2-digit',
   })
+
+  const toggleWishlist = async () => {
+    if (wished) {
+      await removeFromWishlistByProduct(product.id)
+    } else {
+      await addToWishlist(product.id)
+    }
+  }
 
   return (
     <div className="product-card">
@@ -34,16 +41,9 @@ export default function ProductCard({ product }: { product: ProductModel }) {
         <button
           aria-label="Toggle wishlist"
           className={`heart ${wished ? 'active' : ''}`}
-        // onClick={() =>
-        // dispatch({
-        //   type: wished ? 'WISHLIST_REMOVE' : 'WISHLIST_ADD',
-        //   productId: product.id,
-        // })
-        // }
+          onClick={toggleWishlist}
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-          </svg>
+          <i className={`fa ${wished ? 'fa-heart' : 'fa-heart-o'}`} style={{ fontSize: '24px' }}></i>
         </button>
       </div>
 

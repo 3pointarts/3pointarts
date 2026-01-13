@@ -23,6 +23,8 @@ export default function Cart() {
     return sum + ((item.product?.price ?? 0) * item.qty)
   }, 0)
 
+  const hasOutOfStock = store.carts.some(item => item.product && item.product.stock <= 0)
+
   const productDiscount = totalMrp - totalSellingPrice
 
   // Coupon Logic
@@ -112,26 +114,30 @@ export default function Cart() {
                       </div>
 
                       <div className="item-controls">
-                        <div className="qty-control" style={{ display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: '4px', marginRight: '10px' }}>
-                          <button
-                            onClick={() => {
-                              if (item.qty > 1) {
-                                store.updateCartQty(item.id, product.id, item.qty - 1)
-                              }
-                            }}
-                            style={{ padding: '2px 8px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderRight: '1px solid #ddd' }}
-                          >
-                            -
-                          </button>
-                          <span style={{ padding: '0 10px', minWidth: '30px', textAlign: 'center', fontWeight: 'bold' }}>{item.qty}</span>
-                          <button
-                            onClick={() => store.updateCartQty(item.id, product.id, item.qty + 1)}
-                            style={{ padding: '2px 8px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderLeft: '1px solid #ddd' }}
-                          >
-                            +
-                          </button>
-                        </div>
 
+                        {product.stock <= 0 ? (
+                          <span className="out-of-stock">Out of stock</span>
+                        ) : (
+                          <div className="qty-control" style={{ display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: '4px', marginRight: '10px' }}>
+                            <button
+                              onClick={() => {
+                                if (item.qty > 1) {
+                                  store.updateCartQty(item.id, product.id, item.qty - 1)
+                                }
+                              }}
+                              style={{ padding: '2px 8px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderRight: '1px solid #ddd' }}
+                            >
+                              -
+                            </button>
+                            <span style={{ padding: '0 10px', minWidth: '30px', textAlign: 'center', fontWeight: 'bold' }}>{item.qty}</span>
+                            <button
+                              onClick={() => store.updateCartQty(item.id, product.id, item.qty + 1)}
+                              style={{ padding: '2px 8px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderLeft: '1px solid #ddd' }}
+                            >
+                              +
+                            </button>
+                          </div>
+                        )}
                         <div className="control-links">
                           <button
                             className="link-button"
@@ -228,9 +234,20 @@ export default function Cart() {
                 {discountPercent > 0 && <div className="coupon-success">"BIRTHDAY" applied!</div>}
               </div>
 
-              <Link to="/checkout" className="btn-proceed-buy">
-                Proceed to Buy
-              </Link>
+              {hasOutOfStock ? (
+                <>
+                  <button className="btn-proceed-buy" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                    Proceed to Buy
+                  </button>
+                  <p style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>
+                    Remove out of stock product from cart first
+                  </p>
+                </>
+              ) : (
+                <Link to="/checkout" className="btn-proceed-buy">
+                  Proceed to Buy
+                </Link>
+              )}
             </div>
 
 

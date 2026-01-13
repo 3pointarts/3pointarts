@@ -3,16 +3,18 @@ import { useEffect, useMemo, useState } from 'react'
 import useAdminProductStore from '../state/admin/AdminProductStore'
 import { Status } from '../core/enum/Status'
 import useCartStore from '../state/customer/CartStore'
+import useWishlistStore from '../state/customer/WishlistStore'
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { products, init, initStatus } = useAdminProductStore()
   const { addToCart } = useCartStore()
+  const { wishlists, addToWishlist, removeFromWishlistByProduct } = useWishlistStore()
   const cstore = useCartStore()
   const [qty, setQty] = useState(1)
   const product = products.find((p) => p.id == Number(id))
-  const wished = false
+  const wished = wishlists.some(w => w.productId === product?.id)
 
 
 
@@ -140,32 +142,38 @@ export default function ProductDetails() {
               </button>
             </div>
           </div>
-          <div className='row'>
-            {inCart ?
-              (<Link to="/cart" className='col-md-6'><h5> Added to cart</h5></Link>) : (<button
-                className="btn-amazon-primary col-md-6"
-                onClick={async () => {
-                  await addToCart(product.id, qty)
-                }}
-              >
-                Add to Cart
-              </button>)}
-            <button className="btn-amazon-secondary col-md-6" onClick={async () => {
-              if (!inCart) {
-                await addToCart(product.id, qty);
-              }
-              navigate('/cart')
-            }}>Buy Now</button>
-          </div>
+          {product.stock <= 0 ? (
+            <span className="out-of-stock">Out of stock</span>
+          ) : (
+            <div className='row'>
+              {inCart ?
+                (<Link to="/cart" className='col-md-6'><h5> Added to cart</h5></Link>) : (<button
+                  className="btn-amazon-primary col-md-6"
+                  onClick={async () => {
+                    await addToCart(product.id, qty)
+                  }}
+                >
+                  Add to Cart
+                </button>)}
+              <button className="btn-amazon-secondary col-md-6" onClick={async () => {
+                if (!inCart) {
+                  await addToCart(product.id, qty);
+                }
+                navigate('/cart')
+              }}>Buy Now</button>
+            </div>)}
           <div className="wishlist-row">
             <button
               className="btn-link-sm"
-            // onClick={() =>
-            // dispatch({
-            //   type: wished ? 'WISHLIST_REMOVE' : 'WISHLIST_ADD',
-            //   productId: product.id,
-            // })
-            // }
+              onClick={async () => {
+                if (product) {
+                  if (wished) {
+                    await removeFromWishlistByProduct(product.id)
+                  } else {
+                    await addToWishlist(product.id)
+                  }
+                }
+              }}
             >
               {wished ? 'Remove from Wishlist' : 'Add to Wishlist'}
             </button>

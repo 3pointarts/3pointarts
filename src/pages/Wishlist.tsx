@@ -1,17 +1,27 @@
-import { useStore } from '../state/Store'
-import ProductCard from '../components/ProductCard'
+import { useEffect } from 'react';
+import ProductCard from '../components/ProductCard';
+import useWishlistStore from '../state/customer/WishlistStore';
+import { Status } from '../core/enum/Status';
 
 export default function Wishlist() {
-  const { state } = useStore()
-  const items = state.products.filter((p) => state.wishlist.includes(p.id))
+  const { wishlists, loadWishlists, status } = useWishlistStore();
+
+  useEffect(() => {
+    loadWishlists();
+  }, [loadWishlists]);
+
+  if (status === Status.loading) {
+    return <div>Loading wishlist...</div>;
+  }
+
   return (
     <section>
       <h2>Wishlist</h2>
       <div className="grid">
-        {items.map((p) => (
-          <ProductCard key={p.id} product={p} />
+        {wishlists.map((w) => (
+          w.product && <ProductCard key={w.id} product={w.product} />
         ))}
-        {items.length === 0 && <div>Your wishlist is empty.</div>}
+        {wishlists.length === 0 && <div>Your wishlist is empty.</div>}
       </div>
     </section>
   )
