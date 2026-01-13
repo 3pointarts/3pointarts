@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
-import { categories } from '../data/products'
 import HomeCarousel from '../components/HomeCarousel'
-
+import useAdminProductStore from '../state/admin/AdminProductStore'
+import { useEffect } from 'react'
 const categoryImages: Record<string, string> = {
   'Lamp': '/assets/images/lamp.png',
   'Statue': '/assets/images/statue.jpg',
@@ -10,6 +10,10 @@ const categoryImages: Record<string, string> = {
 }
 
 export default function Home() {
+  const productStore = useAdminProductStore()
+  useEffect(() => {
+    productStore.init()
+  }, [])
   return (
     <section>
       <HomeCarousel />
@@ -20,12 +24,12 @@ export default function Home() {
         <Link className="cta" to="/catalog">Browse Catalog</Link>
       </div>
       <div className="categories">
-        {categories.map((c) => (
-          <Link key={c} to={`/catalog?category=${encodeURIComponent(c)}`} className="category-card">
+        {productStore.categories.map((c, index) => (
+          <Link key={c.id} to={`/catalog?category=${encodeURIComponent(c.id)}`} className="category-card">
             <div className="category-image">
-              <img src={categoryImages[c] || '/assets/images/full_logo.png'} alt={c} />
+              <img src={c.image || categoryImages[index] || '/assets/images/full_logo.png'} alt={c.name} />
             </div>
-            <span>{c}</span>
+            <span>{c.name}</span>
           </Link>
         ))}
       </div>

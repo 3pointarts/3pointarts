@@ -1,13 +1,6 @@
-export type Category = 'Lamp' | 'Statue' | 'Cars' | 'Lego Toys'
+export type Category = string
 
-export type Product = {
-  id: string
-  name: string
-  description: string
-  price: number
-  category: Category
-  imageUrl?: string
-}
+
 
 export type CartItem = {
   productId: string

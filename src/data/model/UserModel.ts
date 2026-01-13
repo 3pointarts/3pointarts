@@ -8,7 +8,15 @@ export class UserModel {
     phone: string;
     password?: string;
     role: UserRole;
-    constructor(
+    constructor({
+        id,
+        createdAt,
+        name,
+        email,
+        phone,
+        role,
+        password,
+    }: {
         id: string,
         createdAt: Date,
         name: string,
@@ -16,7 +24,7 @@ export class UserModel {
         phone: string,
         role: UserRole,
         password?: string
-    ) {
+    }) {
         this.id = id;
         this.createdAt = createdAt;
         this.name = name;
@@ -27,14 +35,14 @@ export class UserModel {
     }
 
     static fromMap(json: any): UserModel {
-        return new UserModel(
-            json.id,
-            json.created_at ? new Date(json.created_at) : new Date(),
-            json.name,
-            json.email,
-            json.phone,
-            json.role as UserRole,
-            json.password,
-        );
+        return new UserModel({
+            id: json.id,
+            createdAt: json.created_at ? new Date(json.created_at) : new Date(),
+            name: json.name,
+            email: json.email,
+            phone: json.phone,
+            role: json.role as UserRole,
+            password: json.password,
+        });
     }
 }

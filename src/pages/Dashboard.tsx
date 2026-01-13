@@ -1,17 +1,18 @@
 import { Link, Navigate } from 'react-router-dom'
 import { useStore } from '../state/Store'
+import useCustomerAuthStore from '../state/customer/CustomerAuthStore'
 
 export default function Dashboard() {
-  const { state, dispatch } = useStore()
+  const store = useCustomerAuthStore()
+  // const { state, dispatch } = useStore()
 
-  if (!state.user) {
+  if (!store.customer) {
     return <Navigate to="/login" replace />
   }
 
-  const cartCount = state.cart.reduce((s, c) => s + c.qty, 0)
-  const wishlistCount = state.wishlist.length
-  const ordersCount = state.orders.length
-
+  // const cartCount = state.cart.reduce((s, c) => s + c.qty, 0)
+  // const wishlistCount = state.wishlist.length
+  // const ordersCount = state.orders.length
   return (
     <div className="dashboard-page">
       <div className="dashboard-header">
@@ -23,26 +24,26 @@ export default function Dashboard() {
         <div className="dashboard-profile-card">
           <div className="profile-header">
             <div className="profile-avatar">
-              {state.user.name.charAt(0).toUpperCase()}
+              {store.customer?.name?.charAt(0).toUpperCase() || 'U'}
             </div>
-            <h3>{state.user.name}</h3>
-            <p className="profile-email">{state.user.email}</p>
+            <h3>{store.customer?.name || 'User'}</h3>
+            <p className="profile-email">{store.customer?.email || 'No email'}</p>
           </div>
-          
+
           <div className="profile-details">
             <div className="detail-row">
               <span className="label">Phone:</span>
-              <span className="value">{state.user.phoneNumber || 'Not provided'}</span>
+              <span className="value">{store.customer?.phone || 'Not provided'}</span>
             </div>
             <div className="detail-row">
               <span className="label">Member Since:</span>
-              <span className="value">Jan 2024</span>
+              <span className="value">{store.customer?.createdAt?.toISOString().split('T')[0] || 'N/A'}</span>
             </div>
           </div>
 
-          <button 
+          <button
             className="btn-logout"
-            onClick={() => dispatch({ type: 'LOGOUT' })}
+            onClick={() => store.logout()}
           >
             Sign Out
           </button>
@@ -50,7 +51,7 @@ export default function Dashboard() {
 
         {/* Right Column: Action Cards */}
         <div className="dashboard-actions">
-          
+
           <Link to="/cart" className="action-card">
             <div className="icon-box cart-icon">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -61,7 +62,7 @@ export default function Dashboard() {
             </div>
             <div className="card-content">
               <h3>Your Cart</h3>
-              <p>{cartCount} items in your cart</p>
+              <p>{0} items in your cart</p>
             </div>
             <div className="arrow-icon">→</div>
           </Link>
@@ -74,7 +75,7 @@ export default function Dashboard() {
             </div>
             <div className="card-content">
               <h3>Your Wishlist</h3>
-              <p>{wishlistCount} items saved for later</p>
+              <p>{0} items saved for later</p>
             </div>
             <div className="arrow-icon">→</div>
           </Link>
@@ -89,7 +90,7 @@ export default function Dashboard() {
             </div>
             <div className="card-content">
               <h3>Your Orders</h3>
-              <p>{ordersCount} orders placed</p>
+              <p>{0} orders placed</p>
             </div>
             <div className="arrow-icon">→</div>
           </Link>

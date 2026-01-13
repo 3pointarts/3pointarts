@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useStore } from '../state/Store'
+import useAdminProductStore from '../state/admin/AdminProductStore'
 import ProductCard from '../components/ProductCard'
-import { categories } from '../data/products'
+import { Status } from '../core/enum/Status'
 
 function useQuery() {
   const { search } = useLocation()
@@ -10,28 +10,44 @@ function useQuery() {
 }
 
 export default function Catalog() {
-  const { state } = useStore()
+  const { products, categories, init, initStatus } = useAdminProductStore()
   const q = useQuery()
   const query = (q.get('q') || '').toLowerCase()
-  const category = q.get('category') || ''
+  const categoryParam = q.get('category')
+  const categoryId = categoryParam ? parseInt(categoryParam, 10) : null
+
+  useEffect(() => {
+    if (initStatus === Status.init) {
+      init()
+    }
+  }, [init, initStatus])
 
   const [minPrice, setMinPrice] = useState(0)
   const [maxPrice, setMaxPrice] = useState(5000)
-  const [selectedCats, setSelectedCats] = useState<string[]>(category ? [category] : [])
+  const [selectedCatIds, setSelectedCatIds] = useState<number[]>(categoryId ? [categoryId] : [])
   type SortOpt = 'featured' | 'price-asc' | 'price-desc'
   const [sort, setSort] = useState<SortOpt>('featured')
 
-  const prices = state.products.map((p) => p.price)
-  const floor = Math.min(...prices)
-  const ceil = Math.max(...prices)
-  const min = Math.min(minPrice || floor, ceil)
-  const max = Math.max(maxPrice || ceil, floor)
+  // Update selected categories if URL param changes
+  useEffect(() => {
+    if (categoryId) {
+      setSelectedCatIds([categoryId])
+    }
+  }, [categoryId])
 
-  const filtered = state.products
+  const prices = products.map((p) => p.price)
+  const floor = prices.length ? Math.min(...prices) : 0
+  const ceil = prices.length ? Math.max(...prices) : 5000
+
+  // Calculate effective min/max
+  const min = Math.max(minPrice || floor, floor)
+  const max = Math.min(maxPrice || ceil, ceil)
+
+  const filtered = products
     .filter((p) => {
       const matchQ =
-        !query || p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query)
-      const matchC = selectedCats.length === 0 || selectedCats.includes(p.category)
+        !query || p.title.toLowerCase().includes(query) || p.about.toLowerCase().includes(query)
+      const matchC = selectedCatIds.length === 0 || selectedCatIds.includes(p.categoryId)
       const matchP = p.price >= min && p.price <= max
       return matchQ && matchC && matchP
     })
@@ -41,10 +57,14 @@ export default function Catalog() {
       return 0
     })
 
-  function toggleCat(c: string) {
-    setSelectedCats((prev) =>
-      prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]
+  function toggleCat(id: number) {
+    setSelectedCatIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     )
+  }
+
+  if (initStatus === Status.loading) {
+    return <div className="text-center p-5">Loading products...</div>
   }
 
   return (
@@ -69,16 +89,16 @@ export default function Catalog() {
               <div className="mb-3">
                 <label className="form-label">Category</label>
                 {categories.map((c) => (
-                  <div className="form-check" key={c}>
+                  <div className="form-check" key={c.id}>
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      id={`cat-${c}`}
-                      checked={selectedCats.includes(c)}
-                      onChange={() => toggleCat(c)}
+                      id={`cat-${c.id}`}
+                      checked={selectedCatIds.includes(c.id)}
+                      onChange={() => toggleCat(c.id)}
                     />
-                    <label className="form-check-label" htmlFor={`cat-${c}`}>
-                      {c}
+                    <label className="form-check-label" htmlFor={`cat-${c.id}`}>
+                      {c.name}
                     </label>
                   </div>
                 ))}
@@ -109,9 +129,9 @@ export default function Catalog() {
         <div>
           {query && <div className="hint">Showing results for “{query}”</div>}
           <div className="product-grid">
-            {filtered.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
+            {filtered.map((p) => {
+              return <ProductCard key={p.id} product={p} />
+            })}
             {filtered.length === 0 && <div>No products found.</div>}
           </div>
         </div>

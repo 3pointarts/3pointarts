@@ -1,15 +1,41 @@
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { useStore } from '../state/Store'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import useAdminProductStore from '../state/admin/AdminProductStore'
+import { Status } from '../core/enum/Status'
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { state, dispatch } = useStore()
+  const { products, init, initStatus } = useAdminProductStore()
   const [qty, setQty] = useState(1)
+  const product = products.find((p) => p.id == Number(id))
+  const wished = false
 
-  const product = state.products.find((p) => p.id === id)
-  const wished = product ? state.wishlist.includes(product.id) : false
+
+
+  const reviews = useMemo(() => {
+    const list = [
+      { id: 1, user: "Ravi Kumar", rating: 5, date: "10 Dec 2024", title: "Great product!", content: "Really loved the quality. Worth the price." },
+      { id: 2, user: "Anita Singh", rating: 4, date: "15 Dec 2024", title: "Good, but delivery late", content: "Product is amazing but delivery took 2 days extra." },
+      { id: 3, user: "John Doe", rating: 5, date: "20 Dec 2024", title: "Perfect fit", content: "Fits perfectly and looks exactly like the image." },
+      { id: 4, user: "Priya M", rating: 3, date: "22 Dec 2024", title: "Average", content: "It's okay for the price, not the best quality." },
+    ]
+    return list.sort(() => Math.random() - 0.5)
+  }, [])
+
+  useEffect(() => {
+    if (initStatus === Status.init) {
+      init()
+    }
+  }, [init, initStatus])
+
+  if (initStatus === Status.loading || initStatus === Status.init) {
+    return (
+      <div className="page" style={{ textAlign: 'center', padding: '50px' }}>
+        <h2>Loading Product...</h2>
+      </div>
+    )
+  }
 
   if (!product) {
     return (
@@ -25,32 +51,31 @@ export default function ProductDetails() {
   const discount = Math.round(((mrp - product.price) / mrp) * 100)
   const rating = 4.5
   const ratingCount = 1245
-  const deliveryDate = "Friday, 12 Jan"
+  const deliveryDate = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: '2-digit',
+  })
 
-  const reviews = [
-    { id: 1, user: "Ravi Kumar", rating: 5, date: "10 Dec 2024", title: "Great product!", content: "Really loved the quality. Worth the price." },
-    { id: 2, user: "Anita Singh", rating: 4, date: "15 Dec 2024", title: "Good, but delivery late", content: "Product is amazing but delivery took 2 days extra." },
-    { id: 3, user: "John Doe", rating: 5, date: "20 Dec 2024", title: "Perfect fit", content: "Fits perfectly and looks exactly like the image." },
-    { id: 4, user: "Priya M", rating: 3, date: "22 Dec 2024", title: "Average", content: "It's okay for the price, not the best quality." },
-  ]
+
 
   return (
     <div className="page product-details-page">
       <div className="breadcrumb">
-        <Link to="/catalog">Catalog</Link> <span>›</span> <span className="active">{product.name}</span>
+        <Link to="/catalog">Catalog</Link> <span>›</span> <span className="active">{product.title}</span>
       </div>
 
       <div className="details-grid-amazon">
         {/* Left Column: Images */}
         <div className="col-images">
           <div className="main-image-container">
-            <img src={product.imageUrl || '/assets/images/full_logo.png'} alt={product.name} />
+            <img src={product.images[0] || '/assets/images/full_logo.png'} alt={product.title} />
           </div>
         </div>
 
         {/* Center Column: Info */}
         <div className="col-info">
-          <h1 className="product-title">{product.name}</h1>
+          <h1 className="product-title">{product.title}</h1>
           <div className="product-meta">
             <div className="rating-row">
               <span className="stars">★★★★☆</span>
@@ -67,6 +92,10 @@ export default function ProductDetails() {
               <span className="currency-lg">₹</span>
               <span className="price-lg">{product.price.toLocaleString()}</span>
             </div>
+            <div className="delivery">
+              <span className="free">FREE delivery</span>
+              <span className="date">{deliveryDate}</span>
+            </div>
             <div className="mrp-row">
               M.R.P.: <span className="strike">₹{mrp.toLocaleString()}</span>
             </div>
@@ -82,7 +111,7 @@ export default function ProductDetails() {
           <div className="about-item">
             <h3>About this item</h3>
             <ul>
-              <li>{product.description}</li>
+              <li>{product.about}</li>
               <li>High quality material ensuring durability and comfort.</li>
               <li>Perfect for daily use or special occasions.</li>
               <li>Easy to clean and maintain.</li>
@@ -106,29 +135,29 @@ export default function ProductDetails() {
               </button>
             </div>
           </div>
-          <div className='d-flex gap-3'>
+          <div className='row'>
             <button
-              className="btn-amazon-primary"
+              className="btn-amazon-primary col-md-6"
               onClick={() => {
                 for (let i = 0; i < qty; i++) {
-                  dispatch({ type: 'CART_ADD', productId: product.id })
+                  // dispatch({ type: 'CART_ADD', productId: product.id })
                 }
                 navigate('/cart')
               }}
             >
               Add to Cart
             </button>
-            <button className="btn-amazon-secondary">Buy Now</button>
+            <button className="btn-amazon-secondary col-md-6">Buy Now</button>
           </div>
           <div className="wishlist-row">
             <button
               className="btn-link-sm"
-              onClick={() =>
-                dispatch({
-                  type: wished ? 'WISHLIST_REMOVE' : 'WISHLIST_ADD',
-                  productId: product.id,
-                })
-              }
+            // onClick={() =>
+            // dispatch({
+            //   type: wished ? 'WISHLIST_REMOVE' : 'WISHLIST_ADD',
+            //   productId: product.id,
+            // })
+            // }
             >
               {wished ? 'Remove from Wishlist' : 'Add to Wishlist'}
             </button>

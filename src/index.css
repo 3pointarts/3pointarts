@@ -1400,7 +1400,6 @@ a:hover {
 }
 
 .btn-amazon-primary {
-    width: 100%;
     background: #FFD814;
     border: 1px solid #FCD200;
     border-radius: 10px;
@@ -1411,7 +1410,6 @@ a:hover {
 }
 
 .btn-amazon-secondary {
-    width: 100%;
     background: #FFA41C;
     border: 1px solid #FF8F00;
     border-radius: 10px;
