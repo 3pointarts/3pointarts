@@ -2,11 +2,14 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
 import useAdminProductStore from '../state/admin/AdminProductStore'
 import { Status } from '../core/enum/Status'
+import useCartStore from '../state/customer/CartStore'
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { products, init, initStatus } = useAdminProductStore()
+  const { addToCart } = useCartStore()
+
   const [qty, setQty] = useState(1)
   const product = products.find((p) => p.id == Number(id))
   const wished = false
@@ -138,11 +141,8 @@ export default function ProductDetails() {
           <div className='row'>
             <button
               className="btn-amazon-primary col-md-6"
-              onClick={() => {
-                for (let i = 0; i < qty; i++) {
-                  // dispatch({ type: 'CART_ADD', productId: product.id })
-                }
-                navigate('/cart')
+              onClick={async () => {
+                await addToCart(product.id, qty)
               }}
             >
               Add to Cart

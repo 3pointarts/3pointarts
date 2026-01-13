@@ -53,11 +53,11 @@ export default function Login() {
     }
   }
 
-  // useEffect(() => {
-  //   if (loginStatus === Status.success) {
-  //     navigate('/dashboard')
-  //   }
-  // }, [loginStatus, navigate])
+  useEffect(() => {
+    if (store.loginStatus === Status.success) {
+      navigate('/dashboard')
+    }
+  }, [store.loginStatus, navigate])
 
 
   return (

@@ -1,29 +1,26 @@
-import { useStore } from '../state/Store'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import useCartStore from '../state/customer/CartStore'
+import useAdminProductStore from '../state/admin/AdminProductStore';
+import useCustomerAuthStore from '../state/customer/CustomerAuthStore';
 
 export default function Cart() {
-  const { state, dispatch, selectors } = useStore()
+  const store = useCartStore();
+  const astore = useCustomerAuthStore();
   const [couponCode, setCouponCode] = useState('')
   const [discountPercent, setDiscountPercent] = useState(0)
 
-  const totalItems = state.cart.reduce((sum, item) => sum + item.qty, 0)
-
-  // Helper to get product details safely
-  const getProduct = (id: string) => selectors.productById(id)
-
-  // Calculate Details
-  const cartItems = state.cart.map(item => {
-    const product = getProduct(item.productId)
-    return { ...item, product }
-  }).filter(item => item.product) as Array<{ productId: string, qty: number, product: any }>
+  const totalItems = store.carts.reduce((sum, item) => sum + item.qty, 0)
 
   // Simulate MRP (e.g., 20% higher than price)
-  const totalMrp = cartItems.reduce((sum, item) => {
-    return sum + (item.product.price * 1.2 * item.qty)
+  const totalMrp = store.carts.reduce((sum, item) => {
+    return sum + (item.product?.price ?? 0 * 1.2 * item.qty)
   }, 0)
 
-  const totalSellingPrice = selectors.cartTotal()
+  const totalSellingPrice = store.carts.reduce((sum, item) => {
+    return sum + (item.product?.price ?? 0 * item.qty)
+  }, 0)
+
   const productDiscount = totalMrp - totalSellingPrice
 
   // Coupon Logic
@@ -55,12 +52,12 @@ export default function Cart() {
             <span className="price-label">Price</span>
           </div>
 
-          {state.cart.length === 0 ? (
+          {store.carts.length === 0 ? (
             <div className="empty-cart-message">
               <p>Your Cart is empty.</p>
               <Link to="/" className="link-button">Shop today's deals</Link>
               <div className="auth-buttons" style={{ marginTop: '1rem' }}>
-                {!state.user && (
+                {!astore.customer && (
                   <>
                     <Link to="/login" className="btn-primary-sm">Sign in to your account</Link>
                   </>
@@ -69,8 +66,8 @@ export default function Cart() {
             </div>
           ) : (
             <div className="cart-list">
-              {state.cart.map((item) => {
-                const product = getProduct(item.productId)
+              {store.carts.map((item) => {
+                const product = item.product
                 if (!product) return null
 
                 return (
@@ -85,8 +82,8 @@ export default function Cart() {
                     <div className="item-image">
                       <Link to={`/product/${item.productId}`}>
                         <img
-                          src={product.imageUrl || 'https://via.placeholder.com/180'}
-                          alt={product.name}
+                          src={product.images[0] || 'https://via.placeholder.com/180'}
+                          alt={product.title}
                         />
                       </Link>
                     </div>
@@ -95,7 +92,7 @@ export default function Cart() {
                     <div className="item-details">
                       <div className="item-header-row">
                         <Link to={`/product/${item.productId}`} className="item-title">
-                          {product.name}
+                          {product.title}
                         </Link>
                         <div className="item-price-mobile">
                           <span className="price-symbol">₹</span>
@@ -115,12 +112,7 @@ export default function Cart() {
                       <div className="item-controls">
                         <select
                           value={item.qty}
-                          onChange={(e) =>
-                            dispatch({
-                              type: 'CART_SET_QTY',
-                              productId: item.productId,
-                              qty: parseInt(e.target.value || '1', 10),
-                            })
+                          onChange={(e) => { }
                           }
                           className="qty-select"
                         >
@@ -132,7 +124,7 @@ export default function Cart() {
                         <div className="control-links">
                           <button
                             className="link-button"
-                            onClick={() => dispatch({ type: 'CART_REMOVE', productId: item.productId })}
+                            onClick={() => { }}
                           >
                             Delete
                           </button>
@@ -158,7 +150,7 @@ export default function Cart() {
             </div>
           )}
 
-          {state.cart.length > 0 && (
+          {store.carts.length > 0 && (
             <div className="cart-subtotal-row">
               <span className="subtotal-label">Subtotal ({totalItems} items):</span>
               <span className="subtotal-amount">₹{finalTotal.toLocaleString()}</span>
@@ -167,7 +159,7 @@ export default function Cart() {
         </div>
 
         {/* Right Column: Summary Box */}
-        {state.cart.length > 0 && (
+        {store.carts.length > 0 && (
           <div className="cart-right-column">
             <div className="cart-summary-box">
               <div className="delivery-check">

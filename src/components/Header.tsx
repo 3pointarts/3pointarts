@@ -1,9 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../state/Store'
 import { useState, type FormEvent } from 'react'
+import useCustomerAuthStore from '../state/customer/CustomerAuthStore'
+import useCartStore from '../state/customer/CartStore'
 
 function Header() {
-  const { state } = useStore()
+  const state = useCustomerAuthStore()
+  const cartState = useCartStore()
   const [query, setQuery] = useState('')
   const navigate = useNavigate()
 
@@ -44,15 +47,15 @@ function Header() {
           </form>
 
           <div className="user-actions">
-            {state.user ? (
+            {state.customer ? (
               <>
                 <Link to="/cart" className="icon-btn" title="Cart">
                   <div className="icon-badge-wrap">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M9 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-7-4h7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-9.2L4.2 3H2v2h1.4l3.6 11.4A2 2 0 0 0 9 16z" />
                     </svg>
-                    {state.cart.reduce((s, c) => s + c.qty, 0) > 0 && (
-                      <span className="badge">{state.cart.reduce((s, c) => s + c.qty, 0)}</span>
+                    {cartState.carts.reduce((s, c) => s + c.qty, 0) > 0 && (
+                      <span className="badge">{cartState.carts.reduce((s, c) => s + c.qty, 0)}</span>
                     )}
                   </div>
                 </Link>

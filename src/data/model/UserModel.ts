@@ -1,7 +1,7 @@
 import type { UserRole } from "../../core/enum/UserRole";
 
 export class UserModel {
-    id: string;
+    id: number;
     createdAt: Date;
     name: string;
     email: string;
@@ -17,7 +17,7 @@ export class UserModel {
         role,
         password,
     }: {
-        id: string,
+        id: number,
         createdAt: Date,
         name: string,
         email: string,
@@ -37,7 +37,7 @@ export class UserModel {
     static fromMap(json: any): UserModel {
         return new UserModel({
             id: json.id,
-            createdAt: json.created_at ? new Date(json.created_at) : new Date(),
+            createdAt: json.created_at ? new Date(json.created_at) : json.createdAt ? new Date(json.createdAt) : new Date(),
             name: json.name,
             email: json.email,
             phone: json.phone,

@@ -6,7 +6,7 @@ import { AuthDatasource } from "../../data/datasource/AuthDatasource";
 import { showError, showSuccess } from "../../core/message";
 import { UserPayload } from "../../data/payload/UserPayload";
 import { UserRole } from "../../core/enum/UserRole";
-
+import useCartStore from "./CartStore";
 const authDatasource = new AuthDatasource();
 
 interface CustomerAuthState {
@@ -22,6 +22,7 @@ interface CustomerAuthState {
     customer: UserModel | null;
 
     // Actions
+    init: () => void;
     setEmail: (email: string) => void;
     setOtp: (otp: string) => void;
     setName: (name: string) => void;
@@ -51,7 +52,14 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
     setOtp: (otp: string) => set({ otp }),
     setName: (name: string) => set({ name }),
     setPhone: (phone: string) => set({ phone }),
-
+    init: () => {
+        set((state) => ({ loginStatus: Status.loading, admin: null }));
+        const customer = localStorage.getItem('customer');
+        if (customer) {
+            useCartStore.getState().loadCarts();
+            set((state) => ({ customer: UserModel.fromMap(JSON.parse(customer)), loginStatus: Status.success }));
+        }
+    },
     sendOtp: async () => {
         const { email } = get();
         if (!email) {
@@ -140,10 +148,8 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
 
 const useCustomerAuthStore = create<CustomerAuthState>()(
     devtools(
-        persist(
-            CustomerAuthStore,
-            { name: "customer-auth-store" }
-        )
+        CustomerAuthStore,
+        { name: "customer-auth-store" }
     )
 );
 

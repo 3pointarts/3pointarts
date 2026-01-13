@@ -21,6 +21,7 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import ProductDetails from './pages/ProductDetails'
 import { ToastContainer } from 'react-toastify'
 import { useEffect } from 'react'
+import useCustomerAuthStore from './state/customer/CustomerAuthStore'
 const PublicLayout = () => {
   return (
     <div className="app">
@@ -35,8 +36,10 @@ const PublicLayout = () => {
 
 function App() {
   const initAdmin = useAdminAuthStore((state) => state.init);
+  const initCustomer = useCustomerAuthStore((state) => state.init);
   useEffect(() => {
     initAdmin();
+    initCustomer();
   }, []);
   return (
     <StoreProvider>

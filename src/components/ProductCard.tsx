@@ -1,14 +1,19 @@
 import { useStore } from '../state/Store'
 import { Link, useNavigate } from 'react-router-dom'
 import { ProductModel } from '../data/model/ProductModel'
+import useCartStore from '../state/customer/CartStore'
+
 export default function ProductCard({ product }: { product: ProductModel }) {
   const { state, dispatch } = useStore()
+  const { addToCart } = useCartStore()
+  const cstore = useCartStore()
   const navigate = useNavigate()
   const wished = state.wishlist.includes(product.id.toString())
 
   // Mock data to match the design since they are missing in the Product type
   const mrp = Math.floor(product.price * 1.4) // 40% markup for demo
   const discount = Math.round(((mrp - product.price) / mrp) * 100)
+  const inCart = cstore.carts.some(c => c.productId === product.id)
   const rating = 5.0
   const reviewCount = 18
   const deliveryDate = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
@@ -77,18 +82,21 @@ export default function ProductCard({ product }: { product: ProductModel }) {
           {product.stock <= 0 ? (
             <span className="out-of-stock">Out of stock</span>
           ) : (
-            <button
-              className="btn-cart"
-              onClick={() => {
-                // dispatch({ type: 'CART_ADD', productId: product.id })
-                navigate('/cart')
-              }}
-            >
-              Add to cart
-            </button>
+            inCart ?
+              (<Link to="/cart"><h3> Added to cart</h3></Link>) : (
+                <button
+                  className="btn-cart"
+                  onClick={() => {
+                    addToCart(product.id, 1)
+                    navigate('/cart')
+                  }}
+                >
+                  Add to cart
+                </button>
+              )
           )}
         </div>
       </div>
-    </div>
+    </div >
   )
 }
