@@ -14,12 +14,16 @@ interface AdminAuthState {
     email: string;
     password: string;
     admin: UserModel | null;
+    customers: UserModel[];
+    listCustomersStatus: Status;
     //event
     init: () => Promise<void>,
     setEmail: (email: string) => Promise<void>,
     setPassword: (password: string) => Promise<void>,
     login: () => Promise<void>;
     logout: () => Promise<void>;
+    listCustomers: () => Promise<void>;
+    updateCustomer: (id: number, data: any) => Promise<void>;
 }
 
 const AdminAuthStore: StateCreator<AdminAuthState> = (set, get) => ({
@@ -27,11 +31,14 @@ const AdminAuthStore: StateCreator<AdminAuthState> = (set, get) => ({
     loginStatus: Status.init,
     email: "",
     password: "",
+    customers: [],
+    listCustomersStatus: Status.init,
     //event
     init: async () => {
         set((state) => ({ loginStatus: Status.init, admin: null }));
         let a = localStorage.getItem('admin');
         if (a) {
+            get().listCustomers();
             useAdminOrderStore.getState().init();
             set((state) => ({ admin: UserModel.fromMap(JSON.parse(a)), loginStatus: Status.success }));
         }
@@ -56,6 +63,27 @@ const AdminAuthStore: StateCreator<AdminAuthState> = (set, get) => ({
         set((state) => ({ admin: null, loginStatus: Status.init }));
         localStorage.removeItem('admin');
     },
+    listCustomers: async () => {
+        set({ listCustomersStatus: Status.loading });
+        try {
+            const customers = await authDatasource.listCustomers();
+            set({ customers, listCustomersStatus: Status.success });
+        } catch (error) {
+            console.error(error);
+            showError("Failed to list customers");
+            set({ listCustomersStatus: Status.error });
+        }
+    },
+    updateCustomer: async (id: number, data: any) => {
+        try {
+            await authDatasource.updateUser(id, data);
+            showSuccess("Customer updated successfully");
+            await get().listCustomers();
+        } catch (error) {
+            console.error(error);
+            showError("Failed to update customer");
+        }
+    }
 });
 
 const useAdminAuthStore = create<AdminAuthState>()(

@@ -46,4 +46,14 @@ export class AuthDatasource {
         }
         throw new Error("Failed to register customer");
     }
+
+    async updateUser(id: number, data: any): Promise<void> {
+        await http(`${BASE_URL}?id=eq.${id}`, {
+            method: "PATCH",
+            headers: {
+                Prefer: "return=representation",
+            },
+            body: JSON.stringify(data),
+        });
+    }
 }
