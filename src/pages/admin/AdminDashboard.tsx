@@ -9,11 +9,12 @@ import useAdminAuthStore from '../../state/admin/AdminAuthStore';
 import useAdminProductStore from '../../state/admin/AdminProductStore';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import useAdminOrderStore from '../../state/admin/AdminOrderStore';
 export default function AdminDashboard() {
     const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState('dashboard');
     const admin = useAdminAuthStore((state) => state.admin);
+    const orderStore = useAdminOrderStore((state) => state);
     const init = useAdminProductStore((state) => state.init);
     const products = useAdminProductStore((state) => state.products);
     const logout = useAdminAuthStore((state) => state.logout);
@@ -36,7 +37,7 @@ export default function AdminDashboard() {
                                 <div className="stat-icon">🆕</div>
                                 <div className="stat-info">
                                     <h3>New Orders</h3>
-                                    <div className="value">150</div>
+                                    <div className="value">{orderStore.newOrders.length}</div>
                                     <div className="trend up">↗ 12%</div>
                                 </div>
                             </div>
@@ -44,7 +45,7 @@ export default function AdminDashboard() {
                                 <div className="stat-icon">🏗️</div>
                                 <div className="stat-info">
                                     <h3>Building Orders</h3>
-                                    <div className="value">45</div>
+                                    <div className="value">{orderStore.buildingOrders.length}</div>
                                     <div className="trend normal">− 2%</div>
                                 </div>
                             </div>
@@ -52,7 +53,7 @@ export default function AdminDashboard() {
                                 <div className="stat-icon">✅</div>
                                 <div className="stat-info">
                                     <h3>Completed Orders</h3>
-                                    <div className="value">3,800</div>
+                                    <div className="value">{orderStore.completedOrders.length}</div>
                                     <div className="trend up">↗ 25%</div>
                                 </div>
                             </div>

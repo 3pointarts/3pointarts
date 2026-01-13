@@ -1,11 +1,13 @@
 import { create, type StateCreator } from "zustand";
-
 import { devtools, persist } from "zustand/middleware";
 import { UserModel } from "../../data/model/UserModel";
 import { Status } from "../../core/enum/Status";
 import { AuthDatasource } from "../../data/datasource/AuthDatasource";
 import { showError, showSuccess } from "../../core/message";
+import useAdminOrderStore from "./AdminOrderStore";
+
 const authDatasource = new AuthDatasource();
+
 interface AdminAuthState {
     //state
     loginStatus: Status;
@@ -30,6 +32,7 @@ const AdminAuthStore: StateCreator<AdminAuthState> = (set, get) => ({
         set((state) => ({ loginStatus: Status.init, admin: null }));
         let a = localStorage.getItem('admin');
         if (a) {
+            useAdminOrderStore.getState().init();
             set((state) => ({ admin: UserModel.fromMap(JSON.parse(a)), loginStatus: Status.success }));
         }
     },

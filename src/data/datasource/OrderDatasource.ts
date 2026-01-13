@@ -17,7 +17,7 @@ export class OrderDatasource {
             },
             body: JSON.stringify(payload.toMap()),
         });
-        
+
         const orderData = orderRes[0];
         const orderId = orderData.id;
 
@@ -45,5 +45,23 @@ export class OrderDatasource {
     async listOrdersByStatus(status: OrderStatus): Promise<OrderModel[]> {
         const res = await http<any[]>(`${ORDER_URL}?status=eq.${status}&select=*,order_items(*,products(*)),users(*)&order=created_at.desc`);
         return res.map((item) => OrderModel.fromMap(item));
+    }
+
+    async updateOrderStatus(id: number, status: OrderStatus): Promise<void> {
+        await http(`${ORDER_URL}?id=eq.${id}`, {
+            method: "PATCH",
+            headers: {
+                Prefer: "return=representation",
+            },
+            body: JSON.stringify({ status }),
+        });
+    }
+
+    async getOrderById(id: number): Promise<OrderModel | null> {
+        const res = await http<any[]>(`${ORDER_URL}?id=eq.${id}&select=*,order_items(*,products(*)),users(*)`);
+        if (res && res.length > 0) {
+            return OrderModel.fromMap(res[0]);
+        }
+        return null;
     }
 }

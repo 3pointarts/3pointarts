@@ -1,19 +1,20 @@
 import { useParams, Link } from 'react-router-dom'
 import { useEffect } from 'react'
-import useCustomerOrderStore from '../state/customer/CustomerOrderStore'
+import useAdminOrderStore from '../state/admin/AdminOrderStore'
+
 import { Status } from '../core/enum/Status'
 
 export default function BillView() {
   const { orderId } = useParams()
-  const { orders, status, loadOrders } = useCustomerOrderStore()
+  const { selectedOrder, getOrderStatus, getOrderById } = useAdminOrderStore()
 
   useEffect(() => {
-    if (orders.length === 0 && status === Status.init) {
-      loadOrders()
+    if (getOrderStatus === Status.init) {
+      getOrderById(Number(orderId))
     }
-  }, [orders.length, status, loadOrders])
+  }, [selectedOrder])
 
-  const order = orders.find((o) => o.id === Number(orderId))
+  const order = selectedOrder?.id === Number(orderId) ? selectedOrder : null
 
   if (status === Status.loading) {
     return <div className="loading-bill">Loading invoice...</div>
