@@ -65,20 +65,25 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
         }
     },
     sendOtp: async () => {
-        const { email } = get();
-        if (!email) {
-            showError("Please enter your email");
+        const { phone } = get();
+        if (!phone) {
+            showError("Please enter your phone number");
             return;
         }
         set({ otpStatus: Status.loading });
 
-        // Simulate OTP generation
-        const otp = Math.floor(1000 + Math.random() * 9000).toString();
-        set({ generatedOtp: otp, otpStatus: Status.success });
+        // Generate OTP
+        const otp = Math.floor(100000 + (Math.random() * 900000)).toString();
 
-        // In a real app, this would be an API call
-        console.log(`OTP for ${email}: ${otp}`);
-        showSuccess(`OTP sent to ${email} (Check console: ${otp})`);
+        try {
+            await authDatasource.sendPhoneOtp(phone, otp);
+            set({ generatedOtp: otp, otpStatus: Status.success, step: 2 });
+            showSuccess(`OTP sent to ${phone}`);
+        } catch (e) {
+            set({ otpStatus: Status.error });
+            showError("Failed to send OTP");
+            console.error(e);
+        }
     },
 
     verifyOtp: (otp: string) => {
@@ -91,9 +96,9 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
     },
 
     checkUserExists: async () => {
-        const { email } = get();
+        const { phone } = get();
         try {
-            const user = await authDatasource.customerLogin(email);
+            const user = await authDatasource.customerLoginByPhone(phone);
             if (user) {
                 return true;
             }
@@ -103,11 +108,13 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
         }
     },
 
+
+
     login: async () => {
-        const { email } = get();
+        const { phone } = get();
         set({ loginStatus: Status.loading });
         try {
-            const user = await authDatasource.customerLogin(email);
+            const user = await authDatasource.customerLoginByPhone(phone);
             if (user) {
                 localStorage.setItem('customer', JSON.stringify(user));
                 showSuccess('Login Successful!');

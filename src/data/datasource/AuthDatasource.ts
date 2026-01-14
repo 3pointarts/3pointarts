@@ -31,12 +31,31 @@ export class AuthDatasource {
         return res.map(u => UserModel.fromMap(u));
     }
 
-    async customerLogin(email: string): Promise<UserModel | null> {
-        const users = await http<any[]>(BASE_URL + '?email=eq.' + email);
+    // async customerLogin(email: string): Promise<UserModel | null> {
+    //     const users = await http<any[]>(BASE_URL + '?email=eq.' + email);
+    //     if (users.length > 0) {
+    //         return UserModel.fromMap(users[0]);
+    //     }
+    //     return null;
+    // }
+
+
+    async customerLoginByPhone(phone: string): Promise<UserModel | null> {
+        const users = await http<any[]>(BASE_URL + '?phone=eq.' + phone);
         if (users.length > 0) {
             return UserModel.fromMap(users[0]);
         }
         return null;
+    }
+
+    async sendPhoneOtp(phone: string, otp: string): Promise<void> {
+        const USER = "3pointarts@gmail.com";
+        const KEY = "UUGYDIHOLFUJFHDUIGVKGRTJHCCJYG";
+        const otpUrl = `https://otp.indiahost.org/send_otp.php?mobile=+91${phone}&otp=${otp}&user=${USER}&key=${KEY}`;
+
+        // Use no-cors mode to bypass CORS preflight and checks.
+        // The response will be opaque (status 0, ok false), so we cannot check for errors.
+        await fetch(otpUrl, { mode: 'no-cors' });
     }
 
     async customerRegister(payload: UserPayload): Promise<UserModel> {

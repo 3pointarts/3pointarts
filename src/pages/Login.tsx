@@ -9,9 +9,9 @@ export default function Login() {
   const [error, setError] = useState('')
 
   // Step 1: Request OTP
-  async function handleEmailSubmit(e: React.FormEvent) {
+  async function handlePhoneSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!store.email) return
+    if (!store.phone) return
     await store.sendOtp()
     if (store.otpStatus === Status.success) {
       store.setStep(2)
@@ -69,15 +69,15 @@ export default function Login() {
 
 
       {store.step === 1 && (
-        <form onSubmit={handleEmailSubmit} className="login-form">
+        <form onSubmit={handlePhoneSubmit} className="login-form">
           <div className="form-group">
-            <label>Email Address</label>
+            <label>Phone Number</label>
             <input
-              type="email"
-              value={store.email}
-              onChange={e => store.setEmail(e.target.value)}
+              type="tel"
+              value={store.phone}
+              onChange={e => store.setPhone(e.target.value)}
               required
-              placeholder="Enter your email"
+              placeholder="Enter your phone number"
             />
           </div>
           <button type="submit" className="btn-primary" disabled={store.otpStatus === Status.loading}>
@@ -88,9 +88,9 @@ export default function Login() {
 
       {store.step === 2 && (
         <form onSubmit={handleOtpSubmit} className="login-form">
-          <p>We sent an OTP to {store.email}</p>
+          <p>We sent an OTP to {store.phone} </p>
           {/* In a real app, don't show the OTP here */}
-          <div className="otp-demo">Demo OTP: {store.generatedOtp}</div>
+          <div className="otp-demo">Note: Please check OTP is Sended by SB Genus.</div>
 
           <div className="form-group">
             <label>Enter OTP</label>
@@ -125,13 +125,13 @@ export default function Login() {
           </div>
 
           <div className="form-group">
-            <label>Phone Number</label>
+            <label>Email Address</label>
             <input
-              type="tel"
-              value={store.phone}
-              onChange={e => store.setPhone(e.target.value)}
+              type="email"
+              value={store.email}
+              onChange={e => store.setEmail(e.target.value)}
               required
-              placeholder="Your Phone Number"
+              placeholder="Your Email Address"
             />
           </div>
 
