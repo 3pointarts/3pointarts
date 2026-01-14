@@ -1,5 +1,5 @@
 import { create, type StateCreator } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
 import { UserModel } from "../../data/model/UserModel";
 import { Status } from "../../core/enum/Status";
 import { AuthDatasource } from "../../data/datasource/AuthDatasource";
@@ -35,32 +35,32 @@ const AdminAuthStore: StateCreator<AdminAuthState> = (set, get) => ({
     listCustomersStatus: Status.init,
     //event
     init: async () => {
-        set((state) => ({ loginStatus: Status.init, admin: null }));
+        set(() => ({ loginStatus: Status.init, admin: null }));
         let a = localStorage.getItem('admin');
         if (a) {
             get().listCustomers();
             useAdminOrderStore.getState().init();
-            set((state) => ({ admin: UserModel.fromMap(JSON.parse(a)), loginStatus: Status.success }));
+            set(() => ({ admin: UserModel.fromMap(JSON.parse(a)), loginStatus: Status.success }));
         }
     },
     setEmail: async (email: string) => set({ email }),
     setPassword: async (password: string) => set({ password }),
     login: async () => {
         const { email, password } = get();
-        set((state) => ({ loginStatus: Status.loading }));
+        set(() => ({ loginStatus: Status.loading }));
         try {
             const admin = await authDatasource.adminLogin(email, password);
             localStorage.setItem('admin', JSON.stringify(admin));
             showSuccess('Login Successful! Welcome Admin.');
-            set((state) => ({ admin: admin, loginStatus: Status.success, email: '', password: '' }));
+            set(() => ({ admin: admin, loginStatus: Status.success, email: '', password: '' }));
         } catch (error) {
             console.error(error);
             showError('Login Failed! Please check your email and password.');
-            set((state) => ({ loginStatus: Status.error }));
+            set(() => ({ loginStatus: Status.error }));
         }
     },
     logout: async () => {
-        set((state) => ({ admin: null, loginStatus: Status.init }));
+        set(() => ({ admin: null, loginStatus: Status.init }));
         localStorage.removeItem('admin');
     },
     listCustomers: async () => {

@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import './App.css'
 import useAdminAuthStore from './state/admin/AdminAuthStore'
-import { StoreProvider } from './state/Store'
+
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -43,7 +43,7 @@ function App() {
     initCustomer();
   }, []);
   return (
-    <StoreProvider>
+    <>
       <BrowserRouter>
         <Routes>
           <Route element={<PublicLayout />}>
@@ -69,7 +69,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       <ToastContainer />
-    </StoreProvider>
+    </>
   )
 }
 

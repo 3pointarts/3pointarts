@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './admin.css';
 import useAdminAuthStore from '../../state/admin/AdminAuthStore';
 import { Status } from '../../core/enum/Status';
 export default function AdminLogin() {
-    const [message, setMessage] = useState('')
     const navigate = useNavigate()
 
     // Selectors must be at the top level
@@ -67,7 +66,6 @@ export default function AdminLogin() {
                         <div className="loading-spinner"></div> :
                         <button type="submit" className="btn-primary ">Login</button>}
                 </form>
-                {message && <div className={`message ${message.includes('Successful') ? 'success' : 'error'}`}>{message}</div>}
             </div>
         </div>
     )

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import useCustomerOrderStore from '../state/customer/CustomerOrderStore'
 import useCustomerAuthStore from '../state/customer/CustomerAuthStore'
 import { Status } from '../core/enum/Status'

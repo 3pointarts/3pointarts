@@ -1,5 +1,5 @@
 import { create, type StateCreator } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
 import { UserModel } from "../../data/model/UserModel";
 import { Status } from "../../core/enum/Status";
 import { AuthDatasource } from "../../data/datasource/AuthDatasource";

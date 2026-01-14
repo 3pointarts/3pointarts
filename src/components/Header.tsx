@@ -1,5 +1,4 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { useStore } from '../state/Store'
 import { useState, type FormEvent } from 'react'
 import useCustomerAuthStore from '../state/customer/CustomerAuthStore'
 import useCartStore from '../state/customer/CartStore'

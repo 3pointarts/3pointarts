@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import './admin.css';
 
 export default function AdminCoupons() {

@@ -1,16 +1,13 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import useCartStore from '../state/customer/CartStore'
-import useAdminProductStore from '../state/admin/AdminProductStore';
 import useCustomerAuthStore from '../state/customer/CustomerAuthStore';
-import CheckoutModal from '../components/CheckoutModal';
 
 export default function Cart() {
   const store = useCartStore();
   const astore = useCustomerAuthStore();
   const [couponCode, setCouponCode] = useState('')
   const [discountPercent, setDiscountPercent] = useState(0)
-  const [showCheckout, setShowCheckout] = useState(false)
 
   const totalItems = store.carts.reduce((sum, item) => sum + item.qty, 0)
 

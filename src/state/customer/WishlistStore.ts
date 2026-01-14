@@ -63,10 +63,10 @@ const WishlistStore: StateCreator<WishlistState> = (set, get) => ({
                 productId,
                 customerId: customer.id,
             });
-            
+
             await wishlistDatasource.addWishlist(payload);
             showSuccess("Added to wishlist");
-            
+
             // Reload wishlists to get fresh data
             await get().loadWishlists();
         } catch (error) {
@@ -81,12 +81,12 @@ const WishlistStore: StateCreator<WishlistState> = (set, get) => ({
         try {
             await wishlistDatasource.deleteWishlist(wishlistId);
             showSuccess("Removed from wishlist");
-            
+
             // Optimistic update
             const currentWishlists = get().wishlists;
-            set({ 
+            set({
                 wishlists: currentWishlists.filter(w => w.id !== wishlistId),
-                status: Status.success 
+                status: Status.success
             });
         } catch (error) {
             console.error(error);
@@ -104,12 +104,12 @@ const WishlistStore: StateCreator<WishlistState> = (set, get) => ({
             await wishlistDatasource.deleteWishlistByProduct(customer.id, productId);
             showSuccess("Removed from wishlist");
 
-             // Reload or optimistic update
-             const currentWishlists = get().wishlists;
-             set({ 
-                 wishlists: currentWishlists.filter(w => w.productId !== productId),
-                 status: Status.success 
-             });
+            // Reload or optimistic update
+            const currentWishlists = get().wishlists;
+            set({
+                wishlists: currentWishlists.filter(w => w.productId !== productId),
+                status: Status.success
+            });
 
         } catch (error) {
             console.error(error);
@@ -119,9 +119,9 @@ const WishlistStore: StateCreator<WishlistState> = (set, get) => ({
     },
 
     clearWishlist: async () => {
-         // This is a placeholder as usually wishlist isn't cleared all at once like cart
-         // But if needed, we would need a bulk delete endpoint or loop through ids
-         console.warn("clearWishlist not fully implemented");
+        // This is a placeholder as usually wishlist isn't cleared all at once like cart
+        // But if needed, we would need a bulk delete endpoint or loop through ids
+        console.warn("clearWishlist not fully implemented");
     }
 });
 
