@@ -55,13 +55,13 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
     setName: (name: string) => set({ name }),
     setPhone: (phone: string) => set({ phone }),
     init: () => {
-        set((state) => ({ loginStatus: Status.loading, admin: null }));
+        set(() => ({ loginStatus: Status.loading, admin: null }));
         const customer = localStorage.getItem('customer');
         if (customer) {
             useCartStore.getState().loadCarts();
             useCustomerOrderStore.getState().loadOrders();
             useWishlistStore.getState().loadWishlists();
-            set((state) => ({ customer: UserModel.fromMap(JSON.parse(customer)), loginStatus: Status.success }));
+            set(() => ({ customer: UserModel.fromMap(JSON.parse(customer)), loginStatus: Status.success }));
         }
     },
     sendOtp: async () => {
