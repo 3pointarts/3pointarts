@@ -147,20 +147,23 @@ export default function ProductDetails() {
           ) : (
             <div className='row'>
               {inCart ?
-                (<Link to="/cart" className='col-md-6'><h5> Added to cart</h5></Link>) : (<button
-                  className="btn-amazon-primary col-md-6"
-                  onClick={async () => {
-                    await addToCart(product.id, qty)
-                  }}
-                >
-                  Add to Cart
-                </button>)}
-              <button className="btn-amazon-secondary col-md-6" onClick={async () => {
-                if (!inCart) {
-                  await addToCart(product.id, qty);
-                }
-                navigate('/cart')
-              }}>Buy Now</button>
+                (<Link to="/cart" className='col-md-6'><h5> Added to cart</h5></Link>) : (
+                  <div className='col-md-6'>
+                    <button
+                      className="btn-amazon-primary" style={{ width: '100%', margin: '0', marginBottom: '10px' }}
+                      onClick={async () => {
+                        await addToCart(product.id, qty)
+                      }}
+                    >
+                      Add to Cart
+                    </button></div>)}
+              <div className='col-md-6'>
+                <button className="btn-amazon-secondary" style={{ width: '100%', margin: '0' }} onClick={async () => {
+                  if (!inCart) {
+                    await addToCart(product.id, qty);
+                  }
+                  navigate('/cart')
+                }}>Buy Now</button></div>
             </div>)}
           <div className="wishlist-row">
             <button
