@@ -1,6 +1,7 @@
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom'
 import './App.css'
 import useAdminAuthStore from './state/admin/AdminAuthStore'
+import { SEO } from './components/SEO'
 
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -26,6 +27,10 @@ import useCustomerAuthStore from './state/customer/CustomerAuthStore'
 const PublicLayout = () => {
   return (
     <div className="app">
+      <SEO
+        title="Home"
+        description="3 Point Arts - Custom 3D Printed Art, Models & Lamps. Discover unique handcrafted 3D prints for your home."
+      />
       <Header />
       <main className="container">
         <Outlet />
@@ -64,6 +69,7 @@ function App() {
           </Route>
 
           {/* Admin Routes */}
+          <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>

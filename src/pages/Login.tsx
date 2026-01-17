@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import useCustomerAuthStore from '../state/customer/CustomerAuthStore'
 import { useNavigate } from 'react-router-dom'
 import { Status } from '../core/enum/Status'
+import { SEO } from '../components/SEO'
 
 export default function Login() {
   const store = useCustomerAuthStore()
@@ -62,6 +63,10 @@ export default function Login() {
 
   return (
     <div className="login-page">
+      <SEO
+        title="Login"
+        description="Login to your 3 Point Arts account."
+      />
       <div className='d-flex'>
         {store.step !== 1 && <i className='fa fa-angle-left' onClick={() => store.setStep(1)} style={{ cursor: 'pointer', fontSize: '24px' }}></i>}
       </div>

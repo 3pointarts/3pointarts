@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import HomeCarousel from '../components/HomeCarousel'
 import useAdminProductStore from '../state/admin/AdminProductStore'
 import { useEffect } from 'react'
+import { SEO } from '../components/SEO'
+
 const categoryImages: Record<string, string> = {
   'Lamp': '/assets/images/lamp.png',
   'Statue': '/assets/images/statue.jpg',
@@ -16,6 +18,10 @@ export default function Home() {
   }, [])
   return (
     <section>
+      <SEO
+        title="Home"
+        description="Welcome to 3 Point Arts. We specialize in high-quality 3D printed lamps, statues, car models, and custom toys."
+      />
       <HomeCarousel />
       <div className="hero mb-1">
 

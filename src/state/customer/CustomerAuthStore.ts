@@ -63,6 +63,7 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
             useWishlistStore.getState().loadWishlists();
             set(() => ({ customer: UserModel.fromMap(JSON.parse(customer)), loginStatus: Status.success }));
         }
+        set(() => ({ loginStatus: Status.init }));
     },
     sendOtp: async () => {
         const { phone } = get();

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import useAdminProductStore from '../state/admin/AdminProductStore'
 import ProductCard from '../components/ProductCard'
 import { Status } from '../core/enum/Status'
+import { SEO } from '../components/SEO'
 
 function useQuery() {
   const { search } = useLocation()
@@ -69,6 +70,10 @@ export default function Catalog() {
 
   return (
     <section>
+      <SEO
+        title="Catalog"
+        description="Browse our collection of 3D printed products including lamps, statues, car models, and more."
+      />
       <div className="catalog-layout">
         <aside className="filter-panel">
           <div className="card">
