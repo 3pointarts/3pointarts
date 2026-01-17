@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import useCustomerAuthStore from '../state/customer/CustomerAuthStore';
 import useCustomerOrderStore from '../state/customer/CustomerOrderStore';
+import useCartStore from '../state/customer/CartStore';
 import { Link, useNavigate } from 'react-router-dom';
 import { Status } from '../core/enum/Status';
+import { showError } from '../core/message';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ export default function Checkout() {
   // )
   const authStore = useCustomerAuthStore()
   const orderStore = useCustomerOrderStore()
+  const cartStore = useCartStore()
   const onClose = () => { navigate('/dashboard') }
   const {
     contactName, setContactName,
@@ -24,6 +27,9 @@ export default function Checkout() {
     createOrder, createStatus
   } = orderStore
 
+  // Calculate Total
+  const totalAmount = cartStore.carts.reduce((sum, item) => sum + (item.product?.price || 0) * item.qty, 0)
+
   // Pre-fill fields from user profile if available
   useEffect(() => {
     if (authStore.customer) {
@@ -33,12 +39,47 @@ export default function Checkout() {
   }, [authStore.customer])
 
   const handlePlaceOrder = async () => {
-    const success = await createOrder()
-    if (success) {
-      setTimeout(() => {
-        onClose()
-      }, 3000)
+    // Validate fields before payment
+    if (!contactName || !contactPhone || !contactAddress || !billTo) {
+      showError("Please fill in all required fields");
+      return;
     }
+
+    const options = {
+      key: "rzp_test_S50EsU82jDuenn", // Enter the Key ID generated from the Dashboard
+      amount: totalAmount * 100, // Amount is in currency subunits. Default currency is INR.
+      currency: "INR",
+      name: "3 Point Arts",
+      description: "Transaction for 3 Point Arts",
+      image: "/assets/images/logo.png",
+      handler: async function (response: any) {
+        console.log("Payment Successful", response);
+        // Payment successful, now create the order
+        const success = await createOrder()
+        if (success) {
+          setTimeout(() => {
+            onClose()
+          }, 3000)
+        }
+      },
+      prefill: {
+        name: contactName,
+        email: authStore.customer?.email || '',
+        contact: contactPhone
+      },
+      notes: {
+        address: contactAddress
+      },
+      theme: {
+        color: "#3399cc"
+      }
+    };
+
+    const rzp1 = new (window as any).Razorpay(options);
+    rzp1.on('payment.failed', function (response: any) {
+      showError(`Payment Failed: ${response.error.description}`);
+    });
+    rzp1.open();
   }
 
   if (!authStore.customer) {
