@@ -24,7 +24,7 @@ export default function Orders() {
   }
 
   function getProductName(item: any) {
-    return item.productVariant?.product?.title || `Product Variant #${item.productVariantId}`
+    return item.productVariant?.product?.title + ' - ' + item.productVariant?.color || `Product Variant #${item.productVariantId}`
   }
 
   if (status === Status.loading) {

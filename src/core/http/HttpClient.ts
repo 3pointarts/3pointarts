@@ -21,5 +21,15 @@ export async function http<T>(
     return {} as T;
   }
 
-  return res.json();
+  const text = await res.text();
+  if (!text) {
+    return {} as T;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    console.error("Failed to parse JSON:", text);
+    throw new Error("Invalid JSON response");
+  }
 }

@@ -21,10 +21,16 @@ interface AdminProductState {
     categoryImage: string;
     productTitle: string;
     productAbout: string;
-    productImage: string;
     productPrice: number;
-    productStock: number;
-    productCategoryId: number;
+    productCategoryIds: number[];
+    productVariants: {
+        id?: number;
+        color: string;
+        colorHex: string;
+        price: number;
+        stock: number;
+        images: string;
+    }[];
 
     // Actions
     init: () => Promise<void>;
@@ -41,10 +47,13 @@ interface AdminProductState {
     setCategoryImage: (image: string) => Promise<void>,
     setProductTitle: (title: string) => Promise<void>,
     setProductAbout: (about: string) => Promise<void>,
-    setProductImage: (image: string) => Promise<void>,
     setProductPrice: (price: number) => Promise<void>,
-    setProductStock: (stock: number) => Promise<void>,
-    setProductCategoryId: (id: number) => Promise<void>,
+    toggleProductCategoryId: (id: number) => Promise<void>,
+    addProductVariant: () => Promise<void>,
+    removeProductVariant: (index: number) => Promise<void>,
+    updateProductVariant: (index: number, field: string, value: any) => Promise<void>,
+    setProductVariants: (variants: any[]) => Promise<void>,
+    setProductCategoryIds: (ids: number[]) => Promise<void>,
 }
 
 const AdminProductStore: StateCreator<AdminProductState> = (set, get) => ({
@@ -57,19 +66,43 @@ const AdminProductStore: StateCreator<AdminProductState> = (set, get) => ({
     categoryImage: "",
     productTitle: "",
     productAbout: "",
-    productImage: "",
     productPrice: 0,
-    productStock: 0,
-    productCategoryId: 0,
+    productCategoryIds: [],
+    productVariants: [],
 
     setCategoryName: async (name: string) => set({ categoryName: name }),
     setCategoryImage: async (image: string) => set({ categoryImage: image }),
     setProductTitle: async (title: string) => set({ productTitle: title }),
     setProductAbout: async (about: string) => set({ productAbout: about }),
-    setProductImage: async (image: string) => set({ productImage: image }),
     setProductPrice: async (price: number) => set({ productPrice: price }),
-    setProductStock: async (stock: number) => set({ productStock: stock }),
-    setProductCategoryId: async (id: number) => set({ productCategoryId: id }),
+    toggleProductCategoryId: async (id: number) => {
+        const currentIds = get().productCategoryIds;
+        if (currentIds.includes(id)) {
+            set({ productCategoryIds: currentIds.filter(c => c !== id) });
+        } else {
+            set({ productCategoryIds: [...currentIds, id] });
+        }
+    },
+    setProductCategoryIds: async (ids: number[]) => set({ productCategoryIds: ids }),
+    addProductVariant: async () => {
+        set({
+            productVariants: [
+                ...get().productVariants,
+                { id: undefined, color: "", colorHex: "#000000", price: 0, stock: 0, images: "" }
+            ]
+        });
+    },
+    removeProductVariant: async (index: number) => {
+        const variants = [...get().productVariants];
+        variants.splice(index, 1);
+        set({ productVariants: variants });
+    },
+    updateProductVariant: async (index: number, field: string, value: any) => {
+        const variants = [...get().productVariants];
+        variants[index] = { ...variants[index], [field]: value };
+        set({ productVariants: variants });
+    },
+    setProductVariants: async (variants: any[]) => set({ productVariants: variants }),
 
     init: async () => {
         set({ initStatus: Status.loading });
@@ -89,13 +122,20 @@ const AdminProductStore: StateCreator<AdminProductState> = (set, get) => ({
     // --- Product Actions ---
 
     addProduct: async () => {
+        const variants = get().productVariants.map(v => ({
+            color: v.color,
+            color_hex: v.colorHex,
+            price: v.price,
+            stock: v.stock,
+            images: v.images.split(',').map(s => s.trim()).filter(s => s !== "")
+        }));
+
         const payload: ProductPayload = new ProductPayload({
             title: get().productTitle,
             about: get().productAbout,
-            images: get().productImage.split(','),
-            price: get().productPrice,
-            stock: get().productStock,
-            categoryId: get().productCategoryId,
+            basePrice: get().productPrice,
+            categoryIds: get().productCategoryIds,
+            variants: variants,
         });
         set({ productSubmitStatus: Status.loading });
         try {
@@ -103,7 +143,16 @@ const AdminProductStore: StateCreator<AdminProductState> = (set, get) => ({
             showSuccess("Product added successfully");
             // Refresh list
             const products = await productDatasource.listProducts();
-            set({ products: products, productSubmitStatus: Status.success });
+            set({
+                products: products,
+                productSubmitStatus: Status.success,
+                // Reset form
+                productTitle: "",
+                productAbout: "",
+                productPrice: 0,
+                productCategoryIds: [],
+                productVariants: []
+            });
         } catch (error) {
             console.error(error);
             showError("Failed to add product");
@@ -112,13 +161,21 @@ const AdminProductStore: StateCreator<AdminProductState> = (set, get) => ({
     },
 
     updateProduct: async (id: number) => {
+        const variants = get().productVariants.map(v => ({
+            id: v.id,
+            color: v.color,
+            color_hex: v.colorHex,
+            price: v.price,
+            stock: v.stock,
+            images: v.images.split(',').map(s => s.trim()).filter(s => s !== "")
+        }));
+
         const payload: ProductPayload = new ProductPayload({
             title: get().productTitle,
             about: get().productAbout,
-            images: get().productImage.split(','),
-            price: get().productPrice,
-            stock: get().productStock,
-            categoryId: get().productCategoryId,
+            basePrice: get().productPrice,
+            categoryIds: get().productCategoryIds,
+            variants: variants,
         });
         set({ productSubmitStatus: Status.loading });
         try {

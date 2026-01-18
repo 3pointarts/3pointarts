@@ -56,22 +56,22 @@ export const OrderViewModal: React.FC<OrderViewModalProps> = ({ isOpen, onClose,
                             {order.items?.map((item) => (
                                 <tr key={item.id}>
                                     <td>
-                                        {item.product?.images?.[0] && (
-                                            <img 
-                                                src={item.product.images[0]} 
-                                                alt={item.product.title} 
+                                        {item.productVariant?.images?.[0] && (
+                                            <img
+                                                src={item.productVariant.images[0]}
+                                                alt={item.productVariant?.product?.title || 'Unknown Product'}
                                                 className="product-thumb"
                                             />
                                         )}
                                     </td>
-                                    <td>{item.product?.title || 'Unknown Product'}</td>
+                                    <td>{item.productVariant?.product?.title + ' - ' + item.productVariant?.color || 'Unknown Product'}</td>
                                     <td>{item.qty}</td>
-                                    <td>₹{item.product?.price.toLocaleString()}</td>
-                                    <td>₹{((item.product?.price || 0) * item.qty).toLocaleString()}</td>
+                                    <td>₹{item.productVariant?.price.toLocaleString()}</td>
+                                    <td>₹{((item.productVariant?.price || 0) * item.qty).toLocaleString()}</td>
                                 </tr>
                             ))}
                             <tr className="total-row">
-                                <td colSpan={4} style={{textAlign: 'right'}}><strong>Total:</strong></td>
+                                <td colSpan={4} style={{ textAlign: 'right' }}><strong>Total:</strong></td>
                                 <td><strong>₹{order.total.toLocaleString()}</strong></td>
                             </tr>
                         </tbody>

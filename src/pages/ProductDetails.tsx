@@ -226,7 +226,7 @@ export default function ProductDetails() {
             </div>
           </div>
 
-          <div className="qty-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {currentVariant.stock > 0 && <div className="qty-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <label>Quantity:</label>
             <div className="qty-control" style={{ display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: '4px' }}>
               <button
@@ -237,13 +237,18 @@ export default function ProductDetails() {
               </button>
               <span style={{ padding: '5px 15px', minWidth: '30px', textAlign: 'center', fontWeight: 'bold' }}>{qty}</span>
               <button
-                onClick={() => setQty(q => q + 1)}
+                onClick={() => setQty(q => Math.min(currentVariant.stock, q + 1))}
                 style={{ padding: '5px 10px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderLeft: '1px solid #ddd' }}
               >
                 +
               </button>
             </div>
-          </div>
+          </div>}
+          {
+            (currentVariant.stock < 10 && currentVariant.stock > 0) && <div className="stock-row">
+              <span>Only {currentVariant.stock} left in stock</span>
+            </div>
+          }
           {currentVariant.stock <= 0 ? (
             <span className="out-of-stock">Out of stock</span>
           ) : (

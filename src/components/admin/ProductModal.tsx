@@ -19,25 +19,30 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, isE
             store.setProductTitle('');
             store.setProductAbout('');
             store.setProductPrice(0);
-            store.setProductStock(0);
-            store.setProductCategoryId(store.categories.length > 0 ? store.categories[0].id : 0);
-            store.setProductImage('');
+            store.setProductCategoryIds([]);
+            store.setProductVariants([]);
         }
     }, [isOpen, isEdit]);
 
     // Load data when opening in edit mode
     useEffect(() => {
-        // if (isOpen && isEdit && editId) {
-        //     const product = store.products.find(p => p.id === editId);
-        //     if (product) {
-        //         store.setProductTitle(product.title);
-        //         store.setProductAbout(product.about);
-        //         store.setProductPrice(product.price);
-        //         store.setProductStock(product.stock);
-        //         store.setProductCategoryId(product.categoryId);
-        //         store.setProductImage(product.images.join(','));
-        //     }
-        // }
+        if (isOpen && isEdit && editId) {
+            const product = store.products.find(p => p.id === editId);
+            if (product) {
+                store.setProductTitle(product.title);
+                store.setProductAbout(product.about);
+                store.setProductPrice(product.basePrice);
+                store.setProductCategoryIds(product.productCategories.map(c => c.categories.id));
+                store.setProductVariants(product.productVariants.map(v => ({
+                    id: v.id,
+                    color: v.color,
+                    colorHex: v.colorHex,
+                    price: v.price,
+                    stock: v.stock,
+                    images: v.images.join(',')
+                })));
+            }
+        }
     }, [isOpen, isEdit, editId]);
 
     const handleSubmit = async () => {
@@ -74,46 +79,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, isE
                     placeholder="Product Name"
                 />
             </div>
-            <div className="modal-form-group">
-                <label>Category</label>
-                <select
-                    value={store.productCategoryId}
-                    onChange={(e) => store.setProductCategoryId(Number(e.target.value))}
-                >
-                    <option value={0} disabled>Select Category</option>
-                    {store.categories.map(cat => (
-                        <option key={cat.id} value={cat.id}>{cat.name}</option>
-                    ))}
-                </select>
-            </div>
-            <div className='row'>
-                <div className="col-6 modal-form-group">
-                    <label>Price</label>
-                    <input
-                        type="number"
-                        value={store.productPrice}
-                        onChange={(e) => store.setProductPrice(Number(e.target.value))}
-                        placeholder="0.00"
-                    />
-                </div>
-                <div className="col-6 modal-form-group">
-                    <label>Stock</label>
-                    <input
-                        type="number"
-                        value={store.productStock}
-                        onChange={(e) => store.setProductStock(Number(e.target.value))}
-                        placeholder="0"
-                    />
-                </div></div>
 
-            <div className="modal-form-group">
-                <label>Images (Comma separated URLs)</label>
-                <textarea
-                    value={store.productImage}
-                    onChange={(e) => store.setProductImage(e.target.value)}
-                    placeholder="http://example.com/img1.jpg,http://example.com/img2.jpg"
-                />
-            </div>
             <div className="modal-form-group">
                 <label>About</label>
                 <textarea
@@ -121,6 +87,87 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, isE
                     onChange={(e) => store.setProductAbout(e.target.value)}
                     placeholder="Product description..."
                 />
+            </div>
+
+            <div className="modal-form-group">
+                <label>Base Price</label>
+                <input
+                    type="number"
+                    value={store.productPrice}
+                    onChange={(e) => store.setProductPrice(Number(e.target.value))}
+                    placeholder="0.00"
+                />
+            </div>
+
+            <div className="modal-form-group">
+                <label>Categories</label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                    {store.categories.map(cat => (
+                        <label key={cat.id} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                            <input
+                                type="checkbox"
+                                checked={store.productCategoryIds.includes(cat.id)}
+                                onChange={() => store.toggleProductCategoryId(cat.id)}
+                            />
+                            {cat.name}
+                        </label>
+                    ))}
+                </div>
+            </div>
+
+            <div className="modal-form-group">
+                <label>Variants</label>
+                {store.productVariants.map((variant, index) => (
+                    <div key={index} style={{ border: '1px solid #ddd', padding: '10px', marginBottom: '10px', borderRadius: '4px' }}>
+                        <div className="row">
+                            <div className="col-6 modal-form-group">
+                                <label>Color Name</label>
+                                <input
+                                    type="text"
+                                    value={variant.color}
+                                    onChange={(e) => store.updateProductVariant(index, 'color', e.target.value)}
+                                    placeholder="Red"
+                                />
+                            </div>
+                            <div className="col-6 modal-form-group">
+                                <label>Color Hex</label>
+                                <input
+                                    type="color"
+                                    value={variant.colorHex}
+                                    onChange={(e) => store.updateProductVariant(index, 'colorHex', e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-6 modal-form-group">
+                                <label>Price</label>
+                                <input
+                                    type="number"
+                                    value={variant.price}
+                                    onChange={(e) => store.updateProductVariant(index, 'price', Number(e.target.value))}
+                                />
+                            </div>
+                            <div className="col-6 modal-form-group">
+                                <label>Stock</label>
+                                <input
+                                    type="number"
+                                    value={variant.stock}
+                                    onChange={(e) => store.updateProductVariant(index, 'stock', Number(e.target.value))}
+                                />
+                            </div>
+                        </div>
+                        <div className="modal-form-group">
+                            <label>Images (Comma separated URLs)</label>
+                            <textarea
+                                value={variant.images}
+                                onChange={(e) => store.updateProductVariant(index, 'images', e.target.value)}
+                                placeholder="http://example.com/img1.jpg,http://example.com/img2.jpg"
+                            />
+                        </div>
+                        <button className="btn-secondary" onClick={() => store.removeProductVariant(index)}>Remove Variant</button>
+                    </div>
+                ))}
+                <button className="btn-primary" onClick={store.addProductVariant}>Add Variant</button>
             </div>
         </CommonModal>
     );
