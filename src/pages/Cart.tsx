@@ -7,7 +7,7 @@ export default function Cart() {
   const store = useCartStore();
   const astore = useCustomerAuthStore();
   const [couponCode, setCouponCode] = useState('')
-  const [discountPercent, setDiscountPercent] = useState(0)
+  const [discountPercent] = useState(0)
 
   const totalItems = store.carts.reduce((sum, item) => sum + item.qty, 0)
 

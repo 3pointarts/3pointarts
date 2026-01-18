@@ -81,17 +81,6 @@ export class ProductDatasource {
                 product_id: productId,
                 images: v.images.join(',')
             }));
-
-
-        }
-
-
-        if (variants && variants.length > 0) {
-            const variantInserts = variants.map((v: any) => ({
-                ...v,
-                product_id: productId,
-                images: v.images.join(',')
-            }));
             await http(PRODUCT_VARIANTS_URL, {
                 method: "POST",
                 body: JSON.stringify(variantInserts),

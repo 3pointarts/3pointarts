@@ -9,11 +9,8 @@ import { showError, showSuccess } from "../../core/message";
 import useCustomerAuthStore from "./CustomerAuthStore";
 import useCartStore from "./CartStore";
 import { OrderStatus } from "../../core/enum/OrderStatus";
-import { ProductDatasource } from "../../data/datasource/ProductDatasource";
-import { ProductPayload } from "../../data/payload/ProductPayload";
 
 const orderDatasource = new OrderDatasource();
-const productDatasource = new ProductDatasource();
 
 interface CustomerOrderState {
     // State
