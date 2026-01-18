@@ -19,7 +19,8 @@ export default function Wishlist() {
       <h2>Wishlist</h2>
       <div className="grid">
         {wishlists.map((w) => (
-          w.product && <ProductCard key={w.id} product={w.product} />
+          w.productVariant && w.productVariant.product && <ProductCard product={w.productVariant.product} variantId={w.productVariant.id} variantOptional={w.productVariant} />
+
         ))}
         {wishlists.length === 0 && <div>Your wishlist is empty.</div>}
       </div>

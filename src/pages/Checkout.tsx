@@ -44,9 +44,11 @@ export default function Checkout() {
       showError("Please fill in all required fields");
       return;
     }
+    const rzpKey = "rzp_live_S5I3OSt6XhauV3";
+    // const rzpSecret = "2S7thrD3iSPOGOiWfmDtp1TW";
 
     const options = {
-      key: "rzp_test_S50EsU82jDuenn", // Enter the Key ID generated from the Dashboard
+      key: rzpKey, // Enter the Key ID generated from the Dashboard
       amount: totalAmount * 100, // Amount is in currency subunits. Default currency is INR.
       currency: "INR",
       name: "3 Point Arts",

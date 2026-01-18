@@ -16,9 +16,9 @@ interface WishlistState {
 
     // Actions
     loadWishlists: () => Promise<void>;
-    addToWishlist: (productId: number) => Promise<void>;
+    addToWishlist: (productVariantId: number) => Promise<void>;
     removeFromWishlist: (wishlistId: number) => Promise<void>;
-    removeFromWishlistByProduct: (productId: number) => Promise<void>;
+    removeFromWishlistByProduct: (productVariantId: number) => Promise<void>;
     clearWishlist: () => Promise<void>; // Note: Usually clearing wishlist one by one, but can implement bulk delete if API supports
 }
 
@@ -43,7 +43,7 @@ const WishlistStore: StateCreator<WishlistState> = (set, get) => ({
         }
     },
 
-    addToWishlist: async (productId: number) => {
+    addToWishlist: async (productVariantId: number) => {
         const customer = useCustomerAuthStore.getState().customer;
         if (!customer) {
             showError("Please login to add items to wishlist");
@@ -51,7 +51,7 @@ const WishlistStore: StateCreator<WishlistState> = (set, get) => ({
         }
 
         // Check if already in wishlist
-        const existing = get().wishlists.find(w => w.productId === productId);
+        const existing = get().wishlists.find(w => w.productVariantId === productVariantId);
         if (existing) {
             showSuccess("Already in wishlist");
             return;
@@ -60,7 +60,7 @@ const WishlistStore: StateCreator<WishlistState> = (set, get) => ({
         set({ status: Status.loading });
         try {
             const payload = new WishlistPayload({
-                productId,
+                productVariantId,
                 customerId: customer.id,
             });
 
@@ -95,19 +95,19 @@ const WishlistStore: StateCreator<WishlistState> = (set, get) => ({
         }
     },
 
-    removeFromWishlistByProduct: async (productId: number) => {
+    removeFromWishlistByProduct: async (productVariantId: number) => {
         const customer = useCustomerAuthStore.getState().customer;
         if (!customer) return;
 
         set({ status: Status.loading });
         try {
-            await wishlistDatasource.deleteWishlistByProduct(customer.id, productId);
+            await wishlistDatasource.deleteWishlistByProduct(customer.id, productVariantId);
             showSuccess("Removed from wishlist");
 
             // Reload or optimistic update
             const currentWishlists = get().wishlists;
             set({
-                wishlists: currentWishlists.filter(w => w.productId !== productId),
+                wishlists: currentWishlists.filter(w => w.productVariantId !== productVariantId),
                 status: Status.success
             });
 

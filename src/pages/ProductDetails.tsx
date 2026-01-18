@@ -19,7 +19,7 @@ export default function ProductDetails() {
   const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null)
 
   const product = products.find((p) => p.id == Number(id))
-  const wished = wishlists.some(w => w.productId === product?.id)
+  const wished = wishlists.some(w => w.productVariant?.product?.id === product?.id)
   const variantParam = searchParams.get('variant')
 
   // Set selected variant from URL or default

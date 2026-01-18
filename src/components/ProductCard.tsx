@@ -2,18 +2,18 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ProductModel } from '../data/model/ProductModel'
 import useCartStore from '../state/customer/CartStore'
 import useWishlistStore from '../state/customer/WishlistStore'
+import type { ProductVariantModel } from '../data/model/ProductVariantModel'
 
-export default function ProductCard({ product, variantId }: { product: ProductModel, variantId?: number }) {
+export default function ProductCard({ product, variantId, variantOptional }: { product: ProductModel, variantId?: number, variantOptional?: ProductVariantModel }) {
   const { addToCart } = useCartStore()
   const { wishlists, addToWishlist, removeFromWishlistByProduct } = useWishlistStore()
   const cstore = useCartStore()
   const navigate = useNavigate()
-  const wished = wishlists.some(w => w.productId === product.id)
 
   // Find the specific variant or default to the first one
-  const variant = variantId
+  const variant = product.productVariants.length > 0 ? (variantId
     ? product.productVariants?.find(v => v.id === variantId)
-    : product.productVariants?.[0]
+    : product.productVariants?.[0]) : variantOptional;
 
   // Fallback if no variant found (shouldn't happen with valid data)
   const displayVariant = variant || product.productVariants?.[0]
@@ -27,6 +27,8 @@ export default function ProductCard({ product, variantId }: { product: ProductMo
 
   // Check if THIS specific variant is in cart
   const inCart = cstore.carts.some(c => c.productVariantId === displayVariant.id)
+
+  const wished = wishlists.some(w => w.productVariantId === displayVariant.id)
 
   const reviewCount = 18
   const deliveryDate = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
@@ -42,11 +44,12 @@ export default function ProductCard({ product, variantId }: { product: ProductMo
   const image = displayVariant.images?.[0] || product.productCategories?.[0]?.categories?.image || '/assets/images/full_logo.png';
 
   const toggleWishlist = async () => {
-    if (wished) {
-      await removeFromWishlistByProduct(product.id)
-    } else {
-      await addToWishlist(product.id)
-    }
+    if (variant)
+      if (wished) {
+        await removeFromWishlistByProduct(variant?.id)
+      } else {
+        await addToWishlist(variant?.id)
+      }
   }
 
   return (
@@ -56,6 +59,7 @@ export default function ProductCard({ product, variantId }: { product: ProductMo
           <img
             src={image}
             alt={product.title}
+            style={{ objectFit: 'cover', height: '100%' }}
           />
         </Link>
         <button

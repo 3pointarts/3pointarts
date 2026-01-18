@@ -1,39 +1,39 @@
-import { ProductModel } from "./ProductModel";
+import { ProductVariantModel } from "./ProductVariantModel";
 
 export class WishlistModel {
     id: number;
-    productId: number;
+    productVariantId: number;
     customerId: number;
     createdAt: Date;
-    product?: ProductModel;
+    productVariant?: ProductVariantModel;
 
     constructor({
         id,
-        productId,
+        productVariantId,
         customerId,
         createdAt,
-        product,
+        productVariant,
     }: {
         id: number;
-        productId: number;
+        productVariantId: number;
         customerId: number;
         createdAt: Date;
-        product?: ProductModel;
+        productVariant?: ProductVariantModel;
     }) {
         this.id = id;
-        this.productId = productId;
+        this.productVariantId = productVariantId;
         this.customerId = customerId;
         this.createdAt = createdAt;
-        this.product = product;
+        this.productVariant = productVariant;
     }
 
     static fromMap(json: any): WishlistModel {
         return new WishlistModel({
             id: json.id,
-            productId: json.product_id,
+            productVariantId: json.product_variant_id,
             customerId: json.customer_id,
             createdAt: new Date(json.created_at),
-            product: json.products ? ProductModel.fromMap(json.products) : undefined,
+            productVariant: json.product_variants ? ProductVariantModel.fromMap(json.product_variants) : undefined,
         });
     }
 }

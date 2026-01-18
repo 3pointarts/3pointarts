@@ -1,21 +1,21 @@
 export class WishlistPayload {
-    productId: number;
+    productVariantId: number;
     customerId: number;
 
     constructor({
-        productId,
+        productVariantId,
         customerId,
     }: {
-        productId: number;
+        productVariantId: number;
         customerId: number;
     }) {
-        this.productId = productId;
+        this.productVariantId = productVariantId;
         this.customerId = customerId;
     }
 
     toMap(): any {
         return {
-            product_id: this.productId,
+            product_variant_id: this.productVariantId,
             customer_id: this.customerId,
         };
     }

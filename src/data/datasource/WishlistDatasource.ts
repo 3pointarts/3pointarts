@@ -21,14 +21,14 @@ export class WishlistDatasource {
         });
     }
 
-    async deleteWishlistByProduct(customerId: number, productId: number): Promise<void> {
-        await http(`${WISHLIST_URL}?customer_id=eq.${customerId}&product_id=eq.${productId}`, {
+    async deleteWishlistByProduct(customerId: number, productVariantId: number): Promise<void> {
+        await http(`${WISHLIST_URL}?customer_id=eq.${customerId}&product_variant_id=eq.${productVariantId}`, {
             method: "DELETE",
         });
     }
 
     async listWishlists(customerId: number): Promise<WishlistModel[]> {
-        const res = await http<any[]>(`${WISHLIST_URL}?customer_id=eq.${customerId}&select=*,products(*)&order=created_at.desc`);
+        const res = await http<any[]>(`${WISHLIST_URL}?customer_id=eq.${customerId}&select=*,users(*),product_variants(*,products(*,product_categories(categories(*))))&order=created_at.desc`);
         return res.map((item) => WishlistModel.fromMap(item));
     }
 }
