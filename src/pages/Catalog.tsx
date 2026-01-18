@@ -76,7 +76,7 @@ export default function Catalog() {
       />
       <div className="catalog-layout">
         <aside className="filter-panel">
-          <div className="card">
+          <div className="card p-2">
             <div className="card-body">
               <h4 className="card-title">Filters</h4>
               <div className="mb-3">
@@ -93,20 +93,27 @@ export default function Catalog() {
               </div>
               <div className="mb-3">
                 <label className="form-label">Category</label>
-                {categories.map((c) => (
-                  <div className="form-check" key={c.id}>
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id={`cat-${c.id}`}
-                      checked={selectedCatIds.includes(c.id)}
-                      onChange={() => toggleCat(c.id)}
-                    />
-                    <label className="form-check-label" htmlFor={`cat-${c.id}`}>
-                      {c.name}
-                    </label>
-                  </div>
-                ))}
+                <div className="category-list">
+                  {categories.map((c) => (
+                    <div
+                      className={`form-check category-item ${selectedCatIds.includes(c.id) ? 'active' : ''
+                        }`}
+                      key={c.id}
+                    >
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id={`cat-${c.id}`}
+                        checked={selectedCatIds.includes(c.id)}
+                        onChange={() => toggleCat(c.id)}
+                      />
+                      <label className="form-check-label" htmlFor={`cat-${c.id}`}>
+                        {c.name}
+                      </label>
+                    </div>
+
+                  ))}
+                </div>
               </div>
               <div className="mb-2">
                 <label className="form-label">Price Range</label>

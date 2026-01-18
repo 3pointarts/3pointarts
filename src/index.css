@@ -384,6 +384,7 @@ a:hover {
     gap: 4px;
     font-size: 14px;
     margin-bottom: 4px;
+    justify-content: center;
 }
 
 .stars {
@@ -403,6 +404,7 @@ a:hover {
 .price-row {
     display: flex;
     align-items: baseline;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 4px;
 }
@@ -2145,5 +2147,26 @@ a:hover {
     .app-footer,
     .app-content>*:not(.bill) {
         display: none !important;
+    }
+}
+
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .category-item {
+        font-size: 14px;
+        width: max-content;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .category-item.active {
+        background: #FFD814;
+        border-color: black;
     }
 }

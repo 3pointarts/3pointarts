@@ -13,7 +13,7 @@ export default function Cart() {
 
   // Simulate MRP (e.g., 20% higher than price)
   const totalMrp = store.carts.reduce((sum, item) => {
-    return sum + (item.product?.price ?? 0 * 1.2 * item.qty)
+    return sum + ((item.product?.price ?? 0) * 1.2 * item.qty)
   }, 0)
 
   const totalSellingPrice = store.carts.reduce((sum, item) => {
@@ -26,20 +26,23 @@ export default function Cart() {
 
   // Coupon Logic
   const handleApplyCoupon = () => {
-    if (couponCode.trim().toUpperCase() === 'BIRTHDAY') {
-      setDiscountPercent(10) // 10% discount
-    } else {
-      setDiscountPercent(0)
-      if (couponCode.trim()) alert('Invalid Coupon Code')
-    }
+    // if (couponCode.trim().toUpperCase() === 'BIRTHDAY') {
+    //   setDiscountPercent(10) // 10% discount
+    // } else {
+    //   setDiscountPercent(0)
+    //   if (couponCode.trim()) alert('Invalid Coupon Code')
+    // }
   }
 
   const couponDiscountAmount = (totalSellingPrice * discountPercent) / 100
 
   // Delivery Logic (Free above 500)
-  const deliveryCharges = totalSellingPrice > 500 ? 0 : 40
+  const deliveryCharges = totalSellingPrice > 200 ? 0 : 40
 
   const finalTotal = totalSellingPrice - couponDiscountAmount + deliveryCharges
+
+
+
 
   return (
     <div className="cart-page">
@@ -101,7 +104,7 @@ export default function Cart() {
                         </div>
                       </div>
 
-                      <div className="item-stock-status">In stock</div>
+                      <div className="item-stock-status">{product.stock > 0 ? (product.stock > 10 ? 'In stock' : 'Only ' + product.stock + ' left') : 'Out of stock'}</div>
                       <div className="item-shipping-badge">Eligible for FREE Shipping</div>
 
                       <div className="item-gift-option">
@@ -128,7 +131,7 @@ export default function Cart() {
                             </button>
                             <span style={{ padding: '0 10px', minWidth: '30px', textAlign: 'center', fontWeight: 'bold' }}>{item.qty}</span>
                             <button
-                              onClick={() => store.updateCartQty(item.id, product.id, item.qty + 1)}
+                              onClick={() => store.updateCartQty(item.id, product.id, product.stock >= item.qty + 1 ? item.qty + 1 : item.qty)}
                               style={{ padding: '2px 8px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderLeft: '1px solid #ddd' }}
                             >
                               +

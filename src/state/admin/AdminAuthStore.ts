@@ -41,6 +41,8 @@ const AdminAuthStore: StateCreator<AdminAuthState> = (set, get) => ({
             get().listCustomers();
             useAdminOrderStore.getState().init();
             set(() => ({ admin: UserModel.fromMap(JSON.parse(a)), loginStatus: Status.success }));
+        } else {
+            set(() => ({ loginStatus: Status.init }));
         }
     },
     setEmail: async (email: string) => set({ email }),

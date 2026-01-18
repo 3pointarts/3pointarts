@@ -55,15 +55,19 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
     setName: (name: string) => set({ name }),
     setPhone: (phone: string) => set({ phone }),
     init: () => {
-        set(() => ({ loginStatus: Status.loading, admin: null }));
+        set(() => ({ loginStatus: Status.loading, customer: null }));
         const customer = localStorage.getItem('customer');
         if (customer) {
-            useCartStore.getState().loadCarts();
-            useCustomerOrderStore.getState().loadOrders();
-            useWishlistStore.getState().loadWishlists();
             set(() => ({ customer: UserModel.fromMap(JSON.parse(customer)), loginStatus: Status.success }));
+            setTimeout(() => {
+                useCartStore.getState().loadCarts();
+                useCustomerOrderStore.getState().loadOrders();
+                useWishlistStore.getState().loadWishlists();
+            }, 500);
+        } else {
+
+            set(() => ({ loginStatus: Status.init }));
         }
-        set(() => ({ loginStatus: Status.init }));
     },
     sendOtp: async () => {
         const { phone } = get();

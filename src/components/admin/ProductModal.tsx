@@ -64,7 +64,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, isE
                     </button>
                 </>
             }
-        >   
+        >
             <div className="modal-form-group">
                 <label>Title</label>
                 <input
@@ -108,11 +108,10 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, isE
 
             <div className="modal-form-group">
                 <label>Images (Comma separated URLs)</label>
-                <input
-                    type="text"
+                <textarea
                     value={store.productImage}
                     onChange={(e) => store.setProductImage(e.target.value)}
-                    placeholder="http://example.com/img1.jpg, http://example.com/img2.jpg"
+                    placeholder="http://example.com/img1.jpg,http://example.com/img2.jpg"
                 />
             </div>
             <div className="modal-form-group">

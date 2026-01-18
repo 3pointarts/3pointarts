@@ -9,8 +9,11 @@ import { showError, showSuccess } from "../../core/message";
 import useCustomerAuthStore from "./CustomerAuthStore";
 import useCartStore from "./CartStore";
 import { OrderStatus } from "../../core/enum/OrderStatus";
+import { ProductDatasource } from "../../data/datasource/ProductDatasource";
+import { ProductPayload } from "../../data/payload/ProductPayload";
 
 const orderDatasource = new OrderDatasource();
+const productDatasource = new ProductDatasource();
 
 interface CustomerOrderState {
     // State
@@ -112,7 +115,7 @@ const CustomerOrderStore: StateCreator<CustomerOrderState> = (set, get) => ({
             // Create payload items
             const orderItems = carts.map(item => new OrderItemPayload({
                 productId: item.productId,
-                qty: item.qty
+                qty: item.product?.stock == null ? item.qty : (item.product!.stock > item.qty ? item.qty : item.product!.stock)
             }));
 
             const payload = new OrderPayload({
@@ -129,6 +132,27 @@ const CustomerOrderStore: StateCreator<CustomerOrderState> = (set, get) => ({
 
             await orderDatasource.addOrderWithItems(payload);
 
+            // Reduce stock
+            try {
+                const products = await productDatasource.listProducts();
+                for (const item of carts) {
+                    const product = products.find(p => p.id === item.productId);
+                    if (product) {
+                        const qty = item.product?.stock == null ? item.qty : (item.product!.stock > item.qty ? item.qty : item.product!.stock)
+                        const newStock = product.stock - qty;
+                        if (newStock >= 0) {
+                            const updatePayload = new ProductPayload({
+                                ...product,
+                                stock: newStock
+                            });
+                            await productDatasource.updateProduct(product.id, updatePayload);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to update stock", error);
+            }
+
             showSuccess("Order placed successfully!");
             set({ createStatus: Status.success });
 
@@ -136,7 +160,6 @@ const CustomerOrderStore: StateCreator<CustomerOrderState> = (set, get) => ({
             await clearCart();
             await get().loadOrders();
             get().resetForm();
-
             return true;
         } catch (error) {
             console.error(error);
