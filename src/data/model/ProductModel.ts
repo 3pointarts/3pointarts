@@ -1,45 +1,38 @@
-import { CategoryModel } from "./CategoryModel";
+import { ProductVariantModel } from "./ProductVariantModel";
+import { ProductCategoryModel } from "./ProductCategoryModel";
 
 export class ProductModel {
     id: number;
     title: string;
     about: string;
-    price: number;
-    stock: number;
-    images: string[];
-    categoryId: number;
-    category?: CategoryModel;
+    basePrice: number;
+    productVariants: ProductVariantModel[];
+    productCategories: ProductCategoryModel[];
     createdAt: Date;
 
     constructor({
         id,
         title,
         about,
-        price,
-        stock,
-        images,
-        categoryId,
-        category,
+        basePrice,
+        productVariants,
+        productCategories,
         createdAt,
     }: {
         id: number;
         title: string;
         about: string;
-        price: number;
-        stock: number;
-        images: string[];
-        categoryId: number;
-        category?: CategoryModel;
+        basePrice: number;
+        productVariants: ProductVariantModel[];
+        productCategories: ProductCategoryModel[];
         createdAt: Date;
     }) {
         this.id = id;
         this.title = title;
         this.about = about;
-        this.price = price;
-        this.stock = stock;
-        this.images = images;
-        this.categoryId = categoryId;
-        this.category = category;
+        this.basePrice = basePrice;
+        this.productVariants = productVariants;
+        this.productCategories = productCategories;
         this.createdAt = createdAt;
     }
 
@@ -48,11 +41,9 @@ export class ProductModel {
             id: json.id,
             title: json.title,
             about: json.about,
-            price: json.price,
-            stock: json.stock,
-            images: typeof json.images === 'string' ? json.images.split(',') : (Array.isArray(json.images) ? json.images : []),
-            categoryId: json.category_id,
-            category: json.categories ? CategoryModel.fromMap(json.categories) : undefined,
+            basePrice: json.base_price,
+            productVariants: Array.isArray(json.product_variants) ? json.product_variants.map((v: any) => ProductVariantModel.fromMap(v)) : [],
+            productCategories: Array.isArray(json.product_categories) ? json.product_categories.map((c: any) => ProductCategoryModel.fromMap(c)) : [],
             createdAt: new Date(json.created_at),
         });
     }

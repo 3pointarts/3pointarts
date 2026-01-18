@@ -1,22 +1,22 @@
 export class OrderItemPayload {
-    productId: number;
+    productVariantId: number;
     qty: number;
 
     constructor({
-        productId,
+        productVariantId,
         qty,
     }: {
-        productId: number;
+        productVariantId: number;
         qty: number;
     }) {
-        this.productId = productId;
+        this.productVariantId = productVariantId;
         this.qty = qty;
     }
 
     toMap(orderId: number): any {
         return {
             order_id: orderId,
-            product_id: this.productId,
+            product_variant_id: this.productVariantId,
             qty: this.qty,
         };
     }

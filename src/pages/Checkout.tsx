@@ -28,7 +28,7 @@ export default function Checkout() {
   } = orderStore
 
   // Calculate Total
-  const totalAmount = cartStore.carts.reduce((sum, item) => sum + (item.product?.price || 0) * item.qty, 0)
+  const totalAmount = cartStore.carts.reduce((sum, item) => sum + (item.productVariant?.price || 0) * item.qty, 0)
 
   // Pre-fill fields from user profile if available
   useEffect(() => {

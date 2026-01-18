@@ -38,12 +38,12 @@ export class OrderDatasource {
     }
 
     async listCustomerOrders(customerId: number): Promise<OrderModel[]> {
-        const res = await http<any[]>(`${ORDER_URL}?customer_id=eq.${customerId}&select=*,order_items(*,products(*))&order=created_at.desc`);
+        const res = await http<any[]>(`${ORDER_URL}?customer_id=eq.${customerId}&select=*,order_items(*,product_variants(*,products(*)))&order=created_at.desc`);
         return res.map((item) => OrderModel.fromMap(item));
     }
 
     async listOrdersByStatus(status: OrderStatus): Promise<OrderModel[]> {
-        const res = await http<any[]>(`${ORDER_URL}?status=eq.${status}&select=*,order_items(*,products(*)),users(*)&order=created_at.desc`);
+        const res = await http<any[]>(`${ORDER_URL}?status=eq.${status}&select=*,order_items(*,product_variants(*,products(*))),users(*)&order=created_at.desc`);
         return res.map((item) => OrderModel.fromMap(item));
     }
 
@@ -58,7 +58,7 @@ export class OrderDatasource {
     }
 
     async getOrderById(id: number): Promise<OrderModel | null> {
-        const res = await http<any[]>(`${ORDER_URL}?id=eq.${id}&select=*,order_items(*,products(*)),users(*)`);
+        const res = await http<any[]>(`${ORDER_URL}?id=eq.${id}&select=*,order_items(*,product_variants(*,products(*))),users(*)`);
         if (res && res.length > 0) {
             return OrderModel.fromMap(res[0]);
         }

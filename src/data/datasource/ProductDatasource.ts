@@ -70,7 +70,7 @@ export class ProductDatasource {
     }
 
     async listProducts(): Promise<ProductModel[]> {
-        const res = await http<any[]>(`${PRODUCT_URL}?select=*,categories(*)&order=created_at.desc`);
+        const res = await http<any[]>(`${PRODUCT_URL}?select=*,product_variants(*),product_categories(categories(*))&order=created_at.desc`);
         return res.map((item) => ProductModel.fromMap(item));
     }
 }

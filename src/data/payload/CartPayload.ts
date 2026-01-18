@@ -1,25 +1,25 @@
 export class CartPayload {
-    productId: number;
+    productVariantId: number;
     customerId: number;
     qty: number;
 
     constructor({
-        productId,
+        productVariantId,
         customerId,
         qty,
     }: {
-        productId: number;
+        productVariantId: number;
         customerId: number;
         qty: number;
     }) {
-        this.productId = productId;
+        this.productVariantId = productVariantId;
         this.customerId = customerId;
         this.qty = qty;
     }
 
     toMap(): any {
         return {
-            product_id: this.productId,
+            product_variant_id: this.productVariantId,
             customer_id: this.customerId,
             qty: this.qty,
         };

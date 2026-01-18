@@ -13,14 +13,14 @@ export default function Cart() {
 
   // Simulate MRP (e.g., 20% higher than price)
   const totalMrp = store.carts.reduce((sum, item) => {
-    return sum + ((item.product?.price ?? 0) * 1.2 * item.qty)
+    return sum + ((item.productVariant?.price ?? 0) * 1.2 * item.qty)
   }, 0)
 
   const totalSellingPrice = store.carts.reduce((sum, item) => {
-    return sum + ((item.product?.price ?? 0) * item.qty)
+    return sum + ((item.productVariant?.price ?? 0) * item.qty)
   }, 0)
 
-  const hasOutOfStock = store.carts.some(item => item.product && item.product.stock <= 0)
+  const hasOutOfStock = store.carts.some(item => item.productVariant && item.productVariant.stock <= 0)
 
   const productDiscount = totalMrp - totalSellingPrice
 
@@ -71,11 +71,15 @@ export default function Cart() {
           ) : (
             <div className="cart-list">
               {store.carts.map((item) => {
-                const product = item.product
-                if (!product) return null
+                const variant = item.productVariant
+                const product = variant?.product
+                if (!variant || !product) return null
+
+                // Determine image to show (variant image or product category image or default)
+                const image = variant.images?.[0] || 'https://via.placeholder.com/180'
 
                 return (
-                  <div className="cart-item-card" key={item.productId}>
+                  <div className="cart-item-card" key={item.id}>
 
                     {/* Item Checkbox */}
                     <div className="item-checkbox">
@@ -84,9 +88,9 @@ export default function Cart() {
 
                     {/* Item Image */}
                     <div className="item-image">
-                      <Link to={`/product/${item.productId}`}>
+                      <Link to={`/product/${product.id}`}>
                         <img
-                          src={product.images[0] || 'https://via.placeholder.com/180'}
+                          src={image}
                           alt={product.title}
                         />
                       </Link>
@@ -95,34 +99,34 @@ export default function Cart() {
                     {/* Item Details */}
                     <div className="item-details">
                       <div className="item-header-row">
-                        <Link to={`/product/${item.productId}`} className="item-title">
-                          {product.title}
+                        <Link to={`/product/${product.id}`} className="item-title">
+                          {product.title} ({variant.color})
                         </Link>
                         <div className="item-price-mobile">
                           <span className="price-symbol">₹</span>
-                          <span className="price-whole">{Math.floor((product.price * item.qty)).toLocaleString()}</span>
+                          <span className="price-whole">{Math.floor((variant.price * item.qty)).toLocaleString()}</span>
                         </div>
                       </div>
 
-                      <div className="item-stock-status">{product.stock > 0 ? (product.stock > 10 ? 'In stock' : 'Only ' + product.stock + ' left') : 'Out of stock'}</div>
+                      <div className="item-stock-status">{variant.stock > 0 ? (variant.stock > 10 ? 'In stock' : 'Only ' + variant.stock + ' left') : 'Out of stock'}</div>
                       <div className="item-shipping-badge">Eligible for FREE Shipping</div>
 
                       <div className="item-gift-option">
-                        <input type="checkbox" id={`gift-${item.productId}`} />
-                        <label htmlFor={`gift-${item.productId}`}>This will be a gift</label>
+                        <input type="checkbox" id={`gift-${item.id}`} />
+                        <label htmlFor={`gift-${item.id}`}>This will be a gift</label>
                         <a href="#" className="link-button">Learn more</a>
                       </div>
 
                       <div className="item-controls">
 
-                        {product.stock <= 0 ? (
+                        {variant.stock <= 0 ? (
                           <span className="out-of-stock">Out of stock</span>
                         ) : (
                           <div className="qty-control" style={{ display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: '4px', marginRight: '10px' }}>
                             <button
                               onClick={() => {
                                 if (item.qty > 1) {
-                                  store.updateCartQty(item.id, product.id, item.qty - 1)
+                                  store.updateCartQty(item.id, item.productVariantId, item.qty - 1)
                                 }
                               }}
                               style={{ padding: '2px 8px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderRight: '1px solid #ddd' }}
@@ -131,7 +135,7 @@ export default function Cart() {
                             </button>
                             <span style={{ padding: '0 10px', minWidth: '30px', textAlign: 'center', fontWeight: 'bold' }}>{item.qty}</span>
                             <button
-                              onClick={() => store.updateCartQty(item.id, product.id, product.stock >= item.qty + 1 ? item.qty + 1 : item.qty)}
+                              onClick={() => store.updateCartQty(item.id, item.productVariantId, variant.stock >= item.qty + 1 ? item.qty + 1 : item.qty)}
                               style={{ padding: '2px 8px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderLeft: '1px solid #ddd' }}
                             >
                               +
@@ -148,7 +152,7 @@ export default function Cart() {
                             Delete
                           </button>
                           <span className="separator">|</span>
-                          <Link to={`/catalog?category=${encodeURIComponent(product.categoryId)}`} className="link-button">See more like this</Link>
+                          <Link to={`/catalog?category=${encodeURIComponent(product.productCategories[0].categories.id)}`} className="link-button">See more like this</Link>
                           <span className="separator">|</span>
                           <button className="link-button">Share</button>
                         </div>
@@ -158,7 +162,7 @@ export default function Cart() {
                     {/* Item Price (Desktop) */}
                     <div className="item-price">
                       <span className="price-symbol">₹</span>
-                      <span className="price-whole">{Math.floor((product.price * item.qty)).toLocaleString()}</span>
+                      <span className="price-whole">{Math.floor((variant.price * item.qty)).toLocaleString()}</span>
                     </div>
                   </div>
                 )

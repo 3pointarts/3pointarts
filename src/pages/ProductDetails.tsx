@@ -1,4 +1,4 @@
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
 import useAdminProductStore from '../state/admin/AdminProductStore'
 import { Status } from '../core/enum/Status'
@@ -9,17 +9,41 @@ import { SEO } from '../components/SEO'
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const { products, init, initStatus } = useAdminProductStore()
   const { addToCart } = useCartStore()
   const { wishlists, addToWishlist, removeFromWishlistByProduct } = useWishlistStore()
   const cstore = useCartStore()
   const [qty, setQty] = useState(1);
   const [mainImage, setMainImage] = useState('')
+  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null)
 
   const product = products.find((p) => p.id == Number(id))
   const wished = wishlists.some(w => w.productId === product?.id)
+  const variantParam = searchParams.get('variant')
 
+  // Set selected variant from URL or default
+  useEffect(() => {
+    if (product && product.productVariants?.length > 0) {
+      if (variantParam) {
+        const vid = parseInt(variantParam)
+        const exists = product.productVariants.some(v => v.id === vid)
+        if (exists) {
+          setSelectedVariantId(vid)
+          return
+        }
+      }
+      // Default to first variant if no param or param invalid
+      if (!selectedVariantId) {
+        setSelectedVariantId(product.productVariants[0].id)
+      }
+    }
+  }, [product, variantParam])
 
+  const selectedVariant = useMemo(() => {
+    if (!product || !product.productVariants) return null
+    return product.productVariants.find(v => v.id === selectedVariantId) || product.productVariants[0]
+  }, [product, selectedVariantId])
 
   const reviews = useMemo(() => {
     const list = [
@@ -57,6 +81,12 @@ export default function ProductDetails() {
     }
   }, [init, initStatus])
 
+  const handleVariantSelect = (vid: number) => {
+    setSelectedVariantId(vid)
+    setSearchParams({ variant: vid.toString() })
+    setMainImage('') // Reset main image when variant changes
+  }
+
   if (initStatus === Status.loading || initStatus === Status.init) {
     return (
       <div className="page" style={{ textAlign: 'center', padding: '50px' }}>
@@ -75,11 +105,14 @@ export default function ProductDetails() {
     )
   }
 
-  // Mock Data
+  // Use selected variant details or fallback to first variant
+  const currentVariant = selectedVariant || product.productVariants?.[0]
+  if (!currentVariant) return <div>No product variants found</div>
 
-  const inCart = cstore.carts.some(c => c.productId === product.id)
-  const mrp = Math.floor(product.price * 1.4)
-  const discount = Math.round(((mrp - product.price) / mrp) * 100)
+  const inCart = cstore.carts.some(c => c.productVariantId === currentVariant.id)
+  const price = currentVariant.price;
+  const mrp = Math.floor(price * 1.4)
+  const discount = Math.round(((mrp - price) / mrp) * 100)
   const rating = 4.5
   const ratingCount = 1245
   const deliveryDate = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
@@ -88,14 +121,16 @@ export default function ProductDetails() {
     day: '2-digit',
   })
 
-
+  // Use variant specific images or fallback
+  const image = currentVariant.images?.[0] || product.productCategories?.[0]?.categories?.image || '/assets/images/full_logo.png';
+  const variantImages = currentVariant.images || [];
 
   return (
     <div className="page product-details-page">
       <SEO
         title={product.title}
         description={product.about}
-        image={product.images[0]}
+        image={image}
         type="product"
       />
       <div className="breadcrumb">
@@ -106,10 +141,19 @@ export default function ProductDetails() {
         {/* Left Column: Images */}
         <div className="col-images">
           <div className="main-image-container">
-            <img src={mainImage.length > 0 ? mainImage : product.images[0] || '/assets/images/full_logo.png'} alt={product.title} />
+            <img src={mainImage.length > 0 ? mainImage : image} alt={product.title} />
             <div className='mt-3'>
-              {product.images.map((img, index) => (
-                <img className='m-1' key={index} src={img} alt={`${product.title} ${index + 1}`} width={60} height={60} onClick={() => setMainImage(img)} />
+              {variantImages.map((img, index) => (
+                <img
+                  className={`m-1 ${mainImage === img ? 'active-thumb' : ''}`}
+                  style={{ border: mainImage === img ? '2px solid #e47911' : '1px solid #ddd', cursor: 'pointer' }}
+                  key={index}
+                  src={img}
+                  alt={`${product.title} ${index + 1}`}
+                  width={60}
+                  height={60}
+                  onClick={() => setMainImage(img)}
+                />
               ))}
             </div>
           </div>
@@ -117,7 +161,7 @@ export default function ProductDetails() {
 
         {/* Center Column: Info */}
         <div className="col-info">
-          <h1 className="product-title">{product.title}</h1>
+          <h1 className="product-title">{product.title} ({currentVariant.color})</h1>
           <div className="product-meta">
             <div className="rating-row">
               <span className="stars">★★★★☆</span>
@@ -132,7 +176,7 @@ export default function ProductDetails() {
             <div className="price-row-lg">
               <span className="discount-lg">-{discount}%</span>
               <span className="currency-lg">₹</span>
-              <span className="price-lg">{product.price.toLocaleString()}</span>
+              <span className="price-lg">{price.toLocaleString()}</span>
             </div>
             <div className="delivery">
               <span className="free">FREE delivery</span>
@@ -146,10 +190,6 @@ export default function ProductDetails() {
 
           <div className="divider"></div>
 
-
-
-          <div className="divider"></div>
-
           <div className="about-item">
             <h3>About this item</h3>
             <ul>
@@ -159,6 +199,33 @@ export default function ProductDetails() {
               <li>Easy to clean and maintain.</li>
             </ul>
           </div>
+
+          <div className="variant-selector mb-3">
+            <span style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Color: {currentVariant.color}</span>
+            <div className="d-flex flex-wrap gap-2">
+              {product.productVariants.map((variant) => (
+                <div
+                  key={variant.id}
+                  onClick={() => handleVariantSelect(variant.id)}
+                  style={{
+                    border: variant.id === currentVariant.id ? '2px solid #e47911' : '1px solid #ddd',
+                    padding: '8px 12px',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    backgroundColor: variant.id === currentVariant.id ? '#fff9f3' : '#fff',
+                    minWidth: '80px',
+                    textAlign: 'center'
+                  }}
+                >
+                  <div style={{ width: '20px', height: '20px', borderRadius: '50%', display: 'inline-block', marginRight: '5px', backgroundColor: variant.colorHex }}
+                  ></div>
+                  <div style={{ fontWeight: 'bold' }}>{variant.color}</div>
+                  <div style={{ fontSize: '0.9em', color: '#565959' }}>₹{variant.price.toLocaleString()}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="qty-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <label>Quantity:</label>
             <div className="qty-control" style={{ display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: '4px' }}>
@@ -177,7 +244,7 @@ export default function ProductDetails() {
               </button>
             </div>
           </div>
-          {product.stock <= 0 ? (
+          {currentVariant.stock <= 0 ? (
             <span className="out-of-stock">Out of stock</span>
           ) : (
             <div className='row'>
@@ -187,7 +254,7 @@ export default function ProductDetails() {
                     <button
                       className="btn-amazon-primary" style={{ width: '100%', margin: '0', marginBottom: '10px' }}
                       onClick={async () => {
-                        await addToCart(product.id, qty)
+                        await addToCart(currentVariant.id, qty)
                       }}
                     >
                       Add to Cart
@@ -195,7 +262,7 @@ export default function ProductDetails() {
               <div className='col-md-6'>
                 <button className="btn-amazon-secondary" style={{ width: '100%', margin: '0' }} onClick={async () => {
                   if (!inCart) {
-                    await addToCart(product.id, qty);
+                    await addToCart(currentVariant.id, qty);
                   }
                   navigate('/cart')
                 }}>Buy Now</button></div>

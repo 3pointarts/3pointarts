@@ -35,7 +35,7 @@ export class CartDatasource {
     }
 
     async listCarts(userId: number): Promise<CartModel[]> {
-        const res = await http<any[]>(`${CART_URL}?customer_id=eq.${userId}&select=*,products(*)&order=created_at.desc`);
+        const res = await http<any[]>(`${CART_URL}?customer_id=eq.${userId}&select=*,product_variants(*,products(*,product_categories(categories(*))))&order=created_at.desc`);
         return res.map((item) => CartModel.fromMap(item));
     }
 }

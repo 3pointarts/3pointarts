@@ -27,17 +27,17 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, isE
 
     // Load data when opening in edit mode
     useEffect(() => {
-        if (isOpen && isEdit && editId) {
-            const product = store.products.find(p => p.id === editId);
-            if (product) {
-                store.setProductTitle(product.title);
-                store.setProductAbout(product.about);
-                store.setProductPrice(product.price);
-                store.setProductStock(product.stock);
-                store.setProductCategoryId(product.categoryId);
-                store.setProductImage(product.images.join(','));
-            }
-        }
+        // if (isOpen && isEdit && editId) {
+        //     const product = store.products.find(p => p.id === editId);
+        //     if (product) {
+        //         store.setProductTitle(product.title);
+        //         store.setProductAbout(product.about);
+        //         store.setProductPrice(product.price);
+        //         store.setProductStock(product.stock);
+        //         store.setProductCategoryId(product.categoryId);
+        //         store.setProductImage(product.images.join(','));
+        //     }
+        // }
     }, [isOpen, isEdit, editId]);
 
     const handleSubmit = async () => {

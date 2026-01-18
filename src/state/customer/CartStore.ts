@@ -43,7 +43,7 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
         }
     },
 
-    addToCart: async (productId: number, qty: number) => {
+    addToCart: async (productVariantId: number, qty: number) => {
         const customer = useCustomerAuthStore.getState().customer;
         if (!customer) {
             showError("Please login to add items to cart");
@@ -53,18 +53,18 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
         set({ status: Status.loading });
         try {
             const payload = new CartPayload({
-                productId,
+                productVariantId,
                 customerId: customer.id,
                 qty
             });
-            
-            const existingCartItem = get().carts.find(c => c.productId === productId);
-            
+
+            const existingCartItem = get().carts.find(c => c.productVariantId === productVariantId);
+
             if (existingCartItem) {
                 // Update existing
                 const newQty = existingCartItem.qty + qty;
-                 const updatePayload = new CartPayload({
-                    productId,
+                const updatePayload = new CartPayload({
+                    productVariantId,
                     customerId: customer.id,
                     qty: newQty
                 });
@@ -75,7 +75,7 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
                 await cartDatasource.addCart(payload);
                 showSuccess("Added to cart");
             }
-            
+
             // Reload carts to get fresh data
             await get().loadCarts();
         } catch (error) {
@@ -85,20 +85,20 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
         }
     },
 
-    updateCartQty: async (cartId: number, productId: number, qty: number) => {
+    updateCartQty: async (cartId: number, productVariantId: number, qty: number) => {
         const customer = useCustomerAuthStore.getState().customer;
         if (!customer) return;
 
         // Optimistic update
         const originalCarts = get().carts;
-        const updatedCarts = originalCarts.map(c => 
+        const updatedCarts = originalCarts.map(c =>
             c.id === cartId ? { ...c, qty } as CartModel : c
         );
         set({ carts: updatedCarts });
 
         try {
             const payload = new CartPayload({
-                productId,
+                productVariantId,
                 customerId: customer.id,
                 qty
             });
@@ -115,12 +115,12 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
         try {
             await cartDatasource.deleteCarts([cartId]);
             showSuccess("Removed from cart");
-            
+
             // Optimistic update or reload
             const currentCarts = get().carts;
-            set({ 
+            set({
                 carts: currentCarts.filter(c => c.id !== cartId),
-                status: Status.success 
+                status: Status.success
             });
         } catch (error) {
             console.error(error);

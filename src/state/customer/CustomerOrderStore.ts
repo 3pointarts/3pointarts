@@ -108,14 +108,14 @@ const CustomerOrderStore: StateCreator<CustomerOrderState> = (set, get) => ({
         try {
             // Calculate total
             const total = carts.reduce((sum, item) => {
-                const price = item.product?.price ?? 0;
+                const price = item.productVariant?.price ?? 0;
                 return sum + (price * item.qty);
             }, 0);
 
             // Create payload items
             const orderItems = carts.map(item => new OrderItemPayload({
-                productId: item.productId,
-                qty: item.product?.stock == null ? item.qty : (item.product!.stock > item.qty ? item.qty : item.product!.stock)
+                productVariantId: item.productVariantId,
+                qty: item.qty
             }));
 
             const payload = new OrderPayload({
@@ -133,25 +133,18 @@ const CustomerOrderStore: StateCreator<CustomerOrderState> = (set, get) => ({
             await orderDatasource.addOrderWithItems(payload);
 
             // Reduce stock
+            /*
             try {
-                const products = await productDatasource.listProducts();
-                for (const item of carts) {
-                    const product = products.find(p => p.id === item.productId);
-                    if (product) {
-                        const qty = item.product?.stock == null ? item.qty : (item.product!.stock > item.qty ? item.qty : item.product!.stock)
-                        const newStock = product.stock - qty;
-                        if (newStock >= 0) {
-                            const updatePayload = new ProductPayload({
-                                ...product,
-                                stock: newStock
-                            });
-                            await productDatasource.updateProduct(product.id, updatePayload);
-                        }
-                    }
-                }
+                // TODO: Implement variant stock reduction
+                // const products = await productDatasource.listProducts();
+                // for (const item of carts) {
+                //     const product = products.find(p => p.id === item.productVariantId);
+                //     ...
+                // }
             } catch (error) {
                 console.error("Failed to update stock", error);
             }
+            */
 
             showSuccess("Order placed successfully!");
             set({ createStatus: Status.success });

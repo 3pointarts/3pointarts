@@ -36,7 +36,14 @@ export default function Catalog() {
     }
   }, [categoryId])
 
-  const prices = products.map((p) => p.price)
+  // Flatten products to variant items
+  const variantItems = useMemo(() => {
+    return products.flatMap(p =>
+      (p.productVariants || []).map(v => ({ product: p, variant: v }))
+    )
+  }, [products])
+
+  const prices = variantItems.map((item) => item.variant.price)
   const floor = prices.length ? Math.min(...prices) : 0
   const ceil = prices.length ? Math.max(...prices) : 5000
 
@@ -44,17 +51,17 @@ export default function Catalog() {
   const min = Math.max(minPrice || floor, floor)
   const max = Math.min(maxPrice || ceil, ceil)
 
-  const filtered = products
-    .filter((p) => {
+  const filtered = variantItems
+    .filter(({ product, variant }) => {
       const matchQ =
-        !query || p.title.toLowerCase().includes(query) || p.about.toLowerCase().includes(query)
-      const matchC = selectedCatIds.length === 0 || selectedCatIds.includes(p.categoryId)
-      const matchP = p.price >= min && p.price <= max
+        !query || product.title.toLowerCase().includes(query) || product.about.toLowerCase().includes(query)
+      const matchC = selectedCatIds.length === 0 || selectedCatIds.includes(product.productCategories[0]?.categories.id)
+      const matchP = variant.price >= min && variant.price <= max
       return matchQ && matchC && matchP
     })
     .sort((a, b) => {
-      if (sort === 'price-asc') return a.price - b.price
-      if (sort === 'price-desc') return b.price - a.price
+      if (sort === 'price-asc') return a.variant.price - b.variant.price
+      if (sort === 'price-desc') return b.variant.price - a.variant.price
       return 0
     })
 
@@ -141,8 +148,8 @@ export default function Catalog() {
         <div>
           {query && <div className="hint">Showing results for “{query}”</div>}
           <div className="product-grid">
-            {filtered.map((p) => {
-              return <ProductCard key={p.id} product={p} />
+            {filtered.map(({ product, variant }) => {
+              return <ProductCard key={variant.id} product={product} variantId={variant.id} />
             })}
             {filtered.length === 0 && <div>No products found.</div>}
           </div>

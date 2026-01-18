@@ -24,7 +24,7 @@ export default function Orders() {
   }
 
   function getProductName(item: any) {
-    return item.product?.title || `Product #${item.productId}`
+    return item.productVariant?.product?.title || `Product Variant #${item.productVariantId}`
   }
 
   if (status === Status.loading) {

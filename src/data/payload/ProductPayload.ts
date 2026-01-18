@@ -1,42 +1,27 @@
 export class ProductPayload {
     title: string;
     about: string;
-    price: number;
-    stock: number;
-    images: string[];
-    categoryId: number;
+    basePrice: number;
 
     constructor({
         title,
         about,
-        price,
-        stock,
-        images,
-        categoryId,
+        basePrice,
     }: {
         title: string;
         about: string;
-        price: number;
-        stock: number;
-        images: string[];
-        categoryId: number;
+        basePrice: number;
     }) {
         this.title = title;
         this.about = about;
-        this.price = price;
-        this.stock = stock;
-        this.images = images;
-        this.categoryId = categoryId;
+        this.basePrice = basePrice;
     }
 
     toMap(): any {
         return {
             title: this.title,
             about: this.about,
-            price: this.price,
-            stock: this.stock,
-            images: this.images.join(','),
-            category_id: this.categoryId,
+            base_price: this.basePrice,
         };
     }
 }

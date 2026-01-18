@@ -103,11 +103,11 @@ export default function AdminProducts() {
                                 {
                                     products.filter((product) => product.title.toLowerCase().includes(searchProduct.toLowerCase())).map((product) => (
                                         <tr key={product.id}>
-                                            <td>{product.images.length > 0 ? <img src={product.images[0]} alt={product.title} className="product-img" style={{ width: '50px', height: '50px', objectFit: 'contain' }} /> : <div className="img-placeholder"></div>}</td>
+                                            <td>{product.productVariants[0].images.length > 0 ? <img src={product.productVariants[0].images[0]} alt={product.title} className="product-img" style={{ width: '50px', height: '50px', objectFit: 'contain' }} /> : <div className="img-placeholder"></div>}</td>
                                             <td>{product.title}</td>
-                                            <td>{categories.find((category) => category.id === product.categoryId)?.name}</td>
-                                            <td>₹{product.price}</td>
-                                            <td>{product.stock}</td>
+                                            <td>{product.productCategories.reduce((acc, category) => acc + category.categories.name + ', ', '')}</td>
+                                            <td>{product.productVariants.reduce((acc, variant) => acc + '₹' + variant.price + ', ', '').toLocaleString()}</td>
+                                            <td>{product.productVariants.reduce((acc, variant) => acc + variant.stock, 0)}</td>
                                             <td>
                                                 <button className="btn-small" style={{ color: 'blue', borderColor: 'blue' }} onClick={() => handleEditProduct(product.id)}>Edit</button>
                                                 <button className="btn-small" style={{ marginLeft: '5px', color: 'red', borderColor: 'red' }} onClick={() => handleDeleteProduct(product.id)}>Delete</button>

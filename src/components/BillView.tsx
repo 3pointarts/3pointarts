@@ -80,11 +80,11 @@ export default function BillView() {
           </thead>
           <tbody>
             {order.items?.map((item, idx) => {
-              const price = item.product?.price || 0
+              const price = item.productVariant?.price || 0
               const total = price * item.qty
               return (
                 <tr key={idx}>
-                  <td>{item.product?.title || `Product #${item.productId}`}</td>
+                  <td>{item.productVariant?.product?.title || `Product Variant #${item.productVariantId}`}</td>
                   <td className="text-right">₹{price.toLocaleString()}</td>
                   <td className="text-center">{item.qty}</td>
                   <td className="text-right">₹{total.toLocaleString()}</td>
