@@ -13,7 +13,9 @@ export default function ProductDetails() {
   const { addToCart } = useCartStore()
   const { wishlists, addToWishlist, removeFromWishlistByProduct } = useWishlistStore()
   const cstore = useCartStore()
-  const [qty, setQty] = useState(1)
+  const [qty, setQty] = useState(1);
+  const [mainImage, setMainImage] = useState('')
+
   const product = products.find((p) => p.id == Number(id))
   const wished = wishlists.some(w => w.productId === product?.id)
 
@@ -104,7 +106,12 @@ export default function ProductDetails() {
         {/* Left Column: Images */}
         <div className="col-images">
           <div className="main-image-container">
-            <img src={product.images[0] || '/assets/images/full_logo.png'} alt={product.title} />
+            <img src={mainImage.length > 0 ? mainImage : product.images[0] || '/assets/images/full_logo.png'} alt={product.title} />
+            <div className='mt-3'>
+              {product.images.map((img, index) => (
+                <img className='m-1' key={index} src={img} alt={`${product.title} ${index + 1}`} width={60} height={60} onClick={() => setMainImage(img)} />
+              ))}
+            </div>
           </div>
         </div>
 
