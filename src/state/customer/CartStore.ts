@@ -47,6 +47,8 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
         const customer = useCustomerAuthStore.getState().customer;
         if (!customer) {
             showError("Please login to add items to cart");
+            window.localStorage.setItem("redirectAfterLogin", window.location.href);
+            window.location.href = "/login";
             return;
         }
 

@@ -122,6 +122,13 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
             const user = await authDatasource.customerLoginByPhone(phone);
             if (user) {
                 localStorage.setItem('customer', JSON.stringify(user));
+                const redirectAfterLogin = localStorage.getItem("redirectAfterLogin");
+                if (redirectAfterLogin) {
+                    setTimeout(() => {
+                        window.location.href = redirectAfterLogin;
+                        localStorage.removeItem("redirectAfterLogin");
+                    }, 1000);
+                }
                 showSuccess('Login Successful!');
                 set({ customer: user, loginStatus: Status.success });
             } else {
@@ -147,6 +154,13 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
             );
             const user = await authDatasource.customerRegister(payload);
             localStorage.setItem('customer', JSON.stringify(user));
+            const redirectAfterLogin = localStorage.getItem("redirectAfterLogin");
+            if (redirectAfterLogin) {
+                setTimeout(() => {
+                    window.location.href = redirectAfterLogin;
+                    localStorage.removeItem("redirectAfterLogin");
+                }, 1000);
+            }
             showSuccess('Registration Successful! Welcome.');
             set({ customer: user, loginStatus: Status.success });
         } catch (error) {
