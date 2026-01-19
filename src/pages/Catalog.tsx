@@ -28,6 +28,7 @@ export default function Catalog() {
   const [selectedCatIds, setSelectedCatIds] = useState<number[]>(categoryId ? [categoryId] : [])
   type SortOpt = 'featured' | 'price-asc' | 'price-desc'
   const [sort, setSort] = useState<SortOpt>('featured')
+  const [showMobileFilters, setShowMobileFilters] = useState(false)
 
   // Update selected categories if URL param changes
   useEffect(() => {
@@ -55,7 +56,7 @@ export default function Catalog() {
     .filter(({ product, variant }) => {
       const matchQ =
         !query || product.title.toLowerCase().includes(query) || product.about.toLowerCase().includes(query)
-      const matchC = selectedCatIds.length === 0 || selectedCatIds.includes(product.productCategories[0]?.categories.id)
+      const matchC = selectedCatIds.length === 0 || product.productCategories.some(pc => selectedCatIds.includes(pc.categories.id))
       const matchP = variant.price >= min && variant.price <= max
       return matchQ && matchC && matchP
     })
@@ -75,14 +76,32 @@ export default function Catalog() {
     return <div className="text-center p-5">Loading products...</div>
   }
 
+  const hasActiveFilters = selectedCatIds.length > 0 || min > floor || max < ceil
+
   return (
     <section>
       <SEO
         title="Catalog"
         description="Browse our collection of 3D printed products including lamps, statues, car models, and more."
       />
+
+      {/* Mobile Filter Toggle */}
+      <div className="d-md-none mb-3">
+        <button
+          className="btn btn-outline-primary w-100 d-flex justify-content-between align-items-center"
+          onClick={() => setShowMobileFilters(!showMobileFilters)}
+        >
+          <span>
+            <i className="fa fa-filter me-2" aria-hidden="true"></i> Filters
+          </span>
+          {hasActiveFilters && (
+            <span className="badge bg-primary rounded-pill">!</span>
+          )}
+        </button>
+      </div>
+
       <div className="catalog-layout">
-        <aside className="filter-panel">
+        <aside className={`filter-panel ${showMobileFilters ? 'd-block' : 'd-none'} d-md-block`}>
           <div className="card p-2">
             <div className="card-body">
               <h4 className="card-title">Filters</h4>

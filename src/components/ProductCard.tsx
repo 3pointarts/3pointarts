@@ -1,14 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { ProductModel } from '../data/model/ProductModel'
 import useCartStore from '../state/customer/CartStore'
 import useWishlistStore from '../state/customer/WishlistStore'
 import type { ProductVariantModel } from '../data/model/ProductVariantModel'
+import { showSuccess } from '../core/message'
 
 export default function ProductCard({ product, variantId, variantOptional }: { product: ProductModel, variantId?: number, variantOptional?: ProductVariantModel }) {
   const { addToCart } = useCartStore()
   const { wishlists, addToWishlist, removeFromWishlistByProduct } = useWishlistStore()
   const cstore = useCartStore()
   const navigate = useNavigate()
+  const [showShare, setShowShare] = useState(false)
 
   // Find the specific variant or default to the first one
   const variant = product.productVariants.length > 0 ? (variantId
@@ -52,6 +55,9 @@ export default function ProductCard({ product, variantId, variantOptional }: { p
       }
   }
 
+  const shareUrl = window.location.origin + `/product/${product.id}?variant=${displayVariant.id}`
+  const shareText = `Check out ${product.title} on 3 Point Arts!`
+
   return (
     <div className="product-card">
       <div className="image-wrap">
@@ -67,16 +73,21 @@ export default function ProductCard({ product, variantId, variantOptional }: { p
           className={`heart ${wished ? 'active' : ''}`}
           onClick={toggleWishlist}
         >
-          <i className={`fa ${wished ? 'fa-heart' : 'fa-heart-o'}`} style={{ fontSize: '24px' }}></i>
+          <i className={`fa ${wished ? 'fa-heart' : 'fa-heart-o'}`} style={{ fontSize: '24px', color: "orange" }}></i>
         </button>
       </div>
 
       <div className="info">
-        <h3>
-          <Link to={`/product/${product.id}?variant=${displayVariant.id}`}>
-            {product.title}
-          </Link>
-        </h3>
+        <div className='row'>
+          <h3 className='col-10'>
+            <Link to={`/product/${product.id}?variant=${displayVariant.id}`}>
+              {product.title}
+            </Link>
+          </h3>
+          <div className='col-2'>
+            <i className='fa fa-share-alt' onClick={() => setShowShare(true)} style={{ cursor: 'pointer' }}></i>
+          </div>
+        </div>
 
         <div className="rating">
           <span className="stars">★★★★★</span>
@@ -119,6 +130,45 @@ export default function ProductCard({ product, variantId, variantOptional }: { p
           )}
         </div>
       </div>
+      {showShare && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050,
+          display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }} onClick={() => setShowShare(false)}>
+          <div className="card p-3" style={{ minWidth: '300px', maxWidth: '90%' }} onClick={e => e.stopPropagation()}>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h5 className="m-0">Share this product</h5>
+              <button type="button" className="btn-close" aria-label="Close" onClick={() => setShowShare(false)}></button>
+            </div>
+            <div className="mb-3">
+              <input type="text" className="form-control" value={shareUrl} readOnly onClick={(e) => e.currentTarget.select()} />
+            </div>
+            <div className="d-flex justify-content-around text-center">
+              <a href={`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-success d-flex flex-column align-items-center" title="WhatsApp">
+                <i className="fa fa-whatsapp fa-2x mb-1"></i>
+                <span style={{ fontSize: '0.8rem' }}>WhatsApp</span>
+              </a>
+              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-primary d-flex flex-column align-items-center" title="Facebook">
+                <i className="fa fa-facebook-official fa-2x mb-1"></i>
+                <span style={{ fontSize: '0.8rem' }}>Facebook</span>
+              </a>
+              <a href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-info d-flex flex-column align-items-center" title="Telegram">
+                <i className="fa fa-telegram fa-2x mb-1"></i>
+                <span style={{ fontSize: '0.8rem' }}>Telegram</span>
+              </a>
+              <div onClick={() => {
+                navigator.clipboard.writeText(shareUrl)
+                showSuccess("Link copied to clipboard!")
+                setShowShare(false)
+              }} style={{ cursor: 'pointer' }} className="text-secondary d-flex flex-column align-items-center" title="Copy Link">
+                <i className="fa fa-clone fa-2x mb-1"></i>
+                <span style={{ fontSize: '0.8rem' }}>Copy</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
