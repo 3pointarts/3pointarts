@@ -2,12 +2,14 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import useCartStore from '../state/customer/CartStore'
 import useCustomerAuthStore from '../state/customer/CustomerAuthStore';
+import ShareDialog from '../components/ShareDialog';
 
 export default function Cart() {
   const store = useCartStore();
   const astore = useCustomerAuthStore();
   const [couponCode, setCouponCode] = useState('')
   const [discountPercent] = useState(0)
+  const [shareData, setShareData] = useState({ show: false, url: '', text: '' })
 
   const totalItems = store.carts.reduce((sum, item) => sum + item.qty, 0)
 
@@ -82,9 +84,9 @@ export default function Cart() {
                   <div className="cart-item-card" key={item.id}>
 
                     {/* Item Checkbox */}
-                    <div className="item-checkbox">
+                    {/* <div className="item-checkbox">
                       <input type="checkbox" defaultChecked />
-                    </div>
+                    </div> */}
 
                     {/* Item Image */}
                     <div className="item-image">
@@ -111,11 +113,11 @@ export default function Cart() {
                       <div className="item-stock-status">{variant.stock > 0 ? (variant.stock > 10 ? 'In stock' : 'Only ' + variant.stock + ' left') : 'Out of stock'}</div>
                       <div className="item-shipping-badge">Eligible for FREE Shipping</div>
 
-                      <div className="item-gift-option">
+                      {/* <div className="item-gift-option">
                         <input type="checkbox" id={`gift-${item.id}`} />
                         <label htmlFor={`gift-${item.id}`}>This will be a gift</label>
                         <a href="#" className="link-button">Learn more</a>
-                      </div>
+                      </div> */}
 
                       <div className="item-controls">
 
@@ -151,10 +153,13 @@ export default function Cart() {
                           >
                             Delete
                           </button>
-                          <span className="separator">|</span>
+                          <button className="link-button" onClick={() => {
+                            const url = window.location.origin + `/product/${product.id}?variant=${variant.id}`;
+                            const text = `Check out ${product.title} on 3 Point Arts!`;
+                            setShareData({ show: true, url, text });
+                          }}>Share</button>
                           <Link to={`/catalog?category=${encodeURIComponent(product.productCategories[0].categories.id)}`} className="link-button">See more like this</Link>
-                          <span className="separator">|</span>
-                          <button className="link-button">Share</button>
+
                         </div>
                       </div>
                     </div>
@@ -237,28 +242,33 @@ export default function Cart() {
                 </div>
                 {discountPercent > 0 && <div className="coupon-success">"BIRTHDAY" applied!</div>}
               </div>
-
-              {hasOutOfStock ? (
-                <>
-                  <button className="btn-proceed-buy" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+              <div className='checkout-btn'>
+                {hasOutOfStock ? (
+                  <>
+                    <button className="btn-proceed-buy" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                      Proceed to Buy
+                    </button>
+                    <p style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>
+                      Remove out of stock product from cart first
+                    </p>
+                  </>
+                ) : (
+                  <Link to="/checkout" className="btn-proceed-buy">
                     Proceed to Buy
-                  </button>
-                  <p style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>
-                    Remove out of stock product from cart first
-                  </p>
-                </>
-              ) : (
-                <Link to="/checkout" className="btn-proceed-buy">
-                  Proceed to Buy
-                </Link>
-              )}
+                  </Link>
+                )}
+              </div>
             </div>
-
-
           </div>
         )}
 
       </div>
+      <ShareDialog
+        isOpen={shareData.show}
+        onClose={() => setShareData({ ...shareData, show: false })}
+        shareUrl={shareData.url}
+        shareText={shareData.text}
+      />
     </div>
   )
 }

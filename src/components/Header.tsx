@@ -84,8 +84,34 @@ function Header() {
       <div className="mobile" style={{
         width: '100%',
         padding: '0 20px',
+        position: 'relative',
+        paddingLeft: '50px',
       }}>
-        <form className="mobile-search mt-2 mx-auto" onSubmit={onSearch}>
+
+        <span style={{
+          fontSize: '24px',
+          border: '1px solid #ccc',
+          padding: '0px 10px 5px 10px',
+          borderRadius: '5px',
+          marginRight: '10px',
+          position: 'absolute',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          left: '10px',
+          backgroundColor: '#fff',
+        }}
+          onClick={(() => {
+            navigate(-1);
+          })}
+        >
+          <i className="fa fa-angle-left"></i>
+        </span>
+        <form
+          // style={{
+          //   width: 'calc(100% - 40px)',
+          // }}
+          className="mobile-search mt-2 mx-auto" onSubmit={onSearch}>
+
           <input
             id="search"
             type="search"

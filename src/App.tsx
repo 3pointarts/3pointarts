@@ -33,7 +33,7 @@ const PublicLayout = () => {
         description="3 Point Arts - Custom 3D Printed Art, Models & Lamps. Discover unique handcrafted 3D prints for your home."
       />
       <Header />
-      <main className="container">
+      <main className='px-3'>
         <Outlet />
       </main>
       <Footer />

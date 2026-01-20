@@ -314,7 +314,7 @@ a:hover {
 /* Catalog */
 .catalog-layout {
     display: grid;
-    grid-template-columns: 240px 1fr;
+    grid-template-columns: 20% 1fr;
     gap: 2rem;
     align-items: start;
 }
@@ -1030,7 +1030,8 @@ a:hover {
 /* Cart Left: Items */
 .cart-items-container {
     background: #fff;
-    padding: 20px;
+    padding: 10px;
+    overflow: hidden;
     /* Amazon cart container is white */
 }
 
@@ -1058,6 +1059,20 @@ a:hover {
     align-items: center;
     justify-content: center;
     margin-right: 16px;
+}
+
+@media screen and (max-width: 768px) {
+    .item-image {
+        width: 40%;
+        min-width: unset;
+    }
+
+}
+
+.control-links>* {
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 4px 8px;
 }
 
 .item-image img {
@@ -1128,10 +1143,12 @@ a:hover {
 
 .control-links {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
     font-size: 12px;
 }
+
 
 .separator {
     color: #ddd;
@@ -1328,6 +1345,21 @@ a:hover {
 
     .col-buybox {
         width: 100%;
+    }
+
+    .checkout-btn {
+        position: fixed;
+        background-color: white;
+        width: 100%;
+        left: 0;
+        padding: 20px;
+        padding-top: 0px;
+        bottom: 0px;
+
+        .btn-proceed-buy {
+
+            font-size: 18px !important;
+        }
     }
 }
 
