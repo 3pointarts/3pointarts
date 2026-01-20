@@ -1,12 +1,20 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { useState, type FormEvent } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import useCustomerAuthStore from '../state/customer/CustomerAuthStore'
 import useCartStore from '../state/customer/CartStore'
-
+function useQuery() {
+  const { search } = useLocation()
+  return useMemo(() => new URLSearchParams(search), [search])
+}
 function Header() {
   const state = useCustomerAuthStore()
   const cartState = useCartStore()
   const [query, setQuery] = useState('')
+  const q = useQuery()
+  const queryNew = (q.get('q') || '').toLowerCase()
+  useEffect(() => {
+    setQuery(queryNew)
+  }, [queryNew])
   const navigate = useNavigate()
 
   function onSearch(e: FormEvent) {
@@ -16,7 +24,7 @@ function Header() {
   }
 
   return (
-    <header className="header">
+    <header className="header" style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
       <div className="header-inner">
         <Link to="/" className="brand">
           <img src="/assets/images/logo.png" alt="3 Point Arts" />
@@ -30,21 +38,23 @@ function Header() {
         </nav>
 
         <div className="header-right">
-          <form className="search" onSubmit={onSearch}>
-            <input
-              type="search"
-              placeholder="Search products"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <button type="submit">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" />
-                <path d="M21 21l-4.35-4.35" />
-              </svg>
-            </button>
-          </form>
-
+          <div className='pc'>
+            <form className="search" onSubmit={onSearch}>
+              <input
+                // id="search"
+                type="search"
+                placeholder="Search products"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button type="submit">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="M21 21l-4.35-4.35" />
+                </svg>
+              </button>
+            </form>
+          </div>
           <div className="user-actions">
             {state.customer ? (
               <>
@@ -71,6 +81,27 @@ function Header() {
           </div>
         </div>
       </div>
+      <div className="mobile" style={{
+        width: '100%',
+        padding: '0 20px',
+      }}>
+        <form className="mobile-search mt-2 mx-auto" onSubmit={onSearch}>
+          <input
+            id="search"
+            type="search"
+            placeholder="Search products"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button type="submit">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+          </button>
+        </form>
+      </div>
+
     </header>
   )
 }

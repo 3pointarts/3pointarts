@@ -37,6 +37,7 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
         try {
             const carts = await cartDatasource.listCarts(customer.id);
             set({ carts, status: Status.success });
+            window.scrollTo(0, 0);
         } catch (error) {
             console.error(error);
             set({ status: Status.error });

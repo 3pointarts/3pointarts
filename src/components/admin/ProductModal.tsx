@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { CommonModal } from '../CommonModal';
 import useAdminProductStore from '../../state/admin/AdminProductStore';
 import { Status } from '../../core/enum/Status';
+import { showError } from '../../core/message';
 
 interface ProductModalProps {
     isOpen: boolean;
@@ -46,13 +47,18 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, isE
     }, [isOpen, isEdit, editId]);
 
     const handleSubmit = async () => {
-        if (isEdit && editId) {
-            await store.updateProduct(editId);
+        if (store.productVariants.length > 0) {
+
+            if (isEdit && editId) {
+                await store.updateProduct(editId);
+            } else {
+                await store.addProduct();
+            }
+            if (useAdminProductStore.getState().productSubmitStatus === Status.success) {
+                onClose();
+            }
         } else {
-            await store.addProduct();
-        }
-        if (useAdminProductStore.getState().productSubmitStatus === Status.success) {
-            onClose();
+            showError('Please add at least one variant.');
         }
     };
 

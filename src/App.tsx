@@ -23,6 +23,7 @@ import ProductDetails from './pages/ProductDetails'
 import { ToastContainer } from 'react-toastify'
 import { useEffect } from 'react'
 import useCustomerAuthStore from './state/customer/CustomerAuthStore'
+import ScrollToTop from './components/ScrollToTop'
 
 const PublicLayout = () => {
   return (
@@ -50,6 +51,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />

@@ -86,7 +86,7 @@ export default function Catalog() {
       />
 
       {/* Mobile Filter Toggle */}
-      <div className="d-md-none mb-3">
+      <div className="d-md-none mb-3 filter-toggle">
         <button
           className="btn btn-outline-primary w-100 d-flex justify-content-between align-items-center"
           onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -101,7 +101,7 @@ export default function Catalog() {
       </div>
 
       <div className="catalog-layout">
-        <aside className={`filter-panel ${showMobileFilters ? 'd-block' : 'd-none'} d-md-block`}>
+        <aside className={`top-0 filter-panel ${showMobileFilters ? 'd-block' : 'd-none'} d-md-block`}>
           <div className="card p-2">
             <div className="card-body">
               <h4 className="card-title">Filters</h4>

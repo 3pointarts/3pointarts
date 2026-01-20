@@ -8,6 +8,26 @@
     background-color: #ffffff;
 }
 
+.pc {
+    display: none !important;
+}
+
+@media (min-width: 768px) {
+    .pc {
+        display: block !important;
+    }
+}
+
+.mobile {
+    display: block !important;
+}
+
+@media (min-width: 768px) {
+    .mobile {
+        display: none !important;
+    }
+}
+
 body {
     margin: 0;
     min-width: 320px;
@@ -28,7 +48,6 @@ a:hover {
 .header {
     border-bottom: 1px solid #eee;
     padding: 1rem 0;
-    margin-bottom: 2rem;
     background-color: #ffffff;
     color: #0F1111;
 }
@@ -75,6 +94,50 @@ a:hover {
     border-radius: 4px;
     overflow: hidden;
     height: 40px;
+}
+
+@media screen and (max-width: 768px) {
+
+    .product-action {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px;
+        background-color: #ffffff;
+    }
+}
+
+
+.mobile-search {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #cdcdcd;
+    border-radius: 4px;
+    overflow: hidden;
+    height: 40px;
+    margin: 0px 10px;
+
+    input {
+        border: none;
+        outline: none;
+        padding: 0 10px;
+        height: 100%;
+        width: 90%;
+    }
+
+    button {
+        background: #febd69;
+        border: none;
+        cursor: pointer;
+        padding: 0 10px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        width: 10%;
+    }
+
 }
 
 .search input {
@@ -263,10 +326,28 @@ a:hover {
 }
 
 .filter-panel {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
     background: #fff;
     border-radius: 8px;
     padding: 1rem;
     border: 1px solid #ddd;
+}
+
+.filter-toggle {
+    background-color: white;
+    position: sticky;
+    top: 130px;
+    left: 0px;
+    right: 0px;
+    z-index: 2000;
+}
+
+@media (max-width: 768px) {
+    .filter-panel {
+        top: 160px !important;
+    }
 }
 
 .product-grid {
@@ -294,9 +375,27 @@ a:hover {
     position: relative;
 }
 
-.product-card:hover {
-    /* box-shadow: 0 0 10px rgba(0,0,0,0.1); */
+@media screen and (max-width: 768px) {
+    .product-card {
+        display: flex;
+        flex-direction: row;
+
+        .image-wrap {
+            height: unset;
+            width: 39%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .info {
+            width: 59%;
+            display: inline-block;
+        }
+    }
+
 }
+
+
 
 .image-wrap {
     position: relative;

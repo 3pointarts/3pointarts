@@ -40,7 +40,7 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="offers-section">
+      <div className="offers-section mb-5">
         <div className="offers-container">
           <h2>What <span className="highlight">3Point Arts Studio</span> Offer</h2>
           <div className="offers-divider"></div>
