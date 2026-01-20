@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './admin.css';
 import useAdminProductStore from '../../state/admin/AdminProductStore';
-import { ProductModal } from '../../components/admin/ProductModal';
+// import { ProductModal } from '../../components/admin/ProductModal'; // No longer used
 import { CategoryModal } from '../../components/admin/CategoryModal';
 import { ConfirmModal } from '../../components/ConfirmModal';
 
 export default function AdminProducts() {
+    const navigate = useNavigate();
     const [productTab, setProductTab] = useState('product');
     const [searchProduct, setSearchProduct] = useState('');
     const [searchCategory, setSearchCategory] = useState('');
@@ -16,7 +18,7 @@ export default function AdminProducts() {
     const deleteCategory = useAdminProductStore((state) => state.deleteCategory);
     const init = useAdminProductStore((state) => state.init);
     // Modal States
-    const [showProductModal, setShowProductModal] = useState(false);
+    // const [showProductModal, setShowProductModal] = useState(false);
     const [showCategoryModal, setShowCategoryModal] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -28,15 +30,11 @@ export default function AdminProducts() {
 
     // --- Product Handlers ---
     const handleAddProduct = () => {
-        setIsEdit(false);
-        setSelectedId(null);
-        setShowProductModal(true);
+        navigate('/admin/products/add');
     };
 
     const handleEditProduct = (id: number) => {
-        setIsEdit(true);
-        setSelectedId(id);
-        setShowProductModal(true);
+        navigate(`/admin/products/edit/${id}`);
     };
 
     const handleDeleteProduct = (id: number) => {
@@ -103,7 +101,7 @@ export default function AdminProducts() {
                                 {
                                     products.filter((product) => product.title.toLowerCase().includes(searchProduct.toLowerCase())).map((product) => (
                                         <tr key={product.id}>
-                                            <td>{product.productVariants[0].images.length > 0 ? <img src={product.productVariants[0].images[0]} alt={product.title} className="product-img" style={{ width: '50px', height: '50px', objectFit: 'contain' }} /> : <div className="img-placeholder"></div>}</td>
+                                            <td>{product.productVariants.length > 0 && product.productVariants[0].images.length > 0 ? <img src={product.productVariants[0].images[0]} alt={product.title} className="product-img" style={{ width: '50px', height: '50px', objectFit: 'contain' }} /> : <div className="img-placeholder"></div>}</td>
                                             <td>{product.title}</td>
                                             <td>{product.productCategories.reduce((acc, category) => acc + category.categories.name + ', ', '')}</td>
                                             <td>{product.productVariants.reduce((acc, variant) => acc + '₹' + variant.price + ', ', '').toLocaleString()}</td>
@@ -141,12 +139,12 @@ export default function AdminProducts() {
             </div>
 
             {/* Modals */}
-            <ProductModal
+            {/* <ProductModal
                 isOpen={showProductModal}
                 onClose={() => setShowProductModal(false)}
                 isEdit={isEdit}
                 editId={selectedId || undefined}
-            />
+            /> */}
             <CategoryModal
                 isOpen={showCategoryModal}
                 onClose={() => setShowCategoryModal(false)}

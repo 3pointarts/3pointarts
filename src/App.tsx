@@ -19,6 +19,7 @@ import Contact from './pages/Contact'
 import Login from './pages/Login'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminProductForm from './pages/admin/AdminProductForm'
 import ProductDetails from './pages/ProductDetails'
 import { ToastContainer } from 'react-toastify'
 import { useEffect } from 'react'
@@ -74,6 +75,8 @@ function App() {
           <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/products/add" element={<AdminProductForm />} />
+          <Route path="/admin/products/edit/:id" element={<AdminProductForm />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer />

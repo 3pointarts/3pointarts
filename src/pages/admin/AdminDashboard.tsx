@@ -8,11 +8,12 @@ import AdminCustomers from './AdminCustomers';
 import useAdminAuthStore from '../../state/admin/AdminAuthStore';
 import useAdminProductStore from '../../state/admin/AdminProductStore';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import useAdminOrderStore from '../../state/admin/AdminOrderStore';
 export default function AdminDashboard() {
     const navigate = useNavigate()
-    const [activeTab, setActiveTab] = useState('dashboard');
+    const [searchParams] = useSearchParams();
+    const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'dashboard');
     const admin = useAdminAuthStore((state) => state.admin);
     const orderStore = useAdminOrderStore((state) => state);
     const init = useAdminProductStore((state) => state.init);
