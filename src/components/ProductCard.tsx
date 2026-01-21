@@ -4,7 +4,6 @@ import { ProductModel } from '../data/model/ProductModel'
 import useCartStore from '../state/customer/CartStore'
 import useWishlistStore from '../state/customer/WishlistStore'
 import type { ProductVariantModel } from '../data/model/ProductVariantModel'
-import { showSuccess } from '../core/message'
 import ShareDialog from './ShareDialog'
 
 export default function ProductCard({ product, variantId, variantOptional }: { product: ProductModel, variantId?: number, variantOptional?: ProductVariantModel }) {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useAdminProductStore from '../../state/admin/AdminProductStore';
 import { Status } from '../../core/enum/Status';
