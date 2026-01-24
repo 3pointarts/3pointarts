@@ -324,7 +324,7 @@ export default function ProductDetails() {
           ) : (
             <div className='row product-action'>
               {inCart ?
-                (<Link to="/cart" className='col-6'><h5> Added to cart</h5></Link>) : (
+                (<Link to="/cart" className='col-6'><h5> View in Cart</h5></Link>) : (
                   <div className='col-6'>
                     <button
                       className="btn-amazon-primary" style={{ width: '100%', margin: '0', marginBottom: '10px' }}

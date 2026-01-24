@@ -4,6 +4,7 @@ import useAdminProductStore from '../state/admin/AdminProductStore'
 import ProductCard from '../components/ProductCard'
 import { Status } from '../core/enum/Status'
 import { SEO } from '../components/SEO'
+import CouponReminder from '../components/CouponReminder'
 
 function useQuery() {
   const { search } = useLocation()
@@ -174,6 +175,7 @@ export default function Catalog() {
           </div>
         </div>
       </div>
+      <CouponReminder />
     </section>
   )
 }

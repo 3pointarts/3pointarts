@@ -77,8 +77,8 @@ export default function ProductCard({ product, variantId, variantOptional }: { p
         </button>
       </div>
 
-      <div className="info" onClick={() => navigate(`/product/${product.id}?variant=${displayVariant.id}`)}>
-        <div className='row'>
+      <div className="info">
+        <div className='row' >
           <h3 className='col-10'>
             <Link to={`/product/${product.id}?variant=${displayVariant.id}`}>
               {product.title}
@@ -89,12 +89,12 @@ export default function ProductCard({ product, variantId, variantOptional }: { p
           </div>
         </div>
 
-        <div className="rating">
+        <div className="rating" onClick={() => navigate(`/product/${product.id}?variant=${displayVariant.id}`)}>
           <span className="stars">★★★★★</span>
           <span className="count">{reviewCount}</span>
         </div>
 
-        <div className="price-block">
+        <div className="price-block" onClick={() => navigate(`/product/${product.id}?variant=${displayVariant.id}`)}>
           <div className="price-row">
             <span className="currency">₹</span>
             <span className="price-main">{price.toLocaleString()}</span>
@@ -106,7 +106,7 @@ export default function ProductCard({ product, variantId, variantOptional }: { p
           </div>
         </div>
 
-        <div className="delivery">
+        <div className="delivery" onClick={() => navigate(`/product/${product.id}?variant=${displayVariant.id}`)}>
           <span className="free">FREE delivery</span>
           <span className="date">{deliveryDate}</span>
         </div>
@@ -116,12 +116,12 @@ export default function ProductCard({ product, variantId, variantOptional }: { p
             <span className="out-of-stock">Out of stock</span>
           ) : (
             inCart ?
-              (<Link to="/cart"><h3> Added to cart</h3></Link>) : (
+              (<Link to="/cart"><h3> View in Cart</h3></Link>) : (
                 <button
                   className="btn-cart"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault()
                     addToCart(displayVariant.id, 1, { ...displayVariant, product })
-                    navigate('/cart')
                   }}
                 >
                   Add to Cart

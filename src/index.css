@@ -349,7 +349,7 @@ a:hover {
 .filter-toggle {
     background-color: white;
     position: sticky;
-    top: 130px;
+    top: 115px;
     left: 0px;
     right: 0px;
     z-index: 2000;
@@ -2310,5 +2310,23 @@ a:hover {
     .category-item.active {
         background: #FFD814;
         border-color: black;
+    }
+}
+
+.coupon-reminder {
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 8px 8px 0 0;
+    background: wheat;
+    height: 100px;
+    position: fixed;
+    z-index: 1000;
+    bottom: 0;
+    right: 0;
+
+    .coupon-reminder-header {
+        background-color: rgb(255, 196, 0);
+        color: #000;
     }
 }

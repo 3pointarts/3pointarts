@@ -68,6 +68,7 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
             console.error(error);
             set({ status: Status.error });
         }
+        get().listCoupons();
     },
 
     addToCart: async (productVariantId: number, qty: number, variant?: ProductVariantModel) => {

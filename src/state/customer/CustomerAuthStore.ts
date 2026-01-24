@@ -66,7 +66,6 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
                 useWishlistStore.getState().loadWishlists();
             }, 500);
         } else {
-
             set(() => ({ loginStatus: Status.init }));
         }
     },
