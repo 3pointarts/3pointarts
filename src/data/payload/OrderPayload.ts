@@ -11,6 +11,8 @@ export class OrderPayload {
     total: number;
     status: OrderStatus;
     items: OrderItemPayload[];
+    couponCode?: string | null;
+    couponValue?: number | null;
 
     constructor({
         customerId,
@@ -22,6 +24,8 @@ export class OrderPayload {
         total,
         status = OrderStatus.new,
         items = [],
+        couponCode = null,
+        couponValue = null,
     }: {
         customerId: number;
         billTo: string;
@@ -32,6 +36,8 @@ export class OrderPayload {
         total: number;
         status?: OrderStatus;
         items?: OrderItemPayload[];
+        couponCode?: string | null;
+        couponValue?: number | null;
     }) {
         this.customerId = customerId;
         this.billTo = billTo;
@@ -42,6 +48,8 @@ export class OrderPayload {
         this.total = total;
         this.status = status;
         this.items = items;
+        this.couponCode = couponCode;
+        this.couponValue = couponValue;
     }
 
     toMap(): any {
@@ -54,6 +62,8 @@ export class OrderPayload {
             note: this.note,
             total: this.total,
             status: this.status,
+            coupon_code: this.couponCode,
+            coupon_value: this.couponValue,
         };
     }
 }

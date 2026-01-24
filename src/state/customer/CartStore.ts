@@ -3,18 +3,25 @@ import { devtools } from "zustand/middleware";
 import { CartModel } from "../../data/model/CartModel";
 import { Status } from "../../core/enum/Status";
 import { CartDatasource } from "../../data/datasource/CartDatasource";
+import { CouponDatasource } from "../../data/datasource/CouponDatasource";
 import { CartPayload } from "../../data/payload/CartPayload";
 import { showError, showSuccess } from "../../core/message";
 import useCustomerAuthStore from "./CustomerAuthStore";
 import { ProductVariantModel } from "../../data/model/ProductVariantModel";
+import { CouponModel } from "../../data/model/CouponModel";
+import { CouponCondition } from "../../core/enum/CouponCondition";
 
 const cartDatasource = new CartDatasource();
+const couponDatasource = new CouponDatasource();
 const LOCAL_CART_KEY = "local_cart";
 
 interface CartState {
     // State
     carts: CartModel[];
     status: Status;
+    eligibleCoupons: CouponModel[];
+    appliedCoupon: CouponModel | null;
+    couponStatus: Status;
 
     // Actions
     loadCarts: () => Promise<void>;
@@ -22,11 +29,17 @@ interface CartState {
     updateCartQty: (cartId: number, productId: number, qty: number) => Promise<void>;
     removeFromCart: (cartId: number) => Promise<void>;
     clearCart: () => Promise<void>;
+    listCoupons: () => Promise<void>;
+    applyCoupon: (code: string) => void;
+    removeCoupon: () => void;
 }
 
 const CartStore: StateCreator<CartState> = (set, get) => ({
     carts: [],
     status: Status.init,
+    eligibleCoupons: [],
+    appliedCoupon: null,
+    couponStatus: Status.init,
 
     loadCarts: async () => {
         const customer = useCustomerAuthStore.getState().customer;
@@ -237,6 +250,56 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
             showError("Failed to clear cart");
             set({ status: Status.error });
         }
+    },
+
+    listCoupons: async () => {
+        set({ couponStatus: Status.loading });
+        try {
+            const coupons = await couponDatasource.listCoupons();
+            // Filter active coupons
+            const now = new Date();
+            const activeCoupons = coupons.filter(c =>
+                c.active &&
+                (!c.endDate || new Date(c.endDate) > now)
+            );
+            set({ eligibleCoupons: activeCoupons, couponStatus: Status.success });
+        } catch (error) {
+            console.error("Failed to list coupons", error);
+            set({ couponStatus: Status.error });
+        }
+    },
+
+    applyCoupon: (code: string) => {
+        const { eligibleCoupons, carts } = get();
+        const coupon = eligibleCoupons.find(c => c.code === code);
+
+        if (!coupon) {
+            showError("Invalid Coupon Code");
+            return;
+        }
+
+        const totalAmount = carts.reduce((sum, item) => sum + (item.productVariant?.price ?? 0) * item.qty, 0);
+        const totalQty = carts.reduce((sum, item) => sum + item.qty, 0);
+
+        if (coupon.condition === CouponCondition.min_order_value) {
+            if (totalAmount < (coupon.conditionValue ?? 0)) {
+                showError(`Minimum order value of ₹${coupon.conditionValue} required`);
+                return;
+            }
+        } else if (coupon.condition === CouponCondition.min_product_qty) {
+            if (totalQty < (coupon.conditionValue ?? 0)) {
+                showError(`Minimum product quantity of ${coupon.conditionValue} required`);
+                return;
+            }
+        }
+
+        set({ appliedCoupon: coupon });
+        showSuccess(`Coupon ${code} applied!`);
+    },
+
+    removeCoupon: () => {
+        set({ appliedCoupon: null });
+        showSuccess("Coupon removed");
     }
 });
 

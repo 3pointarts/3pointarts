@@ -15,6 +15,8 @@ export class OrderModel {
     status: OrderStatus;
     customer?: UserModel;
     items?: OrderItemModel[];
+    couponCode?: string | null;
+    couponValue?: number | null;
 
     constructor({
         id,
@@ -29,6 +31,8 @@ export class OrderModel {
         status,
         customer,
         items,
+        couponCode,
+        couponValue,
     }: {
         id: number;
         createdAt: Date;
@@ -42,6 +46,8 @@ export class OrderModel {
         status: OrderStatus;
         customer?: UserModel;
         items?: OrderItemModel[];
+        couponCode?: string | null;
+        couponValue?: number | null;
     }) {
         this.id = id;
         this.createdAt = createdAt;
@@ -55,6 +61,8 @@ export class OrderModel {
         this.status = status;
         this.customer = customer;
         this.items = items;
+        this.couponCode = couponCode;
+        this.couponValue = couponValue;
     }
 
     static fromMap(json: any): OrderModel {
@@ -71,6 +79,8 @@ export class OrderModel {
             status: json.status as OrderStatus,
             customer: json.users ? UserModel.fromMap(json.users) : undefined,
             items: json.order_items ? json.order_items.map((item: any) => OrderItemModel.fromMap(item)) : undefined,
+            couponCode: json.coupon_code,
+            couponValue: json.coupon_value,
         });
     }
 }

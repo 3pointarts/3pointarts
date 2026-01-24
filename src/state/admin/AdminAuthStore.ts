@@ -5,6 +5,7 @@ import { Status } from "../../core/enum/Status";
 import { AuthDatasource } from "../../data/datasource/AuthDatasource";
 import { showError, showSuccess } from "../../core/message";
 import useAdminOrderStore from "./AdminOrderStore";
+import useAdminCouponStore from "./AdminCouponStore";
 
 const authDatasource = new AuthDatasource();
 
@@ -40,6 +41,7 @@ const AdminAuthStore: StateCreator<AdminAuthState> = (set, get) => ({
         if (a) {
             get().listCustomers();
             useAdminOrderStore.getState().init();
+            useAdminCouponStore.getState().loadCoupons();
             set(() => ({ admin: UserModel.fromMap(JSON.parse(a)), loginStatus: Status.success }));
         } else {
             set(() => ({ loginStatus: Status.init }));

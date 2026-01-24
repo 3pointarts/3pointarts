@@ -5,6 +5,7 @@ import useCartStore from '../state/customer/CartStore';
 import { useNavigate } from 'react-router-dom';
 import { Status } from '../core/enum/Status';
 import { showError } from '../core/message';
+import { CouponType } from '../core/enum/CouponType';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -26,7 +27,20 @@ export default function Checkout() {
   const [otp, setOtp] = useState('')
 
   // Calculate Total
-  const totalAmount = cartStore.carts.reduce((sum, item) => sum + (item.productVariant?.price || 0) * item.qty, 0)
+  const subTotal = cartStore.carts.reduce((sum, item) => sum + (item.productVariant?.price || 0) * item.qty, 0)
+
+  let discountAmount = 0;
+  if (cartStore.appliedCoupon) {
+    if (cartStore.appliedCoupon.type === CouponType.percentage) {
+      discountAmount = (subTotal * cartStore.appliedCoupon.value) / 100;
+    } else {
+      discountAmount = cartStore.appliedCoupon.value;
+    }
+  }
+
+  const totalAmount = subTotal - discountAmount;
+  const deliveryCharges = totalAmount > 200 ? 0 : 40;
+  const finalPayable = totalAmount + deliveryCharges;
 
   // Pre-fill fields from user profile if available
   useEffect(() => {
@@ -43,7 +57,7 @@ export default function Checkout() {
 
     const options = {
       key: rzpKey, // Enter the Key ID generated from the Dashboard
-      amount: totalAmount * 100, // Amount is in currency subunits. Default currency is INR.
+      amount: finalPayable * 100, // Amount is in currency subunits. Default currency is INR.
       currency: "INR",
       name: "3 Point Arts",
       description: "Transaction for 3 Point Arts",
@@ -178,7 +192,7 @@ export default function Checkout() {
               onClick={handlePlaceOrder}
               disabled={createStatus === Status.loading}
             >
-              {createStatus === Status.loading ? 'Processing...' : 'Place Order'}
+              {createStatus === Status.loading ? 'Processing...' : 'Place Order '}
             </button>
           </div>
         </div>

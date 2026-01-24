@@ -9,6 +9,7 @@ import { showError, showSuccess } from "../../core/message";
 import useCustomerAuthStore from "./CustomerAuthStore";
 import useCartStore from "./CartStore";
 import { OrderStatus } from "../../core/enum/OrderStatus";
+import { CouponType } from "../../core/enum/CouponType";
 
 import { AuthDatasource } from "../../data/datasource/AuthDatasource";
 import { UserPayload } from "../../data/payload/UserPayload";

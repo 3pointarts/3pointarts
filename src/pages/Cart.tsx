@@ -1,15 +1,20 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useCartStore from '../state/customer/CartStore'
 import useCustomerAuthStore from '../state/customer/CustomerAuthStore';
 import ShareDialog from '../components/ShareDialog';
+import { CouponType } from '../core/enum/CouponType';
+import { CouponCondition } from '../core/enum/CouponCondition';
 
 export default function Cart() {
   const store = useCartStore();
   const astore = useCustomerAuthStore();
   const [couponCode, setCouponCode] = useState('')
-  const [discountPercent] = useState(0)
   const [shareData, setShareData] = useState({ show: false, url: '', text: '' })
+
+  useEffect(() => {
+    store.listCoupons();
+  }, []);
 
   const totalItems = store.carts.reduce((sum, item) => sum + item.qty, 0)
 
@@ -28,15 +33,17 @@ export default function Cart() {
 
   // Coupon Logic
   const handleApplyCoupon = () => {
-    // if (couponCode.trim().toUpperCase() === 'BIRTHDAY') {
-    //   setDiscountPercent(10) // 10% discount
-    // } else {
-    //   setDiscountPercent(0)
-    //   if (couponCode.trim()) alert('Invalid Coupon Code')
-    // }
+    store.applyCoupon(couponCode);
   }
 
-  const couponDiscountAmount = (totalSellingPrice * discountPercent) / 100
+  let couponDiscountAmount = 0;
+  if (store.appliedCoupon) {
+    if (store.appliedCoupon.type === CouponType.percentage) {
+      couponDiscountAmount = (totalSellingPrice * store.appliedCoupon.value) / 100;
+    } else {
+      couponDiscountAmount = store.appliedCoupon.value;
+    }
+  }
 
   // Delivery Logic (Free above 500)
   const deliveryCharges = totalSellingPrice > 200 ? 0 : 40
@@ -131,7 +138,15 @@ export default function Cart() {
                                   store.updateCartQty(item.id, item.productVariantId, item.qty - 1)
                                 }
                               }}
-                              style={{ padding: '2px 8px', background: '#f0f0f0', border: 'none', cursor: 'pointer', borderRight: '1px solid #ddd' }}
+                              disabled={!!store.appliedCoupon}
+                              style={{
+                                padding: '2px 8px',
+                                background: '#f0f0f0',
+                                border: 'none',
+                                cursor: store.appliedCoupon ? 'not-allowed' : 'pointer',
+                                borderRight: '1px solid #ddd',
+                                opacity: store.appliedCoupon ? 0.5 : 1
+                              }}
                             >
                               -
                             </button>
@@ -149,6 +164,11 @@ export default function Cart() {
                             className="link-button"
                             onClick={() => {
                               store.removeFromCart(item.id)
+                            }}
+                            disabled={!!store.appliedCoupon}
+                            style={{
+                              opacity: store.appliedCoupon ? 0.5 : 1,
+                              cursor: store.appliedCoupon ? 'not-allowed' : 'pointer'
                             }}
                           >
                             Delete
@@ -204,7 +224,7 @@ export default function Cart() {
                   <span>Discount</span>
                   <span className="success-text">- ₹{Math.floor(productDiscount).toLocaleString()}</span>
                 </div>
-                {discountPercent > 0 && (
+                {store.appliedCoupon && (
                   <div className="summary-row">
                     <span>Coupon Savings</span>
                     <span className="success-text">- ₹{Math.floor(couponDiscountAmount).toLocaleString()}</span>
@@ -235,12 +255,50 @@ export default function Cart() {
                     placeholder="Enter Code"
                     value={couponCode}
                     onChange={(e) => setCouponCode(e.target.value)}
+                    disabled={!!store.appliedCoupon}
                   />
-                  <button className="btn-apply-coupon" onClick={handleApplyCoupon}>
-                    {discountPercent > 0 ? 'Applied' : 'Apply'}
-                  </button>
+                  {store.appliedCoupon ? (
+                    <button className="btn-apply-coupon" onClick={() => {
+                      store.removeCoupon();
+                      setCouponCode('');
+                    }}>
+                      Remove
+                    </button>
+                  ) : (
+                    <button className="btn-apply-coupon" onClick={handleApplyCoupon}>
+                      Apply
+                    </button>
+                  )}
                 </div>
-                {discountPercent > 0 && <div className="coupon-success">"BIRTHDAY" applied!</div>}
+                {store.appliedCoupon && <div className="coupon-success">"{store.appliedCoupon.code}" applied!</div>}
+
+                {store.eligibleCoupons.length > 0 && !store.appliedCoupon && (
+                  <div style={{ marginTop: '10px' }}>
+                    <small>Available Coupons:</small>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '5px' }}>
+                      {store.eligibleCoupons.map(c => (
+                        <span
+                          key={c.id}
+                          onClick={() => store.applyCoupon(c.code)}
+                          style={{
+                            background: '#f0f0f0',
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            fontSize: '0.8em',
+                            cursor: 'pointer',
+                            border: '1px dashed #ccc'
+                          }}
+                        >
+                          <span style={{ fontWeight: 'bold' }}>
+                            {c.code}<br />
+                            {c.value}{c.type === CouponType.percentage ? '%' : ' Rs'} OFF
+                          </span>
+                          <br /> {c.condition && ("on Buying at least" + (c.condition == CouponCondition.min_product_qty ? ' ' + c.conditionValue + ' items' : ' ' + c.conditionValue + ' Rs worth of products'))}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
               <div className='checkout-btn'>
                 {hasOutOfStock ? (
