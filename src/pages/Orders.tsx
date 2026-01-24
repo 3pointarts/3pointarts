@@ -140,6 +140,14 @@ export default function Orders() {
                         </div>
                       </div>
                     ))}
+                    {order.couponCode && (
+                      <div className="item-row">
+                        <div className="item-info">
+                          <span className="item-name">Coupon: {order.couponCode}</span>
+                          <span className="item-qty">Discount: ₹{order.couponValue}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="track-container">

@@ -95,11 +95,15 @@ export default function BillView() {
           <tfoot>
             <tr>
               <td colSpan={3} className="text-right"><strong>Subtotal</strong></td>
-              <td className="text-right">₹{order.total.toLocaleString()}</td>
+              <td className="text-right">₹{(order.total + (order.couponValue ?? 0))?.toLocaleString()}</td>
             </tr>
             <tr>
               <td colSpan={3} className="text-right"><strong>Shipping</strong></td>
               <td className="text-right">Free</td>
+            </tr>
+            <tr>
+              <td colSpan={3} className="text-right"><strong>{order.couponCode || 'No '} Coupon Discount</strong></td>
+              <td className="text-right">-₹{order.couponValue?.toLocaleString()}</td>
             </tr>
             <tr className="grand-total">
               <td colSpan={3} className="text-right"><strong>Total</strong></td>

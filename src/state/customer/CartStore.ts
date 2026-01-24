@@ -43,6 +43,7 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
 
     loadCarts: async () => {
         const customer = useCustomerAuthStore.getState().customer;
+        get().listCoupons();
         if (!customer) {
             const localCartJson = localStorage.getItem(LOCAL_CART_KEY);
             if (localCartJson) {
@@ -68,7 +69,7 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
             console.error(error);
             set({ status: Status.error });
         }
-        get().listCoupons();
+
     },
 
     addToCart: async (productVariantId: number, qty: number, variant?: ProductVariantModel) => {
