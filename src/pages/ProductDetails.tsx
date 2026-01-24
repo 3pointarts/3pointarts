@@ -329,7 +329,7 @@ export default function ProductDetails() {
                     <button
                       className="btn-amazon-primary" style={{ width: '100%', margin: '0', marginBottom: '10px' }}
                       onClick={async () => {
-                        await addToCart(currentVariant.id, qty)
+                        await addToCart(currentVariant.id, qty, { ...currentVariant, product })
                       }}
                     >
                       Add to Cart
@@ -337,7 +337,7 @@ export default function ProductDetails() {
               <div className='col-6'>
                 <button className="btn-amazon-secondary" style={{ width: '100%', margin: '0' }} onClick={async () => {
                   if (!inCart) {
-                    await addToCart(currentVariant.id, qty);
+                    await addToCart(currentVariant.id, qty, { ...currentVariant, product });
                   }
                   navigate('/cart')
                 }}>Buy Now</button></div>

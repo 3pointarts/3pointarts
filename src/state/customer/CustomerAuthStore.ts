@@ -30,6 +30,7 @@ interface CustomerAuthState {
     setName: (name: string) => void;
     setPhone: (phone: string) => void;
     setStep: (step: number) => void;
+    setCustomer: (user: UserModel) => void;
     sendOtp: () => Promise<void>;
     verifyOtp: (otp: string) => boolean;
     checkUserExists: () => Promise<boolean>;
@@ -121,16 +122,7 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
         try {
             const user = await authDatasource.customerLoginByPhone(phone);
             if (user) {
-                localStorage.setItem('customer', JSON.stringify(user));
-                const redirectAfterLogin = localStorage.getItem("redirectAfterLogin");
-                if (redirectAfterLogin) {
-                    setTimeout(() => {
-                        window.location.href = redirectAfterLogin;
-                        localStorage.removeItem("redirectAfterLogin");
-                    }, 1000);
-                }
-                showSuccess('Login Successful!');
-                set({ customer: user, loginStatus: Status.success });
+                get().setCustomer(user);
             } else {
                 showError("User not found");
                 set({ loginStatus: Status.error });
@@ -140,6 +132,19 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
             showError('Login Failed');
             set({ loginStatus: Status.error });
         }
+    },
+
+    setCustomer: (user: UserModel) => {
+        localStorage.setItem('customer', JSON.stringify(user));
+        const redirectAfterLogin = localStorage.getItem("redirectAfterLogin");
+        if (redirectAfterLogin) {
+            setTimeout(() => {
+                window.location.href = redirectAfterLogin;
+                localStorage.removeItem("redirectAfterLogin");
+            }, 1000);
+        }
+        showSuccess('Login Successful!');
+        set({ customer: user, loginStatus: Status.success });
     },
 
     register: async () => {

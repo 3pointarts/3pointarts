@@ -1,19 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useCustomerAuthStore from '../state/customer/CustomerAuthStore';
 import useCustomerOrderStore from '../state/customer/CustomerOrderStore';
 import useCartStore from '../state/customer/CartStore';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Status } from '../core/enum/Status';
 import { showError } from '../core/message';
 
 export default function Checkout() {
   const navigate = useNavigate();
-  // return (
-  //   <section>
-  //     <h2>Checkout</h2>
-  //     <CheckoutModal onClose={() => { navigate('/cart') }} />
-  //   </section>
-  // )
   const authStore = useCustomerAuthStore()
   const orderStore = useCustomerOrderStore()
   const cartStore = useCartStore()
@@ -24,8 +18,12 @@ export default function Checkout() {
     contactAddress, setContactAddress,
     billTo, setBillTo,
     note, setNote,
-    createOrder, createStatus
+    createOrder, createStatus,
+    showOtpDialog, setShowOtpDialog,
+    checkGuestStatus, verifyOtpAndLogin
   } = orderStore
+
+  const [otp, setOtp] = useState('')
 
   // Calculate Total
   const totalAmount = cartStore.carts.reduce((sum, item) => sum + (item.productVariant?.price || 0) * item.qty, 0)
@@ -38,12 +36,8 @@ export default function Checkout() {
     }
   }, [authStore.customer])
 
-  const handlePlaceOrder = async () => {
-    // Validate fields before payment
-    if (!contactName || !contactPhone || !contactAddress || !billTo) {
-      showError("Please fill in all required fields");
-      return;
-    }
+  const initiatePayment = async () => {
+    // await createOrder()
     const rzpKey = "rzp_live_S5I3OSt6XhauV3";
     // const rzpSecret = "2S7thrD3iSPOGOiWfmDtp1TW";
 
@@ -84,19 +78,35 @@ export default function Checkout() {
     rzp1.open();
   }
 
-  if (!authStore.customer) {
-    return (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <button className="close-btn" onClick={onClose}>×</button>
-          <div className="notice">
-            <h3>Login Required</h3>
-            <p>Please login to place an order.</p>
-            <Link to="/login" className="btn-primary" onClick={onClose}>Go to Login</Link>
-          </div>
-        </div>
-      </div>
-    )
+  const handlePlaceOrder = async () => {
+    // Validate fields
+    if (!contactName || !contactPhone || !contactAddress || !billTo) {
+      showError("Please fill in all required fields");
+      return;
+    }
+
+    // Guest Checkout Logic
+    if (!authStore.customer) {
+      const status = await checkGuestStatus();
+      if (status === 'registered') {
+        // User registered and logged in automatically
+        initiatePayment();
+      } else if (status === 'otp_sent') {
+        // Dialog will show, wait for user input
+      }
+      // If error or missing fields, messages are already shown by store
+      return;
+    }
+
+    // Existing User
+    initiatePayment();
+  }
+
+  const handleVerifyOtp = async () => {
+    const success = await verifyOtpAndLogin(otp);
+    if (success) {
+      initiatePayment();
+    }
   }
 
   return (
@@ -151,8 +161,6 @@ export default function Checkout() {
             />
           </div>
 
-
-
           <div className="form-group col-md-6 full-width">
             <label>Order Note</label>
             <textarea
@@ -170,12 +178,44 @@ export default function Checkout() {
               onClick={handlePlaceOrder}
               disabled={createStatus === Status.loading}
             >
-              {createStatus === Status.loading ? 'Placing Order...' : 'Place Order'}
+              {createStatus === Status.loading ? 'Processing...' : 'Place Order'}
             </button>
           </div>
         </div>
       )}
 
+      {/* OTP Dialog */}
+      {showOtpDialog && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="close-btn" onClick={() => setShowOtpDialog(false)}>×</button>
+            <div className="otp-container">
+              <h3>Verify Phone Number</h3>
+              <p>An OTP has been sent to {contactPhone}</p>
+
+              <div className="form-group">
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  placeholder="Enter 6-digit OTP"
+                  maxLength={6}
+                  className="otp-input"
+                />
+              </div>
+
+              <div className="form-actions" style={{ justifyContent: 'center' }}>
+                <button
+                  className="btn-primary"
+                  onClick={handleVerifyOtp}
+                >
+                  Verify & Pay
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         .modal-overlay {
@@ -195,10 +235,8 @@ export default function Checkout() {
             padding: 2rem;
             border-radius: 8px;
             width: 90%;
-            max-width: 500px;
+            max-width: 400px;
             position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
         }
         .close-btn {
             position: absolute;
@@ -208,6 +246,15 @@ export default function Checkout() {
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
+        }
+        .otp-container {
+            text-align: center;
+        }
+        .otp-input {
+            font-size: 1.2rem;
+            letter-spacing: 0.2rem;
+            text-align: center;
+            margin: 1rem 0;
         }
         .form-grid {
             display: grid;
@@ -263,11 +310,11 @@ export default function Checkout() {
             color: green;
             margin-bottom: 1rem;
         }
-            .checkout-section {
-                .form-group label {
-                   text-align: left;
-                }
+        .checkout-section {
+            .form-group label {
+               text-align: left;
             }
+        }
       `}</style>
     </section>
   )

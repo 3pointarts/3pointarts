@@ -42,22 +42,22 @@ function Footer() {
           <div className="col-lg-3 col-md-6 mb-4">
             <h5 className="text-uppercase mb-3 fw-bold text-warning h6">Follow Us</h5>
             <div className="d-flex gap-3 mb-4">
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-sm rounded-circle" style={{ width: '35px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <a href="https://www.facebook.com/profile.php?id=61587021021703" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-sm rounded-circle" style={{ width: '35px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <i className="fa fa-facebook"></i>
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-sm rounded-circle" style={{ width: '35px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <a href="https://www.instagram.com/3pointarts/" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-sm rounded-circle" style={{ width: '35px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <i className="fa fa-instagram"></i>
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-sm rounded-circle" style={{ width: '35px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <a href="https://www.youtube.com/channel/UCEMpMIbPjA0EiDo-72BhGng" target="_blank" rel="noreferrer" className="btn btn-outline-light btn-sm rounded-circle" style={{ width: '35px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <i className="fa fa-youtube-play"></i>
               </a>
             </div>
 
-            <h5 className="text-uppercase mb-2 fw-bold text-warning h6">Newsletter</h5>
+            {/* <h5 className="text-uppercase mb-2 fw-bold text-warning h6">Newsletter</h5>
             <div className="input-group input-group-sm">
               <input type="email" className="form-control bg-dark text-light border-secondary" placeholder="Your email" />
               <button className="btn btn-warning" type="button">Subscribe</button>
-            </div>
+            </div> */}
           </div>
 
           {/* Partners */}

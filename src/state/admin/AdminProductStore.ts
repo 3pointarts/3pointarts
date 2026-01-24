@@ -85,10 +85,14 @@ const AdminProductStore: StateCreator<AdminProductState> = (set, get) => ({
     },
     setProductCategoryIds: async (ids: number[]) => set({ productCategoryIds: ids }),
     addProductVariant: async () => {
+        let p;
+        if (get().productVariants.length > 0) {
+            p = get().productVariants[0]
+        }
         set({
             productVariants: [
                 ...get().productVariants,
-                { id: undefined, color: "", colorHex: "#000000", price: 0, stock: 0, images: "" }
+                { id: undefined, color: p?.color || "", colorHex: p?.colorHex || "#000000", price: get().productPrice || 0, stock: p?.stock || 0, images: p?.images || "" }
             ]
         });
     },

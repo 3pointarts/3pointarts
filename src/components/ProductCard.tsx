@@ -120,7 +120,7 @@ export default function ProductCard({ product, variantId, variantOptional }: { p
                 <button
                   className="btn-cart"
                   onClick={() => {
-                    addToCart(displayVariant.id, 1)
+                    addToCart(displayVariant.id, 1, { ...displayVariant, product })
                     navigate('/cart')
                   }}
                 >

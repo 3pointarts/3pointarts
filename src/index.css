@@ -65,6 +65,12 @@ a:hover {
     height: 50px;
 }
 
+@media screen and (max-width: 768px) {
+    .brand img {
+        height: 40px;
+    }
+}
+
 .nav {
     display: flex;
     gap: 1.5rem;
@@ -317,6 +323,11 @@ a:hover {
     grid-template-columns: 20% 1fr;
     gap: 2rem;
     align-items: start;
+}
+
+.filter-toggle button:hover {
+    background-color: white;
+    color: #0d6efd
 }
 
 @media (max-width: 768px) {

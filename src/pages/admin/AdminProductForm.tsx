@@ -71,129 +71,155 @@ export default function AdminProductForm() {
     };
 
     return (
-        <div className="admin-page-container" style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+        <div className="admin-page-container" style={{ padding: '20px', margin: '0 auto' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>{isEdit ? "Edit Product" : "Add Product"}</h2>
-                <button className="btn-secondary" onClick={() => navigate('/admin/dashboard?tab=product')}>Back to Dashboard</button>
-            </div>
-
-            <div className="card" style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-                <div className="form-group mb-3">
-                    <label className="form-label">Title</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={store.productTitle}
-                        onChange={(e) => store.setProductTitle(e.target.value)}
-                        placeholder="Product Name"
-                    />
-                </div>
-
-                <div className="form-group mb-3">
-                    <label className="form-label">About</label>
-                    <textarea
-                        className="form-control"
-                        rows={4}
-                        value={store.productAbout}
-                        onChange={(e) => store.setProductAbout(e.target.value)}
-                        placeholder="Product description..."
-                    />
-                </div>
-
-                <div className="form-group mb-3">
-                    <label className="form-label">Base Price</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        value={store.productPrice}
-                        onChange={(e) => store.setProductPrice(Number(e.target.value))}
-                        placeholder="0.00"
-                    />
-                </div>
-
-                <div className="form-group mb-3">
-                    <label className="form-label">Categories</label>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '5px' }}>
-                        {store.categories.map(cat => (
-                            <label key={cat.id} style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer', border: '1px solid #eee', padding: '5px 10px', borderRadius: '20px' }}>
-                                <input
-                                    type="checkbox"
-                                    checked={store.productCategoryIds.includes(cat.id)}
-                                    onChange={() => store.toggleProductCategoryId(cat.id)}
-                                />
-                                {cat.name}
-                            </label>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="form-group mb-3">
-                    <label className="form-label" style={{ fontWeight: 'bold', fontSize: '1.1em' }}>Variants</label>
-                    {store.productVariants.map((variant, index) => (
-                        <div key={index} style={{ border: '1px solid #eee', padding: '15px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
-                            <div className="row mb-2">
-                                <div className="col-md-6 mb-2">
-                                    <label className="form-label small">Color Name</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={variant.color}
-                                        onChange={(e) => store.updateProductVariant(index, 'color', e.target.value)}
-                                        placeholder="Red"
-                                    />
-                                </div>
-                                <div className="col-md-6 mb-2">
-                                    <label className="form-label small">Color Hex</label>
-                                    <input
-                                        type="color"
-                                        className="form-control form-control-color"
-                                        value={variant.colorHex}
-                                        onChange={(e) => store.updateProductVariant(index, 'colorHex', e.target.value)}
-                                        style={{ width: '100%' }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="row mb-2">
-                                <div className="col-md-6 mb-2">
-                                    <label className="form-label small">Price</label>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        value={variant.price}
-                                        onChange={(e) => store.updateProductVariant(index, 'price', Number(e.target.value))}
-                                    />
-                                </div>
-                                <div className="col-md-6 mb-2">
-                                    <label className="form-label small">Stock</label>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        value={variant.stock}
-                                        onChange={(e) => store.updateProductVariant(index, 'stock', Number(e.target.value))}
-                                    />
-                                </div>
-                            </div>
-                            <div className="mb-2">
-                                <label className="form-label small">Images (Comma separated URLs)</label>
-                                <textarea
-                                    className="form-control"
-                                    rows={2}
-                                    value={variant.images}
-                                    onChange={(e) => store.updateProductVariant(index, 'images', e.target.value)}
-                                    placeholder="http://example.com/img1.jpg,http://example.com/img2.jpg"
-                                />
-                            </div>
-                            <button className="btn btn-sm btn-outline-danger" onClick={() => store.removeProductVariant(index)}>Remove Variant</button>
-                        </div>
-                    ))}
-                    <button className="btn btn-outline-primary w-100" onClick={store.addProductVariant}>+ Add Variant</button>
-                </div>
-
-                <div className="d-flex justify-content-end gap-2 mt-4">
-                    <button className="btn-secondary" onClick={() => navigate('/admin/dashboard?tab=product')}>Cancel</button>
+                <div className="d-flex  align-items-stretch">
+                    <button className="btn-secondary me-2" style={{
+                    }} onClick={() => navigate('/admin/dashboard?tab=product')}>Back</button>
                     <button className="btn-primary" onClick={handleSubmit} disabled={store.productSubmitStatus === Status.loading}>
                         {store.productSubmitStatus === Status.loading ? 'Saving...' : (isEdit ? 'Update Product' : 'Create Product')}
                     </button>
+                </div>
+            </div>
+            <div className='row'>
+                <div className='col-md-3'>
+                    <div className="form-group mb-3">
+                        <label className="form-label">Title</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={store.productTitle}
+                            onChange={(e) => store.setProductTitle(e.target.value)}
+                            placeholder="Product Name"
+                        />
+                    </div>
+
+                    <div className="form-group mb-3">
+                        <label className="form-label">About</label>
+                        <textarea
+                            className="form-control"
+                            rows={6}
+                            value={store.productAbout}
+                            onChange={(e) => store.setProductAbout(e.target.value)}
+                            placeholder="Product description..."
+                        />
+                    </div>
+
+                    <div className="form-group mb-3">
+                        <label className="form-label">Base Price</label>
+                        <input
+                            type="number"
+                            className="form-control"
+                            value={store.productPrice}
+                            onChange={(e) => store.setProductPrice(Number(e.target.value))}
+                            placeholder="0.00"
+                        />
+                    </div>
+
+                    <div className="form-group mb-3">
+                        <label className="form-label">Categories</label>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '5px' }}>
+                            {store.categories.map(cat => (
+                                <label key={cat.id} style={{ fontSize: '14px', display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer', border: '1px solid #eee', padding: '5px 10px', borderRadius: '20px' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={store.productCategoryIds.includes(cat.id)}
+                                        onChange={() => store.toggleProductCategoryId(cat.id)}
+                                        style={{
+                                            width: '16px',
+                                            height: '16px',
+                                        }}
+                                    />
+                                    {cat.name}
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className='col-md-9'>
+                    <div className="form-group mb-3">
+                        <div className='d-flex justify-content-between align-items-center'>
+                            <label className="form-label" style={{ fontWeight: 'bold', fontSize: '1.1em' }}>Variants</label>
+                            <button className="btn btn-outline-primary" onClick={store.addProductVariant}>+ Add Variant</button>
+                        </div>
+
+                        {store.productVariants.map((variant, index) => (
+                            <div key={index} className="card" style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '8px', margin: '10px 0px' }}>
+                                {isEdit &&
+                                    <div>
+                                        SKU
+                                        <span className='me-2 ms-2'>
+                                            3PAP{editId}V{variant.id}
+                                        </span>
+                                        <span>
+                                            <i className="fa fa-copy" style={{ cursor: 'pointer', color: '#007bff' }} onClick={() => navigator.clipboard.writeText(`3PAP${editId}V${variant.id}`)}></i>
+                                        </span>
+                                    </div>}
+                                <div className="row">
+                                    <div className="col-md-11">
+                                        <div className="row mb-2">
+                                            <div className="col-md-3 mb-2">
+                                                <label className="form-label small">Color Name</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    value={variant.color}
+                                                    onChange={(e) => store.updateProductVariant(index, 'color', e.target.value)}
+                                                    placeholder="Black"
+                                                />
+                                            </div>
+                                            <div className="col-md-3 mb-2">
+                                                <label className="form-label small">Color Hex</label>
+                                                <input
+                                                    type="color"
+                                                    className="form-control form-control-color"
+                                                    value={variant.colorHex}
+                                                    onChange={(e) => store.updateProductVariant(index, 'colorHex', e.target.value)}
+                                                    style={{ width: '100%' }}
+                                                />
+                                            </div>
+
+                                            <div className="col-md-3 mb-2">
+                                                <label className="form-label small">Price</label>
+                                                <input
+                                                    type="number"
+                                                    className="form-control"
+                                                    value={variant.price}
+                                                    onChange={(e) => store.updateProductVariant(index, 'price', Number(e.target.value))}
+                                                />
+                                            </div>
+                                            <div className="col-md-3 mb-2">
+                                                <label className="form-label small">Stock</label>
+                                                <input
+                                                    type="number"
+                                                    className="form-control"
+                                                    value={variant.stock}
+                                                    onChange={(e) => store.updateProductVariant(index, 'stock', Number(e.target.value))}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className='col-md-1'>
+                                        <button className="btn btn-sm btn-outline-danger mt-4" onClick={() => store.removeProductVariant(index)}>
+                                            <i className="fa fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="mb-2">
+                                    <label className="form-label small">Images (Comma separated URLs)</label>
+                                    <textarea
+                                        className="form-control"
+                                        rows={2}
+                                        value={variant.images}
+                                        onChange={(e) => store.updateProductVariant(index, 'images', e.target.value)}
+                                        placeholder="http://example.com/img1.jpg,http://example.com/img2.jpg"
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
             </div>
         </div>

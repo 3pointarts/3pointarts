@@ -6,8 +6,10 @@ import { CartDatasource } from "../../data/datasource/CartDatasource";
 import { CartPayload } from "../../data/payload/CartPayload";
 import { showError, showSuccess } from "../../core/message";
 import useCustomerAuthStore from "./CustomerAuthStore";
+import { ProductVariantModel } from "../../data/model/ProductVariantModel";
 
 const cartDatasource = new CartDatasource();
+const LOCAL_CART_KEY = "local_cart";
 
 interface CartState {
     // State
@@ -16,7 +18,7 @@ interface CartState {
 
     // Actions
     loadCarts: () => Promise<void>;
-    addToCart: (productId: number, qty: number) => Promise<void>;
+    addToCart: (productId: number, qty: number, variant?: ProductVariantModel) => Promise<void>;
     updateCartQty: (cartId: number, productId: number, qty: number) => Promise<void>;
     removeFromCart: (cartId: number) => Promise<void>;
     clearCart: () => Promise<void>;
@@ -29,7 +31,18 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
     loadCarts: async () => {
         const customer = useCustomerAuthStore.getState().customer;
         if (!customer) {
-            set({ carts: [] });
+            const localCartJson = localStorage.getItem(LOCAL_CART_KEY);
+            if (localCartJson) {
+                try {
+                    const localCarts = JSON.parse(localCartJson).map((item: any) => CartModel.fromMap(item));
+                    set({ carts: localCarts, status: Status.success });
+                } catch (e) {
+                    console.error("Failed to parse local cart", e);
+                    set({ carts: [] });
+                }
+            } else {
+                set({ carts: [] });
+            }
             return;
         }
 
@@ -44,12 +57,61 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
         }
     },
 
-    addToCart: async (productVariantId: number, qty: number) => {
+    addToCart: async (productVariantId: number, qty: number, variant?: ProductVariantModel) => {
         const customer = useCustomerAuthStore.getState().customer;
         if (!customer) {
-            showError("Please login to add items to cart");
-            window.localStorage.setItem("redirectAfterLogin", window.location.href);
-            window.location.href = "/login";
+            const { carts } = get();
+            const existingCartItem = carts.find(c => c.productVariantId === productVariantId);
+            let newCarts = [...carts];
+
+            if (existingCartItem) {
+                existingCartItem.qty += qty;
+                newCarts = carts.map(c => c.productVariantId === productVariantId ? existingCartItem : c);
+                showSuccess("Cart updated");
+            } else {
+                if (!variant) {
+                    showError("Product information missing");
+                    return;
+                }
+                const newItem = new CartModel({
+                    id: Date.now(),
+                    productVariantId,
+                    customerId: 0,
+                    qty,
+                    createdAt: new Date(),
+                    productVariant: variant
+                });
+                newCarts.push(newItem);
+                showSuccess("Added to cart");
+            }
+
+            const serializedCarts = newCarts.map(c => ({
+                id: c.id,
+                product_variant_id: c.productVariantId,
+                customer_id: c.customerId,
+                qty: c.qty,
+                created_at: c.createdAt.toISOString(),
+                product_variants: c.productVariant ? {
+                    id: c.productVariant.id,
+                    color: c.productVariant.color,
+                    images: c.productVariant.images.join(','),
+                    price: c.productVariant.price,
+                    stock: c.productVariant.stock,
+                    color_hex: c.productVariant.colorHex,
+                    created_at: c.productVariant.createdAt.toISOString(),
+                    product_id: c.productVariant.productId,
+                    products: c.productVariant.product ? {
+                        id: c.productVariant.product.id,
+                        title: c.productVariant.product.title,
+                        about: c.productVariant.product.about,
+                        base_price: c.productVariant.product.basePrice,
+                        created_at: c.productVariant.product.createdAt.toISOString(),
+                    } : undefined
+                } : undefined
+            }));
+
+            localStorage.setItem(LOCAL_CART_KEY, JSON.stringify(serializedCarts));
+            set({ carts: newCarts });
             return;
         }
 
@@ -90,7 +152,16 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
 
     updateCartQty: async (cartId: number, productVariantId: number, qty: number) => {
         const customer = useCustomerAuthStore.getState().customer;
-        if (!customer) return;
+
+        if (!customer) {
+            const { carts } = get();
+            const updatedCarts = carts.map(c =>
+                c.id === cartId ? { ...c, qty } as CartModel : c
+            );
+            set({ carts: updatedCarts });
+            localStorage.setItem(LOCAL_CART_KEY, JSON.stringify(serializeCarts(updatedCarts)));
+            return;
+        }
 
         // Optimistic update
         const originalCarts = get().carts;
@@ -114,6 +185,17 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
     },
 
     removeFromCart: async (cartId: number) => {
+        const customer = useCustomerAuthStore.getState().customer;
+
+        if (!customer) {
+            const { carts } = get();
+            const newCarts = carts.filter(c => c.id !== cartId);
+            set({ carts: newCarts });
+            localStorage.setItem(LOCAL_CART_KEY, JSON.stringify(serializeCarts(newCarts)));
+            showSuccess("Removed from cart");
+            return;
+        }
+
         set({ status: Status.loading });
         try {
             await cartDatasource.deleteCarts([cartId]);
@@ -136,6 +218,14 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
         const { carts } = get();
         if (carts.length === 0) return;
 
+        const customer = useCustomerAuthStore.getState().customer;
+        if (!customer) {
+            set({ carts: [], status: Status.success });
+            localStorage.removeItem(LOCAL_CART_KEY);
+            showSuccess("Cart cleared");
+            return;
+        }
+
         set({ status: Status.loading });
         try {
             const ids = carts.map(c => c.id);
@@ -149,6 +239,41 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
         }
     }
 });
+
+const serializeCarts = (carts: CartModel[]) => {
+    return carts.map(c => ({
+        id: c.id,
+        product_variant_id: c.productVariantId,
+        customer_id: c.customerId,
+        qty: c.qty,
+        created_at: c.createdAt.toISOString(),
+        product_variants: c.productVariant ? {
+            id: c.productVariant.id,
+            color: c.productVariant.color,
+            images: c.productVariant.images,
+            price: c.productVariant.price,
+            stock: c.productVariant.stock,
+            color_hex: c.productVariant.colorHex,
+            created_at: c.productVariant.createdAt.toISOString(),
+            product_id: c.productVariant.productId,
+            products: c.productVariant.product ? {
+                id: c.productVariant.product.id,
+                title: c.productVariant.product.title,
+                about: c.productVariant.product.about,
+                base_price: c.productVariant.product.basePrice,
+                created_at: c.productVariant.product.createdAt.toISOString(),
+                product_categories: c.productVariant.product.productCategories?.map(pc => ({
+                    categories: {
+                        id: pc.categories.id,
+                        name: pc.categories.name,
+                        image: pc.categories.image,
+                        created_at: pc.categories.createdAt.toISOString()
+                    }
+                }))
+            } : undefined
+        } : undefined
+    }));
+};
 
 const useCartStore = create<CartState>()(
     devtools(
