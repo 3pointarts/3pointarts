@@ -37,7 +37,7 @@ const AdminAuthStore: StateCreator<AdminAuthState> = (set, get) => ({
     //event
     init: async () => {
         set(() => ({ loginStatus: Status.init, admin: null }));
-        let a = localStorage.getItem('admin');
+        const a = localStorage.getItem('admin');
         if (a) {
             get().listCustomers();
             useAdminOrderStore.getState().init();

@@ -174,7 +174,7 @@ const CustomerOrderStore: StateCreator<CustomerOrderState> = (set, get) => ({
     createOrder: async () => {
         const { contactName, contactPhone, contactAddress, billTo, note } = get();
         const customer = useCustomerAuthStore.getState().customer;
-        const { carts, clearCart } = useCartStore.getState();
+        const { carts, clearCart, appliedCoupon } = useCartStore.getState();
 
         if (carts.length === 0) {
             showError("Your cart is empty");
@@ -191,10 +191,26 @@ const CustomerOrderStore: StateCreator<CustomerOrderState> = (set, get) => ({
 
         try {
             // Calculate total
-            const total = carts.reduce((sum, item) => {
+            const subTotal = carts.reduce((sum, item) => {
                 const price = item.productVariant?.price ?? 0;
                 return sum + (price * item.qty);
             }, 0);
+
+            let discountAmount = 0;
+            let couponCode = null;
+            let couponValue = null;
+
+            if (appliedCoupon) {
+                couponCode = appliedCoupon.code;
+                if (appliedCoupon.type === CouponType.percentage) {
+                    discountAmount = (subTotal * appliedCoupon.value) / 100;
+                } else {
+                    discountAmount = appliedCoupon.value;
+                }
+                couponValue = discountAmount;
+            }
+
+            const total = subTotal - discountAmount;
 
             // Create payload items
             const orderItems = carts.map(item => new OrderItemPayload({
@@ -211,7 +227,9 @@ const CustomerOrderStore: StateCreator<CustomerOrderState> = (set, get) => ({
                 note,
                 total,
                 status: OrderStatus.new,
-                items: orderItems
+                items: orderItems,
+                couponCode,
+                couponValue
             });
 
             await orderDatasource.addOrderWithItems(payload);

@@ -23,20 +23,6 @@ export default function AdminProductForm() {
         }
     }, [isEdit]);
 
-    // Load data when opening in edit mode
-    useEffect(() => {
-        if (isEdit && editId) {
-            // Ensure products are loaded if refreshing the page directly
-            if (store.products.length === 0) {
-                store.init().then(() => {
-                    loadProductData(editId);
-                });
-            } else {
-                loadProductData(editId);
-            }
-        }
-    }, [isEdit, editId, store.products.length]);
-
     const loadProductData = (productId: number) => {
         const product = store.products.find(p => p.id === productId);
         if (product) {
@@ -54,6 +40,20 @@ export default function AdminProductForm() {
             })));
         }
     };
+
+    // Load data when opening in edit mode
+    useEffect(() => {
+        if (isEdit && editId) {
+            // Ensure products are loaded if refreshing the page directly
+            if (store.products.length === 0) {
+                store.init().then(() => {
+                    loadProductData(editId);
+                });
+            } else {
+                loadProductData(editId);
+            }
+        }
+    }, [isEdit, editId, store.products.length]);
 
     const handleSubmit = async () => {
         if (store.productVariants.length > 0) {
