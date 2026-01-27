@@ -74,6 +74,12 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
 
     addToCart: async (productVariantId: number, qty: number, variant?: ProductVariantModel) => {
         const customer = useCustomerAuthStore.getState().customer;
+        window.dataLayer.push({
+            event: 'add_to_cart',
+            product_id: productVariantId.toString(),
+            price: variant?.price || 0
+        });
+
         if (!customer) {
             const { carts } = get();
             const existingCartItem = carts.find(c => c.productVariantId === productVariantId);

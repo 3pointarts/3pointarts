@@ -51,6 +51,10 @@ export default function Checkout() {
   }, [authStore.customer])
 
   const initiatePayment = async () => {
+    window.dataLayer.push({
+      event: 'initiate_checkout',
+      value: finalPayable
+    });
     // await createOrder()
     const rzpKey = "rzp_live_S5I3OSt6XhauV3";
     // const rzpSecret = "2S7thrD3iSPOGOiWfmDtp1TW";
