@@ -13,7 +13,7 @@ import { CouponCondition } from "../../core/enum/CouponCondition";
 
 const cartDatasource = new CartDatasource();
 const couponDatasource = new CouponDatasource();
-const LOCAL_CART_KEY = "local_cart";
+export const LOCAL_CART_KEY = "local_cart";
 
 interface CartState {
     // State
@@ -121,6 +121,15 @@ const CartStore: StateCreator<CartState> = (set, get) => ({
                         about: c.productVariant.product.about,
                         base_price: c.productVariant.product.basePrice,
                         created_at: c.productVariant.product.createdAt.toISOString(),
+                        product_categories: c.productVariant.product.productCategories.map(cat => ({
+                            categories: {
+                                id: cat.categories.id,
+                                name: cat.categories.name,
+                                image: cat.categories.image,
+                                created_at: cat.categories.createdAt.toISOString()
+                            }
+                        })
+                        )
                     } : undefined
                 } : undefined
             }));

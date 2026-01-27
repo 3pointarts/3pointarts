@@ -178,7 +178,7 @@ export default function Cart() {
                             const text = `Check out ${product.title} on 3 Point Arts!`;
                             setShareData({ show: true, url, text });
                           }}>Share</button>
-                          <Link to={`/catalog?category=${encodeURIComponent(product.productCategories[0].categories.id)}`} className="link-button">See more like this</Link>
+                          <Link to={`/catalog?category=${encodeURIComponent(product.productCategories?.[0]?.categories?.id?.toString() || '')}`} className="link-button">See more like this</Link>
 
                         </div>
                       </div>

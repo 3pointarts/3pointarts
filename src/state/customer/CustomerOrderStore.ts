@@ -7,7 +7,7 @@ import { OrderPayload } from "../../data/payload/OrderPayload";
 import { OrderItemPayload } from "../../data/payload/OrderItemPayload";
 import { showError, showSuccess } from "../../core/message";
 import useCustomerAuthStore from "./CustomerAuthStore";
-import useCartStore from "./CartStore";
+import useCartStore, { LOCAL_CART_KEY } from "./CartStore";
 import { OrderStatus } from "../../core/enum/OrderStatus";
 import { CouponType } from "../../core/enum/CouponType";
 
@@ -240,6 +240,7 @@ const CustomerOrderStore: StateCreator<CustomerOrderState> = (set, get) => ({
             // Clear cart and reload orders
             await clearCart();
             await get().loadOrders();
+            localStorage.removeItem(LOCAL_CART_KEY);
             get().resetForm();
             return true;
         } catch (error) {

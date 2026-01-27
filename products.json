@@ -1,0 +1,554 @@
+[
+    {
+        "id": 22,
+        "created_at": "2026-01-27T09:51:38.192579+00:00",
+        "title": "Valentines Love and Heart Lithophane",
+        "about": "Add a touch of romance to your space with this beautifully crafted Personalized Heart-Shaped Photo Lithophane Lamp. Designed with an elegant “LOVE” base, this showpiece glows warmly to reveal a cherished photo, creating a stunning visual effect. Made using high-quality 3D printing and soft LED backlighting, it’s perfect for bedrooms, living rooms, or as a heartfelt gift for anniversaries, weddings, Valentine’s Day, or birthdays. A timeless décor piece that celebrates love and memories.",
+        "base_price": 599,
+        "product_variants": [
+            {
+                "id": 22,
+                "color": "Natural White",
+                "price": 599,
+                "stock": 6,
+                "images": "https://iili.io/fi9tBTX.md.png,https://iili.io/fi9tfpt.md.png,https://iili.io/fi9t32p.md.png",
+                "color_hex": "#ffffff",
+                "created_at": "2026-01-27T09:51:38.473887+00:00",
+                "product_id": 22
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 9,
+                    "name": "Home Decor",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US922fef5980046c/design/2025-07-01_68af475cd8885.jpg",
+                    "created_at": "2026-01-20T16:24:38.96761+00:00"
+                }
+            },
+            {
+                "categories": {
+                    "id": 8,
+                    "name": "Love Gifts",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US619fe7b4b7ebcd/design/2026-01-01_b427e241fdf858.jpg",
+                    "created_at": "2026-01-18T04:58:56.575926+00:00"
+                }
+            },
+            {
+                "categories": {
+                    "id": 7,
+                    "name": "Personalized Gifts",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US1c9683b3445073/design/2025-02-22_910f20ea56f1f.jpeg",
+                    "created_at": "2026-01-18T04:49:23.836213+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "created_at": "2026-01-25T12:41:59.23095+00:00",
+        "title": "Number Plate Keychains",
+        "about": "Carry your vehicle identity in style with this Number Plate Keychain. Designed to resemble a real license plate, it can be customized with your vehicle number and name. Made from durable, lightweight material, it’s perfect for everyday use and makes a thoughtful, personalized gift.",
+        "base_price": 0,
+        "product_variants": [
+            {
+                "id": 18,
+                "color": "",
+                "price": 168,
+                "stock": 47,
+                "images": "https://iili.io/f6tEgQp.webp,https://iili.io/f6tEUjR.webp",
+                "color_hex": "#000000",
+                "created_at": "2026-01-25T12:41:59.390946+00:00",
+                "product_id": 21
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 8,
+                    "name": "Love Gifts",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US619fe7b4b7ebcd/design/2026-01-01_b427e241fdf858.jpg",
+                    "created_at": "2026-01-18T04:58:56.575926+00:00"
+                }
+            },
+            {
+                "categories": {
+                    "id": 7,
+                    "name": "Personalized Gifts",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US1c9683b3445073/design/2025-02-22_910f20ea56f1f.jpeg",
+                    "created_at": "2026-01-18T04:49:23.836213+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "created_at": "2026-01-25T11:46:00.812102+00:00",
+        "title": "Customize Name & Logo",
+        "about": "Personalize your pet’s style with this Customize Name & Logo Tag. Made from durable, lightweight material, it features bold raised lettering for clear visibility. Easily customizable with your pet’s name or logo, this tag adds a unique touch while ensuring everyday comfort and long-lasting use. Perfect for collars and harnesses.",
+        "base_price": 150,
+        "product_variants": [
+            {
+                "id": 17,
+                "color": "",
+                "price": 169,
+                "stock": 100,
+                "images": "https://iili.io/f6ZKDBt.webp,https://iili.io/f6ZKZQI.md.webp",
+                "color_hex": "#000000",
+                "created_at": "2026-01-25T11:46:01.009324+00:00",
+                "product_id": 20
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 8,
+                    "name": "Love Gifts",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US619fe7b4b7ebcd/design/2026-01-01_b427e241fdf858.jpg",
+                    "created_at": "2026-01-18T04:58:56.575926+00:00"
+                }
+            },
+            {
+                "categories": {
+                    "id": 7,
+                    "name": "Personalized Gifts",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US1c9683b3445073/design/2025-02-22_910f20ea56f1f.jpeg",
+                    "created_at": "2026-01-18T04:49:23.836213+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "created_at": "2026-01-25T11:25:37.31754+00:00",
+        "title": "Customize Lithophane",
+        "about": "This is a customizable lithophane product. Customers can personalize it with their own photo, name, design, or message. The image becomes clearly visible when illuminated, making it ideal for gifts and home décor.",
+        "base_price": 399,
+        "product_variants": [
+            {
+                "id": 16,
+                "color": "white",
+                "price": 399,
+                "stock": 15,
+                "images": "https://iili.io/f6Z3tup.png,https://iili.io/f6ZdXNS.md.png",
+                "color_hex": "#ffffff",
+                "created_at": "2026-01-25T11:25:37.819304+00:00",
+                "product_id": 19
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 7,
+                    "name": "Personalized Gifts",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US1c9683b3445073/design/2025-02-22_910f20ea56f1f.jpeg",
+                    "created_at": "2026-01-18T04:49:23.836213+00:00"
+                }
+            },
+            {
+                "categories": {
+                    "id": 8,
+                    "name": "Love Gifts",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US619fe7b4b7ebcd/design/2026-01-01_b427e241fdf858.jpg",
+                    "created_at": "2026-01-18T04:58:56.575926+00:00"
+                }
+            },
+            {
+                "categories": {
+                    "id": 9,
+                    "name": "Home Decor",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US922fef5980046c/design/2025-07-01_68af475cd8885.jpg",
+                    "created_at": "2026-01-20T16:24:38.96761+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "created_at": "2026-01-22T14:23:28.04427+00:00",
+        "title": "Key Holder with Storage Box",
+        "about": "This wall-mounted key holder is designed for everyday use with a clean and minimal look. It can be easily fixed on the wall near the entrance, helping you keep your keys in one place.\n\nThe holder features a flip-open storage box where you can safely store spare keys or small items, while the bottom hook allows quick hanging of daily-use keys. Its compact design saves space and blends well with any home or office interior.\n\nIdeal for homes, offices, hostels, and apartments, this key holder combines utility and simplicity in one product.",
+        "base_price": 499,
+        "product_variants": [
+            {
+                "id": 15,
+                "color": "BLACK ",
+                "price": 299,
+                "stock": 20,
+                "images": "https://iili.io/f4z33tR.md.png,https://makerworld.bblmw.com/makerworld/model/USe948963d59927e/design/2025-04-23_2a36a6107bb758.jpg,https://makerworld.bblmw.com/makerworld/model/USe948963d59927e/design/2025-04-23_12f45620b11d28.jpg,https://makerworld.bblmw.com/makerworld/model/USe948963d59927e/design/2025-04-23_27e502caeb2fc.png",
+                "color_hex": "#000000",
+                "created_at": "2026-01-22T14:23:28.689584+00:00",
+                "product_id": 18
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 9,
+                    "name": "Home Decor",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US922fef5980046c/design/2025-07-01_68af475cd8885.jpg",
+                    "created_at": "2026-01-20T16:24:38.96761+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "created_at": "2026-01-20T16:55:24.163693+00:00",
+        "title": "Chess box tower set with foldable board game",
+        "about": "This unique foldable tower chess set combines smart design with elegant style ♟️\nThe vertical tower structure allows the chessboard to fold neatly while safely storing all chess pieces inside.\nCrafted with a premium finish and sturdy build for long-lasting use.\nSpace-saving, easy to carry, and perfect for travel or compact storage.\nAn excellent choice for chess lovers, home décor, and gifting.",
+        "base_price": 899,
+        "product_variants": [
+            {
+                "id": 14,
+                "color": "black & white",
+                "price": 349,
+                "stock": 8,
+                "images": "https://iili.io/f4TuOG9.png,https://makerworld.bblmw.com/makerworld/model/US2e91adb4ca3b55/design/2024-10-29_2087844af34bb.jpg,https://makerworld.bblmw.com/makerworld/model/US2e91adb4ca3b55/design/2024-10-29_f2b6e0f861667.jpg",
+                "color_hex": "#000000",
+                "created_at": "2026-01-20T16:55:24.447748+00:00",
+                "product_id": 17
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 10,
+                    "name": "Toy & games",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/USa1b1e6aed87f7d/design/2025-06-04_3288b3b376fbb8.png",
+                    "created_at": "2026-01-20T16:51:33.889294+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "created_at": "2026-01-20T16:47:45.668071+00:00",
+        "title": "Lovely Heart-Shaped Makeup & Desk Organizer",
+        "about": "Stylish heart-shape makeup organizer jo aapke vanity ko de classy & cute look 💖\nHigh-quality soft-touch material se bana, jo durable aur easy to clean hai.",
+        "base_price": 249,
+        "product_variants": [
+            {
+                "id": 13,
+                "color": "red",
+                "price": 249,
+                "stock": 10,
+                "images": "https://makerworld.bblmw.com/makerworld/model/UScf296702a5b7e/design/2026-01-11_7f228a207311b8.png,https://makerworld.bblmw.com/makerworld/model/UScf296702a5b7e/design/2026-01-11_25d4e84c894878.jpeg",
+                "color_hex": "#ec0404",
+                "created_at": "2026-01-20T16:47:45.932509+00:00",
+                "product_id": 16
+            },
+            {
+                "id": 20,
+                "color": "Black",
+                "price": 249,
+                "stock": 10,
+                "images": "https://makerworld.bblmw.com/makerworld/model/UScf296702a5b7e/design/2026-01-11_7f228a207311b8.png,https://makerworld.bblmw.com/makerworld/model/UScf296702a5b7e/design/2026-01-11_25d4e84c894878.jpeg",
+                "color_hex": "#000000",
+                "created_at": "2026-01-26T13:46:41.62696+00:00",
+                "product_id": 16
+            },
+            {
+                "id": 21,
+                "color": "White",
+                "price": 249,
+                "stock": 10,
+                "images": "https://makerworld.bblmw.com/makerworld/model/UScf296702a5b7e/design/2026-01-11_7f228a207311b8.png,https://makerworld.bblmw.com/makerworld/model/UScf296702a5b7e/design/2026-01-11_25d4e84c894878.jpeg",
+                "color_hex": "#ffffff",
+                "created_at": "2026-01-26T13:46:41.62696+00:00",
+                "product_id": 16
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 8,
+                    "name": "Love Gifts",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US619fe7b4b7ebcd/design/2026-01-01_b427e241fdf858.jpg",
+                    "created_at": "2026-01-18T04:58:56.575926+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "created_at": "2026-01-20T16:30:31.176851+00:00",
+        "title": "Tree home decoration",
+        "about": "A modern decorative plant featuring a graceful tree design with a heart-shaped base. This elegant décor piece adds warmth, style, and a touch of nature to any tabletop, shelf, or workspace—perfect for contemporary and romantic interiors.",
+        "base_price": 598,
+        "product_variants": [
+            {
+                "id": 12,
+                "color": "black",
+                "price": 399,
+                "stock": 10,
+                "images": "https://makerworld.bblmw.com/makerworld/model/US922fef5980046c/design/2025-07-01_68af475cd8885.jpg,https://makerworld.bblmw.com/makerworld/model/US922fef5980046c/design/2025-07-01_952e3a19ae558.png,https://makerworld.bblmw.com/makerworld/model/US922fef5980046c/design/2025-07-01_e9f39209828b38.jpg,https://makerworld.bblmw.com/makerworld/model/US922fef5980046c/design/2025-07-01_f162f397591a78.jpg",
+                "color_hex": "#000000",
+                "created_at": "2026-01-20T16:30:31.376012+00:00",
+                "product_id": 15
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 9,
+                    "name": "Home Decor",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US922fef5980046c/design/2025-07-01_68af475cd8885.jpg",
+                    "created_at": "2026-01-20T16:24:38.96761+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "created_at": "2026-01-20T16:01:41.008065+00:00",
+        "title": "Smartphone holder \"Valentine\" ( 2 piece set )",
+        "about": "The Mobile Holder Valentine is a beautifully designed heart-shaped phone stand that blends functionality with elegance. Crafted to add a romantic and modern touch to your space, this mobile holder is perfect for desks, bedside tables, offices, or study areas. Its sturdy and well-balanced structure securely holds your smartphone, allowing hands-free use for video calls, online meetings, watching videos, or charging.\n\nDesigned with both style and practicality in mind, this compact and lightweight phone stand enhances your workspace while keeping your device at a comfortable viewing angle. The charming heart design also makes it a thoughtful and memorable gift for Valentine’s Day, anniversaries, birthdays, or special occasions.\n\nKey Features:\n\nElegant heart-shaped design with a premium aesthetic\n\nStrong and stable build for secure phone placement\n\nUniversal compatibility with all smartphones\n\nIdeal for hands-free viewing during calls, videos, and work\n\nCompact, lightweight, and space-saving design\n\nPerfect as a romantic gift for loved ones\n\nMaterial: High-quality durable plastic\nColor: Pink\nUsage: Mobile phone stand / holder",
+        "base_price": 348,
+        "product_variants": [
+            {
+                "id": 11,
+                "color": "perple",
+                "price": 349,
+                "stock": 2,
+                "images": "https://makerworld.bblmw.com/makerworld/model/UScafa466303de68/design/2025-01-03_80553755f0dbc8.jpg,https://makerworld.bblmw.com/makerworld/model/UScafa466303de68/design/2025-01-03_3ad28479bbaba.jpg,https://makerworld.bblmw.com/makerworld/model/UScafa466303de68/design/2025-01-03_9415f93e3646e.jpg,https://makerworld.bblmw.com/makerworld/model/UScafa466303de68/design/2025-01-03_96510f698b665.jpg,https://makerworld.bblmw.com/makerworld/model/US2d0e372fe9d851/design/2025-01-15_73a2098063518.jpg",
+                "color_hex": "#8003fc",
+                "created_at": "2026-01-20T16:01:41.247344+00:00",
+                "product_id": 14
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 8,
+                    "name": "Love Gifts",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US619fe7b4b7ebcd/design/2026-01-01_b427e241fdf858.jpg",
+                    "created_at": "2026-01-18T04:58:56.575926+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "created_at": "2026-01-19T13:07:57.863853+00:00",
+        "title": "Map to my heart - Personalized 3D City map",
+        "about": "you can add details while checkout or after order we will contact you for details.",
+        "base_price": 599,
+        "product_variants": [
+            {
+                "id": 10,
+                "color": "white black",
+                "price": 599,
+                "stock": 9,
+                "images": "https://makerworld.bblmw.com/makerworld/model/US6fe09c26596665/design/2025-03-01_97e77a862f31d.png,https://makerworld.bblmw.com/makerworld/model/US6fe09c26596665/design/2025-01-05_acdcd6d14f54d.jpeg,https://makerworld.bblmw.com/makerworld/model/US6fe09c26596665/design/2025-01-05_8c1ded84bdb15.jpeg,https://makerworld.bblmw.com/makerworld/model/US6fe09c26596665/design/2025-01-05_1700faf305c9e.jpeg",
+                "color_hex": "#000000",
+                "created_at": "2026-01-19T13:07:58.397445+00:00",
+                "product_id": 12
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 7,
+                    "name": "Personalized Gifts",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/US1c9683b3445073/design/2025-02-22_910f20ea56f1f.jpeg",
+                    "created_at": "2026-01-18T04:49:23.836213+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "created_at": "2026-01-19T11:12:09.634773+00:00",
+        "title": "Flower Pot - The Heart Tree",
+        "about": "This is a decorative cylindrical planter designed with a natural tree bark–inspired texture that gives it a unique and premium look. The planter features an elegant heart-shaped design on the front, making it a perfect blend of nature and modern décor. Available in a stylish black and white color combination, it complements any home or office interior.\n\nThe planter is ideal for indoor plants, succulents, small decorative plants, or artificial plants. Made from durable material, it is sturdy, long-lasting, and retains its shape and finish over time. Its compact size makes it suitable for tabletops, shelves, desks, and gifting purposes.\n\nKey Features:\n\nUnique heart-shaped front design\n\nNatural wood / tree bark texture finish\n\nAvailable in black and white colors\n\nStrong, durable, and lightweight\n\nPerfect for home décor, office décor, and gifting",
+        "base_price": 498,
+        "product_variants": [
+            {
+                "id": 9,
+                "color": "",
+                "price": 499,
+                "stock": 5,
+                "images": "https://iili.io/fg57VnV.md.png,https://iili.io/fg5lOfp.md.png,https://iili.io/fg5WECu.md.png",
+                "color_hex": "#000000",
+                "created_at": "2026-01-19T11:12:10.063718+00:00",
+                "product_id": 11
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 5,
+                    "name": "Plants & Pots",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/USfb1b50510a7b5b/design/2026-01-06_4b2b78dbdbe53.png?x-oss-process=image/resize,w_1000/format,webp",
+                    "created_at": "2026-01-18T02:49:34.506513+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "created_at": "2026-01-19T10:32:56.335915+00:00",
+        "title": "Happy Pot - Mini Succulent Planter",
+        "about": "",
+        "base_price": 0,
+        "product_variants": [
+            {
+                "id": 7,
+                "color": "white",
+                "price": 499,
+                "stock": 10,
+                "images": "https://makerworld.bblmw.com/makerworld/model/US49f612ddb1066a/design/2024-02-16_52b1195b19ff1.jpg,https://makerworld.bblmw.com/makerworld/model/US49f612ddb1066a/design/2024-02-16_bb416eff0d6db.jpg,https://makerworld.bblmw.com/makerworld/model/US49f612ddb1066a/design/2024-02-16_3ba0d7b7c62cf.jpg,https://makerworld.bblmw.com/makerworld/model/US49f612ddb1066a/design/2024-02-16_338c8ec2fb0e8.jpg",
+                "color_hex": "#fdfcfc",
+                "created_at": "2026-01-19T10:32:56.754369+00:00",
+                "product_id": 10
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 5,
+                    "name": "Plants & Pots",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/USfb1b50510a7b5b/design/2026-01-06_4b2b78dbdbe53.png?x-oss-process=image/resize,w_1000/format,webp",
+                    "created_at": "2026-01-18T02:49:34.506513+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "created_at": "2026-01-19T10:18:16.067442+00:00",
+        "title": "Crescent Moon Decoration With Elliptical Plant Pot",
+        "about": "",
+        "base_price": 498,
+        "product_variants": [
+            {
+                "id": 5,
+                "color": "black",
+                "price": 498,
+                "stock": 5,
+                "images": "https://makerworld.bblmw.com/makerworld/model/US19217b3380d62d/design/2025-04-29_0baa27c329eef8.png,https://makerworld.bblmw.com/makerworld/model/US19217b3380d62d/design/2025-04-29_f1ca8114c37308.jpg,https://makerworld.bblmw.com/makerworld/model/US19217b3380d62d/design/2025-04-29_64580408afa7.jpg,https://makerworld.bblmw.com/makerworld/model/US19217b3380d62d/design/2025-04-29_9e02eb33a10ac.jpg",
+                "color_hex": "#000000",
+                "created_at": "2026-01-19T10:18:16.631967+00:00",
+                "product_id": 9
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 5,
+                    "name": "Plants & Pots",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/USfb1b50510a7b5b/design/2026-01-06_4b2b78dbdbe53.png?x-oss-process=image/resize,w_1000/format,webp",
+                    "created_at": "2026-01-18T02:49:34.506513+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "created_at": "2026-01-19T07:23:17.272388+00:00",
+        "title": "Stone Effect Self-Watering Planter",
+        "about": "Bring nature indoors with this elegant stone-effect self-watering planter featuring a sleek circular frame and textured white base. Designed to maintain consistent moisture, the hidden reservoir ensures plants stay hydrated longer with minimal effort. Perfect for herbs, succulents, and small indoor plants, it blends contemporary style with practical function. Made from durable, water-resistant material for safe indoor use.\n\nDimensions:\nHeight: 220 mm\nWidth: 230 mm\nDepth: 80 mm\n\nStylish, compact, and low-maintenance, this planter is ideal for kitchens, desks, and modern living spaces.",
+        "base_price": 599,
+        "product_variants": [
+            {
+                "id": 4,
+                "color": "Black-White",
+                "price": 598,
+                "stock": 4,
+                "images": "https://makerworld.bblmw.com/makerworld/model/USfb1b50510a7b5b/design/2026-01-06_4b2b78dbdbe53.png,https://makerworld.bblmw.com/makerworld/model/USfb1b50510a7b5b/design/2026-01-06_2cb38031cae7f.png,https://iili.io/fgxNK42.md.png",
+                "color_hex": "#000000",
+                "created_at": "2026-01-19T07:23:17.90394+00:00",
+                "product_id": 8
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 5,
+                    "name": "Plants & Pots",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/USfb1b50510a7b5b/design/2026-01-06_4b2b78dbdbe53.png?x-oss-process=image/resize,w_1000/format,webp",
+                    "created_at": "2026-01-18T02:49:34.506513+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "created_at": "2026-01-19T06:43:01.96936+00:00",
+        "title": "Wall-Mounted Minimalist Plant Pot 2 Pieces",
+        "about": "Elevate your walls with this geometric hexagon planter designed for modern interiors. Crafted from durable, water-resistant material, it safely holds soil and moisture without damaging surfaces. The compact yet deep cavity is ideal for succulents, small foliage, or trailing plants, making it perfect for living rooms, offices, balconies, or cafés. With a sleek matte black finish, it blends seamlessly into contemporary décor while adding natural texture.\n\nDimensions:\nHeight: 204.48 mm\nWidth: 180 mm\nDepth: 59.65 mm\n\nLightweight, sturdy, and easy to mount, this planter turns empty walls into stylish green displays while keeping your space clean and organized.",
+        "base_price": 0,
+        "product_variants": [
+            {
+                "id": 3,
+                "color": "Black",
+                "price": 598,
+                "stock": 8,
+                "images": "https://makerworld.bblmw.com/makerworld/model/US9809c8192ab620/design/2025-04-01_42363c87c37c18.jpg,https://iili.io/fgxXR5u.png,https://iili.io/fgxM5Ov.png",
+                "color_hex": "#000000",
+                "created_at": "2026-01-19T06:43:02.398087+00:00",
+                "product_id": 7
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 5,
+                    "name": "Plants & Pots",
+                    "image": "https://makerworld.bblmw.com/makerworld/model/USfb1b50510a7b5b/design/2026-01-06_4b2b78dbdbe53.png?x-oss-process=image/resize,w_1000/format,webp",
+                    "created_at": "2026-01-18T02:49:34.506513+00:00"
+                }
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "created_at": "2026-01-18T06:44:43.549431+00:00",
+        "title": "Snail Lamp",
+        "about": "3D printed decorative lamp",
+        "base_price": 699,
+        "product_variants": [
+            {
+                "id": 19,
+                "color": "Off White",
+                "price": 899,
+                "stock": 22,
+                "images": "https://makerworld.bblmw.com/makerworld/model/US9bcfd41aaf737e/design/2026-01-03_3da568319e06a8.jpg",
+                "color_hex": "#f2ffb3",
+                "created_at": "2026-01-25T18:05:25.288176+00:00",
+                "product_id": 6
+            },
+            {
+                "id": 1,
+                "color": "White",
+                "price": 898,
+                "stock": 22,
+                "images": "https://makerworld.bblmw.com/makerworld/model/US9bcfd41aaf737e/design/2026-01-03_3da568319e06a8.jpg",
+                "color_hex": "#ffffff",
+                "created_at": "2026-01-18T06:48:24.081838+00:00",
+                "product_id": 6
+            },
+            {
+                "id": 2,
+                "color": "Pink",
+                "price": 878,
+                "stock": 6,
+                "images": "https://makerworld.bblmw.com/makerworld/model/US9bcfd41aaf737e/design/2026-01-03_31269656e0ec3.jpg",
+                "color_hex": "#fbbcf9",
+                "created_at": "2026-01-18T06:48:24.081838+00:00",
+                "product_id": 6
+            }
+        ],
+        "product_categories": [
+            {
+                "categories": {
+                    "id": 1,
+                    "name": "Table Lamps",
+                    "image": "https://media.printables.com/media/prints/444111/images/3666911_a4397c50-0cbf-449c-878b-6d5753fa6a51/large_display_4f42616b-eeb4-4d58-a113-5693d71a638a_444111.jpg",
+                    "created_at": "2026-01-11T15:04:38.217321+00:00"
+                }
+            }
+        ]
+    }
+]

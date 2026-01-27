@@ -6,7 +6,7 @@ import { AuthDatasource } from "../../data/datasource/AuthDatasource";
 import { showError, showSuccess } from "../../core/message";
 import { UserPayload } from "../../data/payload/UserPayload";
 import { UserRole } from "../../core/enum/UserRole";
-import useCartStore from "./CartStore";
+import useCartStore, { LOCAL_CART_KEY } from "./CartStore";
 import useCustomerOrderStore from "./CustomerOrderStore";
 import useWishlistStore from "./WishlistStore";
 const authDatasource = new AuthDatasource();
@@ -61,6 +61,7 @@ const CustomerAuthStore: StateCreator<CustomerAuthState> = (set, get) => ({
         if (customer) {
             set(() => ({ customer: UserModel.fromMap(JSON.parse(customer)), loginStatus: Status.success }));
             setTimeout(() => {
+                localStorage.removeItem(LOCAL_CART_KEY);
                 useCartStore.getState().loadCarts();
                 useCustomerOrderStore.getState().loadOrders();
                 useWishlistStore.getState().loadWishlists();
